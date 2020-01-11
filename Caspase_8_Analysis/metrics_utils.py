@@ -62,7 +62,7 @@ def do_evaluations(true_y, pred_y, pred_probs=None, probs_exist=False, displayed
 # X must have 2 columns, Y must be one column (so potted_df 3 columns)
 # If -1 returned the plot failed (due to wrong dimensions given)
 # TODO: Functionality for 1D and 3D plots
-def plot_scatter_points(plotted_df, targets, unique_labels=["label1", "axis_2"], title="Plot"):
+def plot_scatter_points(plotted_df, targets, unique_labels=["label1", "axis_2"], title="Plot", show_ids=True):
     if(len(plotted_df.columns) != 3):
         return -1
 
@@ -75,6 +75,8 @@ def plot_scatter_points(plotted_df, targets, unique_labels=["label1", "axis_2"],
 
     X_df = plotted_df.iloc[:, :-1]
     Y_df = plotted_df.iloc[:, -1]
+    #print(X_df)
+    X_df = pd.concat([X_df, pd.DataFrame(np.arange(len(X_df.index)))], axis=1)
 
     for target, color in zip(targets, colors):
         indicesToKeep = Y_df.values == target
@@ -82,6 +84,14 @@ def plot_scatter_points(plotted_df, targets, unique_labels=["label1", "axis_2"],
                     , X_df.iloc[indicesToKeep, 1]
                     , c=color
                     , s=50)
+
+        # Adding ids on the plotted points
+        if(show_ids):
+            for i in range(sum(indicesToKeep)):
+                plt.annotate(str(X_df.iloc[indicesToKeep, 2].iloc[i]),
+                             (X_df.iloc[indicesToKeep, 0].iloc[i], X_df.iloc[indicesToKeep, 1].iloc[i]),
+                             weight='bold')
+
     plt.legend(unique_labels)
     plt.grid()
 

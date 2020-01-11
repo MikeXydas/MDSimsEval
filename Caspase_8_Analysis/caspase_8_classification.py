@@ -53,7 +53,7 @@ def split_dataset(df, training_rows, feature_indexes):
     scaler = StandardScaler()
     standarized_df = scaler.fit_transform(np.array(X_df))   # Standarization
 
-    # Calculate ANOVA f value
+    # Calculate ANOVA f value and select top-k features
     # ANOVA_feature_selector = SelectKBest(f_classif, k=6).fit(standarized_df, Y_df)
     # final_features = ANOVA_feature_selector.get_support(indices=True)
     # features_df = pd.DataFrame(ANOVA_feature_selector.transform(standarized_df))
@@ -70,7 +70,7 @@ def split_dataset(df, training_rows, feature_indexes):
     comps = pd.concat([comps, variances], axis=1)
     comps.to_csv(path_or_buf='resources/PCA_components.csv', sep=',')
 
-    plot_scatter_points(pd.concat([features_df, Y_df], axis=1), [0, 1], ["Inactive", "Active"], title="PCA Variance")
+    plot_scatter_points(pd.concat([features_df, Y_df], axis=1), [0, 1], ["Inactive", "Active"], title="PCA Variance", show_ids=True)
 
     final_train_X = features_df.iloc[:training_rows, :]
     final_test_X = features_df.iloc[training_rows:, :]
