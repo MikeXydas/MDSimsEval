@@ -1,6 +1,6 @@
 from sklearn.model_selection import LeaveOneOut
 
-from Caspase_8_Analysis.metrics_utils import doEvaluations
+from Caspase_8_Analysis.metrics_utils import do_evaluations
 
 import pandas as pd
 import numpy as np
@@ -33,6 +33,6 @@ def performLOO(classifier, X, Y, probsExist):
 
 
 
-    doEvaluations(Y, predict_results, predict_probs, probs_exist=probsExist, displayed_name="LOO", show_plots=probsExist)
+    do_evaluations(Y, predict_results, predict_probs, probs_exist=probsExist, displayed_name="LOO", show_plots=probsExist)
 
     return pred_y

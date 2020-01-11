@@ -20,7 +20,7 @@ def plot_confusion(classifier, title, test_X, test_Y, class_labels, show_plot, p
         print(disp.confusion_matrix)
 
 
-# Print the difference of probabilities
+# Print the difference of probabilities from predict_proba of each class
 def plot_probabilities(probsList, test_Y, class_labels, show_plot, print_probabilities):
     #probs = np.array(classifier.predict_proba(test_X)).transpose()
     probs = np.array(probsList).transpose()
@@ -41,7 +41,8 @@ def plot_probabilities(probsList, test_Y, class_labels, show_plot, print_probabi
         plt.tight_layout()
         plt.show()
 
-def doEvaluations(true_y, pred_y, pred_probs=None, probs_exist=False, displayed_name="Metrics", show_plots=False):
+# Run metrics for Accuracy, Recall, F1, AUC and print difference in probability predictions (if possible)
+def do_evaluations(true_y, pred_y, pred_probs=None, probs_exist=False, displayed_name="Metrics", show_plots=False):
     print(displayed_name + " | Accuracy: " + str(metrics.accuracy_score(true_y, pred_y)))
 
     print(displayed_name + " | Recall: " + str(metrics.recall_score(true_y, pred_y)))
@@ -54,3 +55,37 @@ def doEvaluations(true_y, pred_y, pred_probs=None, probs_exist=False, displayed_
     if(probs_exist):
         plot_probabilities(pred_probs, true_y, ["Inactive", "Active"], show_plot=show_plots,
                             print_probabilities=False)
+
+
+# Plotting a 2D graph of scattered points
+# plotted_df is X:Y, the column names will be used as axis
+# X must have 2 columns, Y must be one column (so potted_df 3 columns)
+# If -1 returned the plot failed (due to wrong dimensions given)
+# TODO: Functionality for 1D and 3D plots
+def plot_scatter_points(plotted_df, targets, unique_labels=["label1", "axis_2"], title="Plot"):
+    if(len(plotted_df.columns) != 3):
+        return -1
+
+    plt.plot()
+    plt.xlabel(plotted_df.columns[0])
+    plt.ylabel(plotted_df.columns[1])
+    plt.title(title)
+    colors = ['r', 'g', 'b', 'y', 'c', 'm']
+    colors = colors[:len(targets)]
+
+    X_df = plotted_df.iloc[:, :-1]
+    Y_df = plotted_df.iloc[:, -1]
+
+    for target, color in zip(targets, colors):
+        indicesToKeep = Y_df.values == target
+        plt.scatter(X_df.iloc[indicesToKeep, 0]
+                    , X_df.iloc[indicesToKeep, 1]
+                    , c=color
+                    , s=50)
+    plt.legend(unique_labels)
+    plt.grid()
+
+    plt.show()
+
+    return 0
+
