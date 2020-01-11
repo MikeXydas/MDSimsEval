@@ -41,6 +41,7 @@ def plot_probabilities(probsList, test_Y, class_labels, show_plot, print_probabi
         plt.tight_layout()
         plt.show()
 
+
 # Run metrics for Accuracy, Recall, F1, AUC and print difference in probability predictions (if possible)
 def do_evaluations(true_y, pred_y, pred_probs=None, probs_exist=False, displayed_name="Metrics", show_plots=False):
     print(displayed_name + " | Accuracy: " + str(metrics.accuracy_score(true_y, pred_y)))
@@ -79,17 +80,17 @@ def plot_scatter_points(plotted_df, targets, unique_labels=["label1", "axis_2"],
     X_df = pd.concat([X_df, pd.DataFrame(np.arange(len(X_df.index)))], axis=1)
 
     for target, color in zip(targets, colors):
-        indicesToKeep = Y_df.values == target
-        plt.scatter(X_df.iloc[indicesToKeep, 0]
-                    , X_df.iloc[indicesToKeep, 1]
+        indices_to_keep = Y_df.values == target
+        plt.scatter(X_df.iloc[indices_to_keep, 0]
+                    , X_df.iloc[indices_to_keep, 1]
                     , c=color
                     , s=50)
 
         # Adding ids on the plotted points
         if(show_ids):
-            for i in range(sum(indicesToKeep)):
-                plt.annotate(str(X_df.iloc[indicesToKeep, 2].iloc[i]),
-                             (X_df.iloc[indicesToKeep, 0].iloc[i], X_df.iloc[indicesToKeep, 1].iloc[i]),
+            for i in range(sum(indices_to_keep)):
+                plt.annotate(str(X_df.iloc[indices_to_keep, 2].iloc[i]),
+                             (X_df.iloc[indices_to_keep, 0].iloc[i], X_df.iloc[indices_to_keep, 1].iloc[i]),
                              weight='bold')
 
     plt.legend(unique_labels)
