@@ -68,9 +68,9 @@ def plot_scatter_points(plotted_df, targets, unique_labels=["label1", "axis_2"],
         return -1
 
     plt.plot()
-    plt.xlabel(plotted_df.columns[0])
-    plt.ylabel(plotted_df.columns[1])
-    plt.title(title)
+    plt.xlabel(plotted_df.columns[0], fontsize=20)
+    plt.ylabel(plotted_df.columns[1], fontsize=20)
+    plt.title(title, fontsize=25)
     colors = ['r', 'g', 'b', 'y', 'c', 'm']
     colors = colors[:len(targets)]
 

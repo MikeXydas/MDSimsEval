@@ -11,8 +11,7 @@ import matplotlib.pyplot as plt
 # Returns: a 2 row list. First row contains the 1, 0 predictions of the ith sample,
 # 2nd row the certainty (probability) of the ith prediction
 def performLOO(classifier, X, Y, probsExist):
-    print()
-    print(">>> Performing LOO")
+    print("\n>>> Performing LOO")
 
     loo = LeaveOneOut()
     predict_results = list()
