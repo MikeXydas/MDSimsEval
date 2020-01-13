@@ -23,12 +23,22 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
+# Set basic parameters for the experiment
+exp_params = {
+    "dataset_path": "../datasets/caspase_8.csv",
+    "pca_componentes": 2,   # if -1, then PCA is not applied
+    "pca_loadings_path": "resources/PCA_components_MD_3D_no_20_23_AAA.csv",
+    "KBest_features": 5,    # if -1, then KBest is not applied
+    "KBest_scores_path": "resources/ANOVA_MD_scores_BBB.csv",
+    "scatter_plot_title": "KBEST_PCA_MD_3D",    # there will be a plot if features are 2D
+    "feature_groups": ["3D", "MD"]              # Possible values: "2D", "3D", "MD"
+}
 
 # Initialize indexes of features(1D, 2D, 3D, MD)
 feature_groups = {'2D': list(np.arange(8)), '3D': list(np.arange(8, 16)), 'MD': list(np.arange(16, 24))}
 
 # Reading the full dataset
-df = pd.read_csv("../datasets/caspase_8.csv", sep=",")
+df = pd.read_csv(exp_params['dataset_path'], sep=",")
 
 # Inputs training_rows, indexes of wanted features
 # and perform feature selection
@@ -38,7 +48,7 @@ def split_dataset(df, training_rows, feature_indexes):
     train_df_Y = df.iloc[:training_rows, -1]
     temp_cols = train_df_X.columns  # We need the column names for the components of PCA
 
-    # Everything not in train will be on test(validation) set
+    # Everything not in training will be on test set
     test_df_X = df.iloc[training_rows:, feature_indexes]
     test_df_Y = df.iloc[training_rows:, -1]
 
@@ -54,43 +64,43 @@ def split_dataset(df, training_rows, feature_indexes):
     features_df = train_df_X
 
     # Calculate ANOVA f value and select top-k features
-    ANOVA_feature_selector = SelectKBest(f_classif, k=4).fit(features_df, train_df_Y)
-    final_features_indexes = ANOVA_feature_selector.get_support(indices=True)
-    features_df = pd.DataFrame(ANOVA_feature_selector.transform(features_df))
-    pd.DataFrame([ANOVA_feature_selector.scores_], columns=temp_cols)\
-        .round(4).to_csv(path_or_buf="resources/ANOVA_MD_scores_NULL.csv")       # Save scores of features
-    final_features_names = [temp_cols[i] for i in final_features_indexes]
-    features_df.columns = final_features_names
-    # pd.DataFrame(final_features_names).to_csv(path_or_buf="resources/ANOVA_best_k_features.csv")
-    test_df_X = test_df_X.iloc[:, final_features_indexes]   # Get only the selected features on test set
-    temp_cols = features_df.columns
+    if(exp_params['KBest_features'] != -1):
+        ANOVA_feature_selector = SelectKBest(f_classif, k=exp_params['KBest_features']).fit(features_df, train_df_Y)
+        final_features_indexes = ANOVA_feature_selector.get_support(indices=True)       # Indices of the top-k features
+        features_df = pd.DataFrame(ANOVA_feature_selector.transform(features_df))       # A df containing the surviving features of shape [topK, training_rows]
+        pd.DataFrame([ANOVA_feature_selector.scores_], columns=temp_cols)\
+            .round(4).to_csv(path_or_buf=exp_params['KBest_scores_path'])               # Save scores of features
+        features_df.columns = [temp_cols[i] for i in final_features_indexes]            # Get which column names survived
+        test_df_X = test_df_X.iloc[:, final_features_indexes]                           # Get only the selected features on test set
+        temp_cols = features_df.columns
 
     # Perform Principal Component Analysis
-    pca = PCA(n_components=3)
-    final_features = np.zeros(pca.get_params()['n_components'])     # Needed to check condition if we can 2D plot
-    features_df = pd.DataFrame(pca.fit_transform(features_df))  # Fit PCA
-    features_df.columns = ["PC" + str(i) for i in range(1, pca.n_components_ + 1)] # Give name to the columns
-    comps = pd.DataFrame(pca.components_, columns=temp_cols).round(4)     # Components (eigenvetors)
-    variances = pd.DataFrame(pca.explained_variance_, columns=['Variance']).round(4) # Variances (eigenvalues)
-    test_df_X = pca.transform(test_df_X)    # Apply the transformation on the test set
-    # Save components and variances in a csv
-    comps = pd.concat([comps, variances], axis=1)
-    comps.to_csv(path_or_buf='resources/PCA_components_MD_3D_no_20_23_NULL.csv', sep=',')
+    if(exp_params['pca_componentes'] != -1):
+        pca = PCA(n_components=exp_params['pca_componentes'])
+        final_features = np.zeros(pca.get_params()['n_components'])     # Needed to check condition if we can 2D plot
+        features_df = pd.DataFrame(pca.fit_transform(features_df))      # Fit and transform on the training set
+        features_df.columns = ["PC" + str(i) for i in range(1, pca.n_components_ + 1)]          # Give name to the columns (PC1, PC2, ...)
+        comps = pd.DataFrame(pca.components_, columns=temp_cols).round(4)                       # Loading Values
+        variances = pd.DataFrame(pca.explained_variance_, columns=['Variance']).round(4)        # Variances
+        test_df_X = pca.transform(test_df_X)                            # Apply ONLY the transformation on the test set
+        # Save loading values and variances in a csv
+        comps = pd.concat([comps, variances], axis=1)
+        comps = pd.concat([pd.DataFrame(["PC" + str(i) for i in range(1, exp_params['pca_componentes'] + 1)], columns=["PCs"]), comps], axis=1)
+        comps.to_csv(path_or_buf=exp_params['pca_loadings_path'], sep=',')
 
     # This will result in a plot if remaining features of features_df = 2
     plot_scatter_points(pd.concat([features_df, train_df_Y], axis=1), [0, 1],
-                        ["Inactive", "Active"], title="PCA_F_Values_MD_3D", show_ids=True)
+                        ["Inactive", "Active"], title=exp_params['scatter_plot_title'], show_ids=True)
 
-    # Return the features selected for training and evaluation
     final_train_X = features_df.iloc[:training_rows, :]
-    final_test_X = features_df.iloc[training_rows:, :]
 
+    # Return the selected features for training and testing
     return final_train_X, train_df_Y, test_df_X, test_df_Y
 
 
 # Choosing features and creating train and test sets
 # Paper Selection: 29 training, 14 testing (4 actives in train, 2 actives in test)
-features_selected = feature_groups['MD'] + feature_groups['3D']
+features_selected = np.array([feature_groups[i] for i in exp_params['feature_groups']]).flatten()
 train_df_X, train_df_Y, test_df_X, test_df_Y = split_dataset(df, 29, features_selected)
 
 # Fitting on chosen method
