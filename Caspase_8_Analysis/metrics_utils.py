@@ -1,6 +1,7 @@
 from sklearn import metrics
 from sklearn.metrics import plot_confusion_matrix
 from sklearn.metrics import f1_score
+from sklearn.model_selection import KFold
 
 import pandas as pd
 import numpy as np
@@ -50,10 +51,10 @@ def do_evaluations(true_y, pred_y, pred_probs=None, probs_exist=False, displayed
 
     print(displayed_name + " | F1: " + str(metrics.f1_score(true_y, pred_y, average='binary')))
 
-    fpr, tpr, thresholds = metrics.roc_curve(true_y, pred_y)
-    print(displayed_name + " | AUC: " + str(metrics.auc(fpr, tpr)))
-
+    # print(pred_probs)
     if(probs_exist):
+        fpr, tpr, thresholds = metrics.roc_curve(true_y, pred_probs[:, 1], pos_label=1)
+        print(displayed_name + " | AUC: " + str(metrics.auc(fpr, tpr)))
         plot_probabilities(pred_probs, true_y, ["Inactive", "Active"], show_plot=show_plots,
                             print_probabilities=False)
 
@@ -100,3 +101,24 @@ def plot_scatter_points(plotted_df, targets, unique_labels=["label1", "axis_2"],
 
     return 0
 
+
+def performKFold(classifier, X, Y, folds):
+    kf = KFold(n_splits=folds, shuffle=True)
+    acc = f1 = auc = rec = 0
+    for train_index, test_index in kf.split(X):
+        X_train, X_test = X[train_index], X[test_index]
+        y_train, y_test = Y[train_index], Y[test_index]
+        classifier.fit(X_train, y_train)
+        pred_y = classifier.predict(X_test)
+        probs = classifier.predict_proba(X_test)[:, 1]
+        acc += metrics.accuracy_score(y_test, pred_y)
+        f1 += metrics.f1_score(y_test, pred_y)
+        fpr, tpr, thresholds = metrics.roc_curve(y_test, probs, pos_label=1)
+        auc += metrics.auc(fpr, tpr)
+        rec += metrics.recall_score(y_test, pred_y)
+
+    print("\n>>> " + str(folds) + "-Fold Results")
+    print(str(folds) + "-Fold | Accuracy: " + str(acc / folds))
+    print(str(folds) + "-Fold | Recall: " + str(rec / folds))
+    print(str(folds) + "-Fold | F1: " + str(f1 / folds))
+    print(str(folds) + "-Fold | AUC: " + str(auc / folds))

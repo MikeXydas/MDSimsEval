@@ -13,10 +13,11 @@ from sklearn.decomposition import PCA
 from sklearn import metrics
 from sklearn.metrics import plot_confusion_matrix
 from sklearn.model_selection import RandomizedSearchCV
+from sklearn.model_selection import cross_validate
 
 from sklearn import datasets
 
-from Caspase_8_Analysis.metrics_utils import do_evaluations, plot_confusion, plot_scatter_points
+from Caspase_8_Analysis.metrics_utils import do_evaluations, plot_confusion, plot_scatter_points,performKFold
 from Caspase_8_Analysis.loo import performLOO
 
 import pandas as pd
@@ -26,9 +27,9 @@ import matplotlib.pyplot as plt
 # Set basic parameters for the experiment
 exp_params = {
     "dataset_path": "../datasets/caspase_8.csv",
-    "pca_componentes": 2,   # if -1, then PCA is not applied
+    "pca_componentes": -1,   # if -1, then PCA is not applied
     "pca_loadings_path": "resources/PCA_components_MD_3D_no_20_23_AAA.csv",
-    "KBest_features": 5,    # if -1, then KBest is not applied
+    "KBest_features": -1,    # if -1, then KBest is not applied
     "KBest_scores_path": "resources/ANOVA_MD_scores_BBB.csv",
     "scatter_plot_title": "KBEST_PCA_MD_3D",    # there will be a plot if features are 2D
     "feature_groups": ["3D", "MD"]              # Possible values: "2D", "3D", "MD"
@@ -39,6 +40,7 @@ feature_groups = {'2D': list(np.arange(8)), '3D': list(np.arange(8, 16)), 'MD': 
 
 # Reading the full dataset
 df = pd.read_csv(exp_params['dataset_path'], sep=",")
+# df = df.sample(frac=1)
 
 # Inputs training_rows, indexes of wanted features
 # and perform feature selection
@@ -104,12 +106,12 @@ features_selected = np.array([feature_groups[i] for i in exp_params['feature_gro
 train_df_X, train_df_Y, test_df_X, test_df_Y = split_dataset(df, 29, features_selected)
 
 # Fitting on chosen method
-# clf = RandomForestClassifier(class_weight={1:6}, n_estimators=1, criterion='entropy',
-#                                max_features='sqrt', max_depth=60)
-# clf = RandomForestClassifier()
+# clf = RandomForestClassifier(class_weight={0:0.1, 1:0.9}, n_estimators=100, criterion='entropy',
+#                                max_features='log2')
+clf = RandomForestClassifier(random_state=1)
 # clf = SVC(class_weight={1:6}, gamma='auto', tol=1e-5)
-clf = SVC()
-# clf = LogisticRegression(class_weight={1:5}, solver='liblinear', penalty='l1', tol=5e-5, max_iter=10000)
+# clf = SVC()
+# clf = LogisticRegression(class_weight="balanced", solver='liblinear', penalty='l1', tol=5e-5, max_iter=10000)
 # clf = LogisticRegression()
 # clf = KNeighborsClassifier(n_neighbors=1, algorithm='brute', p=2)
 # clf = KNeighborsClassifier()
@@ -119,14 +121,20 @@ clf.fit(train_df_X, train_df_Y)
 # Predicting on test set
 print("\n>>> Evaluating on paper test split")
 pred_y = clf.predict(test_df_X)
-#pred_probs = clf.predict_proba(test_df_X)
+pred_y_probs = clf.predict_proba(test_df_X)
+do_evaluations(test_df_Y, pred_y, pred_y_probs, probs_exist=True, displayed_name="Paper Split", show_plots=True)
 
-do_evaluations(test_df_Y, pred_y, None, probs_exist=False, displayed_name="Paper Split", show_plots=True)
+# Doing k-fold (on paper 10-fold was used)
+# performKFold(clf, np.array(train_df_X), np.array(train_df_Y), 10)
+
+
 #plot_confusion(clf, "Caspase_8 Confusion", test_df_X, test_df_Y, ["Inactive", "Active"],
 #               show_plot=False, print_confusion=True)
 
-# # Run Leave One Out cross-validation on training set
-# pred_y = performLOO(clf, train_df_X, train_df_Y, probsExist=False)
+
+
+# Run Leave One Out cross-validation on training set
+# pred_y = performLOO(clf, train_df_X, train_df_Y, probsExist=True)
 
 
 # # Number of trees in random forest
