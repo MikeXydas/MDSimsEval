@@ -26,13 +26,10 @@ def performLOO(classifier, X, Y, probsExist):
         classifier.fit(np.array(X_train), np.array(Y_train))
         pred_y = classifier.predict(X_test)
         predict_results.append(pred_y[0])
-        print(predict_results)
         if(probsExist):
             pred_y_prob = classifier.predict_proba(X_test)
-            print(pred_y_prob)
             predict_probs.append([pred_y_prob[0][0], pred_y_prob[0][1]])
 
-    print(np.array(predict_probs))
     do_evaluations(Y, predict_results, np.array(predict_probs), probs_exist=probsExist, displayed_name="LOO", show_plots=probsExist)
 
     return pred_y
