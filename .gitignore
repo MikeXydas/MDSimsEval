@@ -10,3 +10,6 @@ gen
 
 # Images / Plots
 *plots/
+
+# Jupyter Checkpoints
+*ipynb_checkpoints/
