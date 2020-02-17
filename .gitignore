@@ -13,3 +13,9 @@ gen
 
 # Jupyter Checkpoints
 *ipynb_checkpoints/
+
+# MD Files
+*.xtc
+*.gro
+*.pdb
+*.npz
