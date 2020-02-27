@@ -13,6 +13,8 @@ gen
 
 # Jupyter Checkpoints
 *ipynb_checkpoints/
+datasets/
+Caspase_8_Analysis/__pycache__/
 
 # MD Files
 *.xtc
