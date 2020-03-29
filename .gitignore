@@ -3,7 +3,7 @@
 ### Example user template
 
 # IntelliJ project files
-.idea
+.idea/*
 *.iml
 out
 gen
@@ -21,3 +21,4 @@ Caspase_8_Analysis/__pycache__/
 *.gro
 *.pdb
 *.npz
+MD_Analysis/Agonists_Antagonists/AnalysisAgonistsAntagonists/__pycache__/
