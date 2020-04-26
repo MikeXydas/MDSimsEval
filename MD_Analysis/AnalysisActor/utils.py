@@ -76,4 +76,8 @@ def create_analysis_actor_dict(root_directory):
                                                                       sasa_file=sasa_filepath,
                                                                       salts_directory=salts_directory)
                                                       )
+    # Alphabetical sorting on ligand name
+    analysis_actors_dict['Agonists'] = sorted(analysis_actors_dict['Agonists'], key= lambda x: x.drug_name)
+    analysis_actors_dict['Antagonists'] = sorted(analysis_actors_dict['Antagonists'], key=lambda x: x.drug_name)
+
     return analysis_actors_dict
