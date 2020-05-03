@@ -208,7 +208,7 @@ class AnalysisActor:
             
         # Calculate Root Mean Square Fluctuation
         if "RMSF" in metrics or len(metrics) == 0:
-            self.rmsf_res = RMSF(self.uni.atoms).run()
+            self.rmsf_res = RMSF(self.uni.select_atoms('protein')).run()
 
         # Perform PCA on the CA atoms
         if "PCA" in metrics or len(metrics) == 0:
