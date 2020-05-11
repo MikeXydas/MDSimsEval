@@ -112,25 +112,30 @@ def create_bar_plots_avg_stde(analysis_actors_dict, dir_path, top=50, start=0, s
     residue_rmsfs_antagon_sem = stats.sem(residue_rmsfs_antagon)
 
     # Get the indexes of the top-k absolute difference of agonists - antagonists RMSF
-    top_k_indexes = return_top_k(np.abs(residue_rmsfs_agon_avg - residue_rmsfs_antagon_avg), analysis_actors_dict, k=top)
+    top_k_indexes = return_top_k(np.abs(residue_rmsfs_agon_avg - residue_rmsfs_antagon_avg), analysis_actors_dict,
+                                 k=top)
+    max_diff = max(top_k_indexes.RMSF)
+    min_diff = min(top_k_indexes.RMSF)
 
     # Get the top-k indexes plotted with different colors
     # Mask is a list of booleans where True means the residue is included in the top-k
     mask_top_k = np.array([(ind in list(top_k_indexes.ResidueId)) for ind in range(len(residue_rmsfs_agon_avg))])
 
-    fig = plt.figure(figsize=(18, 40))
+    fig = plt.figure(figsize=(42, 20))
+    plt.suptitle(f"Range of Top-{top} abs(difference): {min_diff} <= diff <= {max_diff}",
+                 fontsize=35, y=0.95)
 
     # Plotting the agonists
-    ax = fig.add_subplot(211)
+    ax = fig.add_subplot(121)
 
     plt.bar(np.arange(len(residue_rmsfs_agon_avg))[~mask_top_k], residue_rmsfs_agon_avg[~mask_top_k],
             label="Agonists Avg RMSF per Residue")
     plt.bar(np.arange(len(residue_rmsfs_agon_avg))[~mask_top_k], residue_rmsfs_agon_sem[~mask_top_k],
-            label="Agonists Stde RMSF per Residue")
+            label="Agonists Stde RMSF per Residue", color="green")
     plt.bar(np.arange(len(residue_rmsfs_agon_avg))[mask_top_k], residue_rmsfs_agon_avg[mask_top_k],
-            label=f"Top-{top} Agonists Avg RMSF per Residue")
+            label=f"Top-{top} Agonists Avg RMSF per Residue", color="red")
     plt.bar(np.arange(len(residue_rmsfs_agon_avg))[mask_top_k], residue_rmsfs_agon_sem[mask_top_k],
-            label=f"Top-{top} Agonists Stde RMSF per Residue")
+            label=f"Top-{top} Agonists Stde RMSF per Residue", color="orange")
 
     plt.xlabel("Residue Id", fontsize=30)
     plt.xticks(np.arange(0, len(residue_rmsfs_agon_avg), 50), fontsize=25)
@@ -143,23 +148,23 @@ def create_bar_plots_avg_stde(analysis_actors_dict, dir_path, top=50, start=0, s
     plt.legend(prop={'size': 20}, markerscale=3, loc=1)
 
     # Plotting the antagonists
-    ax = fig.add_subplot(212)
+    ax = fig.add_subplot(122)
 
     plt.bar(np.arange(len(residue_rmsfs_antagon_avg))[~mask_top_k], residue_rmsfs_antagon_avg[~mask_top_k],
             label="Antagonists Avg RMSF per Residue")
     plt.bar(np.arange(len(residue_rmsfs_antagon_avg))[~mask_top_k], residue_rmsfs_antagon_sem[~mask_top_k],
-            label="Antagonists Stde RMSF per Residue")
+            label="Antagonists Stde RMSF per Residue", color="green")
     plt.bar(np.arange(len(residue_rmsfs_antagon_avg))[mask_top_k], residue_rmsfs_antagon_avg[mask_top_k],
-            label=f"Top-{top} Antagonists Avg RMSF per Residue")
+            label=f"Top-{top} Antagonists Avg RMSF per Residue", color="red")
     plt.bar(np.arange(len(residue_rmsfs_antagon_avg))[mask_top_k], residue_rmsfs_antagon_sem[mask_top_k],
-            label=f"Top-{top} Antagonists Stde RMSF per Residue")
+            label=f"Top-{top} Antagonists Stde RMSF per Residue", color="orange")
 
     plt.xlabel("Residue Id", fontsize=30)
     plt.xticks(np.arange(0, len(residue_rmsfs_agon_avg), 50), fontsize=25)
     plt.yticks(np.arange(0, 6.5, 0.5), fontsize=25)
     ax.set_ylim(0, 6)
     ax.set_xlim(0, 290)
-    ax.yaxis.grid(linewidth=2)
+    ax.yaxis.grid()
     plt.ylabel("RMSF", fontsize=36)
     plt.title(f"Antagonists Average, Stde RMSF | Frames {start} - {stop}", fontsize=32)
     plt.legend(prop={'size': 20}, markerscale=3, loc=1)
