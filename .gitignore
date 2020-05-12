@@ -24,3 +24,4 @@ Caspase_8_Analysis/__pycache__/
 *.npz
 MD_Analysis/Agonists_Antagonists/AnalysisAgonistsAntagonists/__pycache__/
 /deprecated/
+/.ipynb_checkpoints/
