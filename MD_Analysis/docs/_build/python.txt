@@ -1,0 +1,15 @@
+Undocumented Python objects
+===========================
+AnalysisActorClass
+------------------
+Classes:
+ * AnalysisActor -- missing methods:
+
+   - get_hbonds
+   - get_pca
+   - get_radius_of_gyration
+   - get_rmsf
+   - get_salt_bridges_df
+   - get_salt_bridges_over_time
+   - get_sasa
+
