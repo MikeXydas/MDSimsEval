@@ -1,6 +1,8 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pylab as plt
+import imgkit
+
 from scipy import stats
 
 from MDAnalysis.analysis.rms import RMSF
@@ -170,3 +172,67 @@ def create_bar_plots_avg_stde(analysis_actors_dict, dir_path, top=50, start=0, s
     plt.legend(prop={'size': 20}, markerscale=3, loc=1)
 
     plt.savefig(f'{dir_path}rmsf_avg_stde_top_k_{start}_{stop}.png', format='png')
+
+
+def corr_matrix(analysis_actors_dict, dir_path, top=290, start=0, stop=2500):
+    """
+    Creates a correlation matrix of the RMSF which has #agonists + #antagonists x #agonists + #antagonists dimensions.
+    The values correlation is calculated on are the RMSF values of the top-k residues.
+
+    Args:
+        analysis_actors_dict: Dict(
+                                "Agonists": List[AnalysisActor.class]
+                                "Antagonists": List[AnalysisActor.class]
+                              )
+        dir_path (str): The path of the directory the plot will be saved
+        top(int): The top-k residues that will be used for the correlation calculations
+        start(int): The starting frame of the calculations
+        stop(int): The stopping frame of the calculations
+    """
+    # Reset the calculations of the RMSF for each ligand
+    for ligand in analysis_actors_dict['Agonists'] + analysis_actors_dict['Antagonists']:
+        ligand.rmsf_res = None
+
+    # Recalculate on the given window
+    for ligand in analysis_actors_dict['Agonists'] + analysis_actors_dict['Antagonists']:
+        ligand.rmsf_res = RMSF(ligand.uni.select_atoms('protein')).run(start=start, stop=stop)
+
+    # Calculate RMSF per residue
+    residue_rmsfs_agon = np.array(
+        [get_avg_rmsf_per_residue(ligand) for ligand in analysis_actors_dict['Agonists']])
+    residue_rmsfs_antagon = np.array(
+        [get_avg_rmsf_per_residue(ligand) for ligand in analysis_actors_dict['Antagonists']])
+
+    if top == 290:
+        # We want to calculate the correlation on all the residues of each ligand
+        mask = [True for i in range(len(residue_rmsfs_agon[0]))]
+    else:
+        # We want to calculate the correlation on the top-k differentiating residues of each ligand
+        residue_rmsfs_agon_avg = np.mean(residue_rmsfs_agon, axis=0)
+        residue_rmsfs_antagon_avg = np.mean(residue_rmsfs_antagon, axis=0)
+
+        # Get the indexes of the top-k absolute difference of agonists - antagonists RMSF
+        top_k_indexes = return_top_k(np.abs(residue_rmsfs_agon_avg - residue_rmsfs_antagon_avg), analysis_actors_dict,
+                                     k=top)
+        mask = np.array([(ind in list(top_k_indexes.ResidueId)) for ind in range(len(residue_rmsfs_agon_avg))])
+
+    # Creating dataframe which will have as columns the ligand names and as rows the residues
+    rmsf_array = np.array([res_rmsf[mask] for res_rmsf in np.vstack((residue_rmsfs_agon, residue_rmsfs_antagon))])
+    ligand_names = [ligand.drug_name[:5]    # I use only the first 5 chars of the ligand name for easier fitting
+                    for ligand in analysis_actors_dict['Agonists'] + analysis_actors_dict['Antagonists']]
+    rmsf_df = pd.DataFrame(rmsf_array.T, columns=ligand_names)
+
+    # Creating the correlation matrix adding a heatmap for easier visualization
+    corr = rmsf_df.corr(method='pearson')
+    html_render = corr.style.background_gradient(cmap='coolwarm', axis=None).set_precision(2).render()
+
+    # Saving the correlation matrix
+    try:
+        # If wkhtmltopdf is installed save the results as a .png
+        imgkit.from_string(html_render, f"{dir_path}rmsf_corr_map_top{top}_{start}_{stop}.png")
+    except IOError:
+        # Save the html of the correlation map which can be rendered by a browser
+        with open(f"{dir_path}rmsf_corr_map_top{top}_{start}_{stop}.html", "w") as text_file:
+            text_file.write(html_render)
+
+    return None
