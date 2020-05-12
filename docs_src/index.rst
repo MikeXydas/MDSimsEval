@@ -3,11 +3,14 @@
 MD_Feature_Extraction Documentation
 =================================================
 
-**MD_Feature_Extraction** is a package I created as part of my undergraduate thesis that in a flexible way calculates useful
-metrics from Molecular Dynamics (MD) simulations, stores them and provides a number of methods for useful visualizations.
+**The main goal of this package is to create a way of summarizing, describing and evaluating collections of
+MD simulations**
 
-**This package is use case specific**.The prerequisite of using this package is having **a number
-of MD simulations of two classes**. In the case of my thesis I had a number of Agonist and Antagonist
+**MD_Feature_Extraction** is a package I created as part of my undergraduate thesis that in a flexible way calculates useful
+metrics for **a collection of Molecular Dynamics (MD) simulations**, stores them and provides a number of methods for visualizations.
+
+**This package is use case specific**.The prerequisite of using this package is having a number
+of MD simulations of two classes. In the case of my thesis I had a number of Agonist and Antagonist
 simulations. My goal was to extract known features of MD simulations and evaluate them on their ability
 to differentiate an agonist from an antagonist.
 
@@ -19,20 +22,23 @@ If your goal is simple analysis of MD I suggest these free solutions:
 
 The above solutions are actually used for some of my calculations.
 
+**Concerning usage of the package read** :doc:`Prerequisites <pages/Prerequisites>` .
+
 .. Contents
 .. ========
 
 .. toctree::
    :maxdepth: 4
    :numbered:
+   :hidden:
 
    ./pages/Prerequisites
    ./pages/AnalysisActor
 
 
-Indices and tables
-==================
+.. Indices and tables
+.. ==================
 
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+.. * :ref:`genindex`
+.. * :ref:`modindex`
+.. * :ref:`search`
