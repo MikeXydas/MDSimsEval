@@ -1,0 +1,300 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>2. AnalysisActor &#8212; MD_Feature_Extraction 0.0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="1. Prerequisites" href="Prerequisites.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-AnalysisActorClass">
+<span id="analysisactor"></span><h1><span class="section-number">2. </span>AnalysisActor<a class="headerlink" href="#module-AnalysisActorClass" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="AnalysisActorClass.AnalysisActor">
+<em class="property">class </em><code class="sig-prename descclassname">AnalysisActorClass.</code><code class="sig-name descname">AnalysisActor</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">topology</span></em>, <em class="sig-param"><span class="n">trajectory</span></em>, <em class="sig-param"><span class="n">drug_name</span></em>, <em class="sig-param"><span class="n">sasa_file</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">salts_directory</span><span class="o">=</span><span class="default_value">''</span></em><span class="sig-paren">)</span><a class="headerlink" href="#AnalysisActorClass.AnalysisActor" title="Permalink to this definition">¶</a></dt>
+<dd><p>The AnalysisActor is the core object which inputs a single topology and trajectory and performs the analysis.</p>
+<p>The class will be responsible for reading, running calculations and storing the results. The role of the class
+is mainly “structural” since it is the base input of all of our analysis functions. In the future a caching
+mechanism should be added so as to not have to perform multiple times the same calculations and instead read
+them from the disk.
+A full list of possible input formats:
+<a class="reference external" href="https://www.mdanalysis.org/docs/documentation_pages/coordinates/init.html#supported-coordinate-formats">https://www.mdanalysis.org/docs/documentation_pages/coordinates/init.html#supported-coordinate-formats</a></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><strong>Solvent Accessible Surface Area (SASA) and Salt bridges</strong> can be given as files from disk to avoid calculation time.
+More on that on <a class="reference external" href="aa">reading SASA and Salt Bridges files</a>.</p>
+</div>
+<p class="rubric">Example</p>
+<p>Examples can be given using either the <code class="docutils literal notranslate"><span class="pre">Example</span></code> or <code class="docutils literal notranslate"><span class="pre">Examples</span></code>
+sections. Sections support any reStructuredText formatting, including
+literal blocks:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">MD_Analysis.AnalysisActor.AnalysisActorClass</span> <span class="kn">import</span> <span class="n">AnalysisActor</span>
+<span class="n">ligand</span> <span class="o">=</span> <span class="n">AnalysisActor</span><span class="p">(</span><span class="s1">&#39;topology&#39;</span><span class="p">,</span> <span class="s1">&#39;trajectory&#39;</span><span class="p">,</span> <span class="s1">&#39;ligand_name&#39;</span><span class="p">)</span>    <span class="c1"># No SASA or Salt Bridges files provided</span>
+
+<span class="n">ligand</span><span class="o">.</span><span class="n">perform_analysis</span><span class="p">([</span><span class="s2">&quot;RMSF&quot;</span><span class="p">,</span> <span class="s2">&quot;Rg&quot;</span><span class="p">])</span>    <span class="c1"># Calculate the Rg and the RMSF of the simulation</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ligand</span><span class="o">.</span><span class="n">get_radius_of_gyration</span><span class="p">()))</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="mi">2500</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>topology</strong> (<em>str</em>) – The topology filepath (.pdb, .gro etc)</p></li>
+<li><p><strong>trajectory</strong> (<em>str</em>) – The trajectory filepath (.xtc etc)</p></li>
+<li><p><strong>drug_name</strong> (<em>str</em>) – The name of the agonist or antagonist</p></li>
+<li><p><strong>sasa_file</strong> (<em>str</em><em>, </em><em>optional</em>) – Full path of the sasa.xvg file generated by Gromacs</p></li>
+<li><p><strong>salts_directory</strong> (<em>str</em><em>, </em><em>optional</em>) – Full path of the salts directory generated by the vmd extension</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt id="AnalysisActorClass.AnalysisActor.uni">
+<code class="sig-name descname">uni</code><a class="headerlink" href="#AnalysisActorClass.AnalysisActor.uni" title="Permalink to this definition">¶</a></dt>
+<dd><p>The universe of atoms created by MDAnalysis tool
+(<a class="reference external" href="https://www.mdanalysis.org/docs/documentation_pages/core/universe.html">MDAnalysis.core.universe</a>)</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="AnalysisActorClass.AnalysisActor.mdtraj">
+<code class="sig-name descname">mdtraj</code><a class="headerlink" href="#AnalysisActorClass.AnalysisActor.mdtraj" title="Permalink to this definition">¶</a></dt>
+<dd><p>The trajectory of atoms created by MDTraj tool
+(<a class="reference external" href="http://mdtraj.org/latest/api/generated/mdtraj.Trajectory.html#mdtraj.Trajectory">mdtraj.Trajectory</a>)</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="AnalysisActorClass.AnalysisActor.drug_name">
+<code class="sig-name descname">drug_name</code><a class="headerlink" href="#AnalysisActorClass.AnalysisActor.drug_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The ligand name initialized in the construction of the object</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="AnalysisActorClass.AnalysisActor.rg_res">
+<code class="sig-name descname">rg_res</code><a class="headerlink" href="#AnalysisActorClass.AnalysisActor.rg_res" title="Permalink to this definition">¶</a></dt>
+<dd><p>Radius of gyration of each frame</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code> of double</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="AnalysisActorClass.AnalysisActor.rmsf_res">
+<code class="sig-name descname">rmsf_res</code><a class="headerlink" href="#AnalysisActorClass.AnalysisActor.rmsf_res" title="Permalink to this definition">¶</a></dt>
+<dd><p>RMSF of each atom of the <strong>protein</strong> (NOT including the ligand)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code> of double</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="AnalysisActorClass.AnalysisActor.pca_res">
+<code class="sig-name descname">pca_res</code><a class="headerlink" href="#AnalysisActorClass.AnalysisActor.pca_res" title="Permalink to this definition">¶</a></dt>
+<dd><p>Object containing eigenvectors and eigenvalues of CA atoms covariance matrix
+(<a class="reference external" href="https://www.mdanalysis.org/docs/documentation_pages/analysis/pca.html#MDAnalysis.analysis.pca.PCA">MDAnalysis.analysis.pca.PCA</a>)</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="AnalysisActorClass.AnalysisActor.pca_xyz">
+<code class="sig-name descname">pca_xyz</code><a class="headerlink" href="#AnalysisActorClass.AnalysisActor.pca_xyz" title="Permalink to this definition">¶</a></dt>
+<dd><p>The coordinates of the atoms selected for PCA</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>ndarray[#atoms_selected * 3, #frames]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="AnalysisActorClass.AnalysisActor.sasa_res">
+<code class="sig-name descname">sasa_res</code><a class="headerlink" href="#AnalysisActorClass.AnalysisActor.sasa_res" title="Permalink to this definition">¶</a></dt>
+<dd><p>The calculation currently is performed outside of the pipeline
+using gromacs. MDTraj offers an algorithm for calculating SASA
+but is computationally intensive and cannot run on my laptop</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>ndarray[2, #frames]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="AnalysisActorClass.AnalysisActor.hbonds">
+<code class="sig-name descname">hbonds</code><a class="headerlink" href="#AnalysisActorClass.AnalysisActor.hbonds" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list containing the atom indices involved in
+each of the identified hydrogen bonds at each frame.
+Each element in the list is an array where each row contains
+three integer indices, (d_i, h_i, a_i),
+such that d_i is the index of the donor atom,
+h_i the index of the hydrogen atom,
+and a_i the index of the acceptor atom involved
+in a hydrogen bond which occurs in that frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>ndarray[#frames, #hbonds_of_frame, 3]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="AnalysisActorClass.AnalysisActor.salt_bridges_df">
+<code class="sig-name descname">salt_bridges_df</code><a class="headerlink" href="#AnalysisActorClass.AnalysisActor.salt_bridges_df" title="Permalink to this definition">¶</a></dt>
+<dd><p>A pd.DataFrame with the first two columns [“Residue1”, “Residue2”] being the
+residue names that form the salt bridge and the next #frames column the distance
+between these two residues</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>pd.DataFrame[#NumberOfSaltBridges, 2 + DistancesPerFrame]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="AnalysisActorClass.AnalysisActor.salt_bridges_over_time">
+<code class="sig-name descname">salt_bridges_over_time</code><a class="headerlink" href="#AnalysisActorClass.AnalysisActor.salt_bridges_over_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>A vector of size #frames containing the number of active salt
+bridges per frame</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>ndarray[#frames]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="AnalysisActorClass.AnalysisActor.get_frames_number">
+<code class="sig-name descname">get_frames_number</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#AnalysisActorClass.AnalysisActor.get_frames_number" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the number of frames of the trajectory</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="AnalysisActorClass.AnalysisActor.info">
+<code class="sig-name descname">info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#AnalysisActorClass.AnalysisActor.info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints basic info of the simulation</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="AnalysisActorClass.AnalysisActor.perform_analysis">
+<code class="sig-name descname">perform_analysis</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">metrics</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="headerlink" href="#AnalysisActorClass.AnalysisActor.perform_analysis" title="Permalink to this definition">¶</a></dt>
+<dd><p>Runs the analysis methods for calculating the metrics specified by metrics argument</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>metrics</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – <div class="line-block">
+<div class="line">A list of the metrics to be calculated. Available:</div>
+<div class="line">Empty List []: All of the available metrics will be calculated (default)</div>
+<div class="line">’Rg’: Radius of Gyration</div>
+<div class="line">’RMSF’: Root Mean Square Fluctuations</div>
+<div class="line">’SASA’: Solvent Accessible Surface Area</div>
+<div class="line">’PCA’: Principal Component Analysis</div>
+<div class="line">’Hbonds’: Hydrogen Bonds</div>
+<div class="line">’Salt’: Calculate number of salt bridges</div>
+</div>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">MD_Feature_Extraction</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Prerequisites.html">1. Prerequisites</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">2. AnalysisActor</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="Prerequisites.html" title="previous chapter"><span class="section-number">1. </span>Prerequisites</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Mike Xydas.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/pages/AnalysisActor.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
