@@ -1,0 +1,173 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>2. Reading the simulations &#8212; MD_Feature_Extraction 0.0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="3. AnalysisActor" href="AnalysisActor.html" />
+    <link rel="prev" title="1. Prerequisites" href="Prerequisites.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="reading-the-simulations">
+<h1><span class="section-number">2. </span>Reading the simulations<a class="headerlink" href="#reading-the-simulations" title="Permalink to this headline">¶</a></h1>
+<p>Emphasis must be given on reading the trajectory files in an organized and optimal way.</p>
+<div class="section" id="directory-structure">
+<h2><span class="section-number">2.1. </span>Directory Structure<a class="headerlink" href="#directory-structure" title="Permalink to this headline">¶</a></h2>
+<p>Our reader function expects a specific directory structure.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">input_directory</span><span class="o">/</span>
+  <span class="n">Agonists</span><span class="o">/</span>
+    <span class="n">Ligand1_</span><span class="o">/</span>
+      <span class="n">trajectory_</span><span class="o">.</span><span class="n">xtc</span>
+      <span class="n">topology_</span><span class="o">.</span><span class="n">pdb</span>
+      <span class="n">sasa</span><span class="o">.</span><span class="n">xvg</span> <span class="o">*</span>
+      <span class="n">salts</span><span class="o">/</span> <span class="o">*</span>
+    <span class="n">Ligand2_</span>
+       <span class="o">.</span>
+       <span class="o">.</span>
+       <span class="o">.</span>
+  <span class="n">Antagonists</span><span class="o">/</span>
+     <span class="o">.</span>
+     <span class="o">.</span>
+     <span class="o">.</span>
+</pre></div>
+</div>
+<p>On the above structure everything followed by an underscore <code class="docutils literal notranslate"><span class="pre">_</span></code> can have a different name.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="docutils literal notranslate"><span class="pre">sasa.xvg</span></code> and <code class="docutils literal notranslate"><span class="pre">salts/</span></code> are explained <a class="reference external" href="aa">here</a></p>
+</div>
+<p>As an example this was my actual input directory named <code class="docutils literal notranslate"><span class="pre">New_AI_MD</span></code>:</p>
+<a class="reference internal image-reference" href="../_images/file_structure.png"><img alt="alternate text" class="align-center" src="../_images/file_structure.png" style="width: 400px; height: 450px;" /></a>
+<div class="line-block">
+<div class="line"><br /></div>
+<div class="line"><br /></div>
+</div>
+</div>
+<div class="section" id="module-AnalysisActor.utils">
+<span id="reading-function"></span><h2><span class="section-number">2.2. </span>Reading Function<a class="headerlink" href="#module-AnalysisActor.utils" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="AnalysisActor.utils.create_analysis_actor_dict">
+<code class="sig-prename descclassname">AnalysisActor.utils.</code><code class="sig-name descname">create_analysis_actor_dict</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">root_directory</span></em><span class="sig-paren">)</span><a class="headerlink" href="#AnalysisActor.utils.create_analysis_actor_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads the simulations (topologies, trajectories and sasa.xvg, salts/ if available and stores them in dictionary
+structure. The dictionary structure called <code class="docutils literal notranslate"><span class="pre">analysis_actors_dict</span></code> is the core structure that our functions
+take as an argument.</p>
+<blockquote>
+<div><dl>
+<dt>Example:</dt><dd><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">MD_Analysis.AnalysisActor.utils</span> <span class="kn">import</span> <span class="n">create_analysis_actor_dict</span>
+<span class="n">analysis_actors_dict</span> <span class="o">=</span> <span class="n">create_analysis_actor_dict</span><span class="p">(</span><span class="s1">&#39;path_to_data_directory/&#39;</span><span class="p">)</span>
+
+<span class="n">analysis_actors_dict</span><span class="p">[</span><span class="s1">&#39;Agonists&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
+<span class="n">Out</span><span class="p">:</span>
+    <span class="o">&lt;&lt;&lt;</span> <span class="n">Info</span> <span class="n">of</span> <span class="mi">5</span><span class="o">-</span><span class="n">MeOT</span> <span class="o">&gt;&gt;&gt;</span>
+    <span class="n">Number</span> <span class="n">of</span> <span class="n">Frames</span><span class="p">:</span> <span class="mi">2500</span>
+    <span class="n">Number</span> <span class="n">of</span> <span class="n">Atoms</span><span class="p">:</span> <span class="mi">4743</span>
+    <span class="n">Number</span> <span class="n">of</span> <span class="n">Residues</span><span class="p">:</span> <span class="mi">291</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">MD_Feature_Extraction</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Prerequisites.html">1. Prerequisites</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">2. Reading the simulations</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#directory-structure">2.1. Directory Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-AnalysisActor.utils">2.2. Reading Function</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="AnalysisActor.html">3. AnalysisActor</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="Prerequisites.html" title="previous chapter"><span class="section-number">1. </span>Prerequisites</a></li>
+      <li>Next: <a href="AnalysisActor.html" title="next chapter"><span class="section-number">3. </span>AnalysisActor</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Mike Xydas.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/pages/ReadingData.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

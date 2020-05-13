@@ -14,7 +14,7 @@
     <script src="../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="2. AnalysisActor" href="AnalysisActor.html" />
+    <link rel="next" title="2. Reading the simulations" href="ReadingData.html" />
     <link rel="prev" title="MD_Feature_Extraction Documentation" href="../index.html" />
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
@@ -34,6 +34,59 @@
             
   <div class="section" id="prerequisites">
 <h1><span class="section-number">1. </span>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="installation">
+<h2><span class="section-number">1.1. </span>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<p>The package is not published and is currently <strong>NOT</strong> available with <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">package_name</span></code>.</p>
+<p>The steps for installing are:</p>
+<ol class="arabic simple">
+<li><p>Clone the repository</p></li>
+<li><p>Install the <code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code></p></li>
+</ol>
+<blockquote>
+<div><ul class="simple">
+<li><p>Conda Env: <code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">install</span> <span class="pre">--file</span> <span class="pre">requirements.txt</span></code></p></li>
+<li><p>VirtualEnv: <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-r</span> <span class="pre">requirements.txt</span></code></p></li>
+</ul>
+</div></blockquote>
+<ol class="arabic simple" start="3">
+<li><p>Copy the <cite>AnalysisActor</cite> directory to your project</p></li>
+</ol>
+<p>Then you can import any method or class</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">AnalysisActor.utils</span> <span class="kn">import</span> <span class="n">create_analysis_actor_dict</span>  <span class="c1"># Example import</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><strong>Optional</strong>: The <code class="docutils literal notranslate"><span class="pre">rmsf_analysis.corr_matrix</span></code> function in order to provide as ouput a .png requires <code class="docutils literal notranslate"><span class="pre">wkhtmltopdf</span></code>
+to be installed via <code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">apt-get</span> <span class="pre">install</span> <span class="pre">wkhtmltopdf</span></code>. More on the <a class="reference external" href="https://github.com/kamalkraj/imgkit">imgkit package</a>.
+If not installed the output will be an <code class="docutils literal notranslate"><span class="pre">.html</span></code> file which can be opened with any browser.</p>
+</div>
+</div>
+<div class="section" id="data">
+<h2><span class="section-number">1.2. </span>Data<a class="headerlink" href="#data" title="Permalink to this headline">¶</a></h2>
+<div class="line-block">
+<div class="line">As you may have read in the homepage this is not a package for analysis of a single MD simulation. All the
+methods need a collection of MD simulations preferably of two classes. The goal of the package is to provide
+insight of which features differentiate these two classes.</div>
+<div class="line">Also the simulations must have the <strong>same number of frames and preferably performed on the same protein</strong></div>
+</div>
+<div class="line-block">
+<div class="line">To make it more clear I will present my use case as an example:</div>
+<div class="line">I was provided with a number of 2500 frames simulations on the <a class="reference external" href="https://en.wikipedia.org/wiki/5-HT2A_receptor">5HT2A receptor</a>
+using different ligands. N of the ligands were agonists and M were antagonists. My goal was to find which features
+help us differentiate an agonist from an antagonist.</div>
+</div>
+<dl class="simple">
+<dt>The features I analyzed are:</dt><dd><ul class="simple">
+<li><p>Radius of Gyration</p></li>
+<li><p>Solvent-Accessible Surface Area</p></li>
+<li><p>Root Mean Square Flactuation</p></li>
+<li><p>PCA Loadings and 2D Projections</p></li>
+</ul>
+</dd>
+</dl>
+<p><strong>Continue with</strong> <a class="reference external" href="aa">reading the data</a></p>
+</div>
 </div>
 
 
@@ -54,8 +107,13 @@
 
 <h3>Navigation</h3>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">1. Prerequisites</a></li>
-<li class="toctree-l1"><a class="reference internal" href="AnalysisActor.html">2. AnalysisActor</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">1. Prerequisites</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#installation">1.1. Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#data">1.2. Data</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ReadingData.html">2. Reading the simulations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="AnalysisActor.html">3. AnalysisActor</a></li>
 </ul>
 
 <div class="relations">
@@ -63,7 +121,7 @@
 <ul>
   <li><a href="../index.html">Documentation overview</a><ul>
       <li>Previous: <a href="../index.html" title="previous chapter">MD_Feature_Extraction Documentation</a></li>
-      <li>Next: <a href="AnalysisActor.html" title="next chapter"><span class="section-number">2. </span>AnalysisActor</a></li>
+      <li>Next: <a href="ReadingData.html" title="next chapter"><span class="section-number">2. </span>Reading the simulations</a></li>
   </ul></li>
 </ul>
 </div>

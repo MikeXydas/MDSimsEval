@@ -3,5 +3,5 @@
 AnalysisActor
 =================================================
 
-.. automodule:: AnalysisActorClass
+.. automodule:: AnalysisActor.AnalysisActorClass
     :members:

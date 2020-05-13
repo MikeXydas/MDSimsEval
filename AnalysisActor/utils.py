@@ -6,25 +6,25 @@ from tqdm import tqdm
 from .AnalysisActorClass import AnalysisActor
 
 
-# ## Reading the trajectories
-#
-# Emphasis must be given on reading the trajectory files in an organized and optimal way.
-# The current approach is:
-#
-# 1. Input: path which points to a directory that contains to subdirectories with names **"agonists", "antagonists"**
-# 2. Extract the file paths of trajectory.xtc, topology.pdb and sasa.xvg (if available)
-# 3. Create the dictionary:
-# ```python
-# {
-#     "Agonists": List[AnalysisActor.class]
-#     "Antagonists": List[AnalysisActor.class]
-# }
-# ```
-#
-# **The trajectory and topology file are expected to have a file ending of .xtc and .pdb respectively,
-# although we can easily expand it to more formats**
-#
 def create_analysis_actor_dict(root_directory):
+    """
+    Reads the simulations (topologies, trajectories and sasa.xvg, salts/ if available and stores them in dictionary
+    structure. The dictionary structure called ``analysis_actors_dict`` is the core structure that our functions
+    take as an argument.
+
+     Example:
+        ::
+
+            from MD_Analysis.AnalysisActor.utils import create_analysis_actor_dict
+            analysis_actors_dict = create_analysis_actor_dict('path_to_data_directory/')
+
+            analysis_actors_dict['Agonists'][0].info()
+            Out:
+                <<< Info of 5-MeOT >>>
+                Number of Frames: 2500
+                Number of Atoms: 4743
+                Number of Residues: 291
+    """
     dir_list = os.listdir(root_directory)
 
     # Check that the root_directory contains the Agonists, Antagonists folders
@@ -40,7 +40,7 @@ def create_analysis_actor_dict(root_directory):
     for which_dir in ['Agonists', 'Antagonists']:
         simulations = tqdm(os.listdir(root_directory + which_dir + '/'))
         for which_sim in simulations:
-            simulations.set_description(f"{which_dir} | {which_sim}")    # Updating the tqdm progress bar description
+            simulations.set_description(f"{which_dir} | {which_sim}")  # Updating the tqdm progress bar description
 
             # Get the MD info files
             files = os.listdir(root_directory + which_dir + '/' + which_sim + '/')
@@ -68,16 +68,16 @@ def create_analysis_actor_dict(root_directory):
 
             if traj == "" or top == "":
                 logging.error("Failed to find topology or trajectory file in: " + root_directory + which_dir + '/'
-                                                                                + which_sim + '/' + file)
+                              + which_sim + '/' + file)
             else:
                 # Everything ok, construct a new AnalysisActor
                 analysis_actors_dict[which_dir].append(
-                                                        AnalysisActor(top, traj, which_sim,
-                                                                      sasa_file=sasa_filepath,
-                                                                      salts_directory=salts_directory)
-                                                      )
+                    AnalysisActor(top, traj, which_sim,
+                                  sasa_file=sasa_filepath,
+                                  salts_directory=salts_directory)
+                )
     # Alphabetical sorting on ligand name
-    analysis_actors_dict['Agonists'] = sorted(analysis_actors_dict['Agonists'], key= lambda x: x.drug_name)
+    analysis_actors_dict['Agonists'] = sorted(analysis_actors_dict['Agonists'], key=lambda x: x.drug_name)
     analysis_actors_dict['Antagonists'] = sorted(analysis_actors_dict['Antagonists'], key=lambda x: x.drug_name)
 
     return analysis_actors_dict

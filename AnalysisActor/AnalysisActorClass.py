@@ -26,11 +26,9 @@ class AnalysisActor:
         More on that on `reading SASA and Salt Bridges files <aa>`_.
 
     Example:
-        Examples can be given using either the ``Example`` or ``Examples``
-        sections. Sections support any reStructuredText formatting, including
-        literal blocks::
+        ::
 
-            from MD_Analysis.AnalysisActor.AnalysisActorClass import AnalysisActor
+            from AnalysisActor.AnalysisActorClass import AnalysisActor
             ligand = AnalysisActor('topology', 'trajectory', 'ligand_name')    # No SASA or Salt Bridges files provided
 
             ligand.perform_analysis(["RMSF", "Rg"])    # Calculate the Rg and the RMSF of the simulation

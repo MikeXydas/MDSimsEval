@@ -33,6 +33,7 @@ The above solutions are actually used for some of my calculations.
    :hidden:
 
    ./pages/Prerequisites
+   ./pages/ReadingData
    ./pages/AnalysisActor
 
 
