@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>3. AnalysisActor &mdash; MD_Feature_Extraction 0.0.1 documentation</title>
+  <title>3. AnalysisActor &mdash; MDSimsEval 0.0.1 documentation</title>
   
 
   
@@ -35,6 +35,7 @@
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="4. RMSF Analysis" href="RmsfAnalysis.html" />
     <link rel="prev" title="2. Reading the simulations" href="ReadingData.html" /> 
 </head>
 
@@ -49,7 +50,7 @@
           
 
           
-            <a href="../index.html" class="icon icon-home"> MD_Feature_Extraction
+            <a href="../index.html" class="icon icon-home"> MDSimsEval
           
 
           
@@ -57,6 +58,10 @@
 
           
             
+            
+              <div class="version">
+                0.0.1
+              </div>
             
           
 
@@ -83,6 +88,7 @@
 <li class="toctree-l1"><a class="reference internal" href="Prerequisites.html">1. Prerequisites</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ReadingData.html">2. Reading the simulations</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">3. AnalysisActor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RmsfAnalysis.html">4. RMSF Analysis</a></li>
 </ul>
 
             
@@ -97,7 +103,7 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../index.html">MD_Feature_Extraction</a>
+          <a href="../index.html">MDSimsEval</a>
         
       </nav>
 
@@ -156,13 +162,11 @@
 <p>The class will be responsible for reading, running calculations and storing the results. The role of the class
 is mainly “structural” since it is the base input of all of our analysis functions. In the future a caching
 mechanism should be added so as to not have to perform multiple times the same calculations and instead read
-them from the disk.
-A full list of possible input formats:
-<a class="reference external" href="https://www.mdanalysis.org/docs/documentation_pages/coordinates/init.html#supported-coordinate-formats">https://www.mdanalysis.org/docs/documentation_pages/coordinates/init.html#supported-coordinate-formats</a></p>
+them from the disk.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p><strong>Solvent Accessible Surface Area (SASA) and Salt bridges</strong> can be given as files from disk to avoid calculation time.
-More on that on <a class="reference external" href="aa">reading SASA and Salt Bridges files</a>.</p>
+<p><strong>Solvent Accessible Surface Area (SASA) and Salt bridges</strong> are calculated outside of the package
+More info on <a class="reference internal" href="ReadingData.html#reading-salt-sasa"><span class="std std-ref">SASA and Salt Bridges</span></a>.</p>
 </div>
 <p class="rubric">Example</p>
 <p>Example on one simulation</p>
@@ -174,11 +178,11 @@ More on that on <a class="reference external" href="aa">reading SASA and Salt Br
 <span class="o">&gt;&gt;&gt;</span> <span class="mi">2500</span>
 </pre></div>
 </div>
-<p>Example on the whole <code class="docutils literal notranslate"><span class="pre">analysis_actors_dict</span></code></p>
+<p>Example on the whole <code class="docutils literal notranslate"><span class="pre">analysis_actors_dict</span></code> (probably what you want)</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">AnalysisActor.utils</span> <span class="kn">import</span> <span class="n">create_analysis_actor_dict</span>
 <span class="n">analysis_actors_dict</span> <span class="o">=</span> <span class="n">create_analysis_actor_dict</span><span class="p">(</span><span class="s1">&#39;path_to_data_directory/&#39;</span><span class="p">)</span>
 
-<span class="k">for</span> <span class="n">ligand</span> <span class="ow">in</span> <span class="n">analysis_actors_dict</span><span class="p">[</span><span class="s1">&#39;Agonists&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">analysis_actors_dict</span><span class="p">[</span><span class="s1">&#39;Agonists&#39;</span><span class="p">]:</span>
+<span class="k">for</span> <span class="n">ligand</span> <span class="ow">in</span> <span class="n">analysis_actors_dict</span><span class="p">[</span><span class="s1">&#39;Agonists&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">analysis_actors_dict</span><span class="p">[</span><span class="s1">&#39;Antagonists&#39;</span><span class="p">]:</span>
     <span class="n">ligand</span><span class="o">.</span><span class="n">perform_analysis</span><span class="p">(</span><span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;RMSF&quot;</span><span class="p">,</span> <span class="s2">&quot;PCA&quot;</span><span class="p">])</span>
 </pre></div>
 </div>
@@ -221,7 +225,7 @@ More on that on <a class="reference external" href="aa">reading SASA and Salt Br
 <dl class="py attribute">
 <dt id="AnalysisActor.AnalysisActorClass.AnalysisActor.rg_res">
 <code class="sig-name descname">rg_res</code><a class="headerlink" href="#AnalysisActor.AnalysisActorClass.AnalysisActor.rg_res" title="Permalink to this definition">¶</a></dt>
-<dd><p>Radius of gyration of each frame</p>
+<dd><p>Radius of gyration of each frame (<a class="reference external" href="https://www.mdanalysis.org/MDAnalysisTutorial/trajectories.html#trajectory-analysis">MDAnalysis</a>)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
 <dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code> of double</p>
@@ -232,7 +236,7 @@ More on that on <a class="reference external" href="aa">reading SASA and Salt Br
 <dl class="py attribute">
 <dt id="AnalysisActor.AnalysisActorClass.AnalysisActor.rmsf_res">
 <code class="sig-name descname">rmsf_res</code><a class="headerlink" href="#AnalysisActor.AnalysisActorClass.AnalysisActor.rmsf_res" title="Permalink to this definition">¶</a></dt>
-<dd><p>RMSF of each atom of the <strong>protein</strong> (NOT including the ligand)</p>
+<dd><p>RMSF of each atom of the <strong>protein</strong> (<a class="reference external" href="https://www.mdanalysis.org/pmda/api/rmsf.html">MDAnalysis</a>)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
 <dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code> of double</p>
@@ -262,8 +266,7 @@ More on that on <a class="reference external" href="aa">reading SASA and Salt Br
 <dt id="AnalysisActor.AnalysisActorClass.AnalysisActor.sasa_res">
 <code class="sig-name descname">sasa_res</code><a class="headerlink" href="#AnalysisActor.AnalysisActorClass.AnalysisActor.sasa_res" title="Permalink to this definition">¶</a></dt>
 <dd><p>The calculation currently is performed outside of the pipeline
-using gromacs. MDTraj offers an algorithm for calculating SASA
-but is computationally intensive and cannot run on my laptop</p>
+using <a class="reference external" href="http://manual.gromacs.org/documentation/5.1/onlinehelp/gmx-sasa.html">gromacs</a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
 <dd class="field-odd"><p>ndarray[2, #frames]</p>
@@ -281,7 +284,8 @@ three integer indices, (d_i, h_i, a_i),
 such that d_i is the index of the donor atom,
 h_i the index of the hydrogen atom,
 and a_i the index of the acceptor atom involved
-in a hydrogen bond which occurs in that frame.</p>
+in a hydrogen bond which occurs in that frame.
+(<a class="reference external" href="http://mdtraj.org/1.9.3/api/generated/mdtraj.wernet_nilsson.html?highlight=wernet#mdtraj.wernet_nilsson">MDtraj</a>)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
 <dd class="field-odd"><p>ndarray[#frames, #hbonds_of_frame, 3]</p>
@@ -294,7 +298,7 @@ in a hydrogen bond which occurs in that frame.</p>
 <code class="sig-name descname">salt_bridges_df</code><a class="headerlink" href="#AnalysisActor.AnalysisActorClass.AnalysisActor.salt_bridges_df" title="Permalink to this definition">¶</a></dt>
 <dd><p>A pd.DataFrame with the first two columns [“Residue1”, “Residue2”] being the
 residue names that form the salt bridge and the next #frames column the distance
-between these two residues</p>
+between these two residues (<a class="reference external" href="https://www.ks.uiuc.edu/Research/vmd/plugins/saltbr/">VMD plugin</a>)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
 <dd class="field-odd"><p>pd.DataFrame[#NumberOfSaltBridges, 2 + DistancesPerFrame]</p>
@@ -358,6 +362,8 @@ bridges per frame</p>
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="RmsfAnalysis.html" class="btn btn-neutral float-right" title="4. RMSF Analysis" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="ReadingData.html" class="btn btn-neutral float-left" title="2. Reading the simulations" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

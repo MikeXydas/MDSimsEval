@@ -2,7 +2,8 @@
 
 Reading the simulations
 =================================================
-Emphasis must be given on reading the trajectory files in an organized and optimal way.
+This doc page will guide you through preparing your data in the package expected structure and present a function
+for reading and storing them.
 
 Directory Structure
 ###################
@@ -33,7 +34,7 @@ On the above structure everything followed by an underscore ``_`` can have a dif
 class labels. To be fixed so as class label is also a variable.
 
 .. note::
-   ``sasa.xvg`` and ``salts/`` are explained `here <aa>`_
+   ``sasa.xvg`` and ``salts/`` are explained in :ref:`reading_salt_sasa`.
 
 As an example this was my actual input directory named ``New_AI_MD``:
 
@@ -52,6 +53,23 @@ Reading Function
 .. automodule:: AnalysisActor.utils
     :members:
 
+.. _reading_salt_sasa:
+
 SASA and Salt Bridges
 ######################
 
+These two features have a different way of being calculated outside of this package.
+
+Concerning **SASA** we must first create a ``sasa.xvg`` file for each simulation and keep it next to the topology and the
+trajectory. The `GROMACS <http://manual.gromacs.org/documentation/5.1/onlinehelp/gmx-sasa.html>`_ command is::
+
+ gmx sasa -f trajecotry.xtc -s topology.pdb -o sasa.xvg
+
+Concerning the **salt bridges** you must use a `VMD <https://www.ks.uiuc.edu/Research/vmd/plugins/saltbr/>`_ plugin and
+copy the whole outputted directory named ``salts/`` next to the trajectory files.
+
+.. note:: Currently no analysis functions uses salt bridges in this package.
+
+.. todo::
+
+   Create a script to automate the above tedious calculations

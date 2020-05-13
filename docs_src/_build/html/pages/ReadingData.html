@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>2. Reading the simulations &mdash; MD_Feature_Extraction 0.0.1 documentation</title>
+  <title>2. Reading the simulations &mdash; MDSimsEval 0.0.1 documentation</title>
   
 
   
@@ -50,7 +50,7 @@
           
 
           
-            <a href="../index.html" class="icon icon-home"> MD_Feature_Extraction
+            <a href="../index.html" class="icon icon-home"> MDSimsEval
           
 
           
@@ -58,6 +58,10 @@
 
           
             
+            
+              <div class="version">
+                0.0.1
+              </div>
             
           
 
@@ -89,6 +93,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="AnalysisActor.html">3. AnalysisActor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RmsfAnalysis.html">4. RMSF Analysis</a></li>
 </ul>
 
             
@@ -103,7 +108,7 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../index.html">MD_Feature_Extraction</a>
+          <a href="../index.html">MDSimsEval</a>
         
       </nav>
 
@@ -155,7 +160,8 @@
             
   <div class="section" id="reading-the-simulations">
 <h1><span class="section-number">2. </span>Reading the simulations<a class="headerlink" href="#reading-the-simulations" title="Permalink to this headline">¶</a></h1>
-<p>Emphasis must be given on reading the trajectory files in an organized and optimal way.</p>
+<p>This doc page will guide you through preparing your data in the package expected structure and present a function
+for reading and storing them.</p>
 <div class="section" id="directory-structure">
 <h2><span class="section-number">2.1. </span>Directory Structure<a class="headerlink" href="#directory-structure" title="Permalink to this headline">¶</a></h2>
 <p>Our reader function expects a specific directory structure.</p>
@@ -181,7 +187,7 @@
 class labels. To be fixed so as class label is also a variable.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p><code class="docutils literal notranslate"><span class="pre">sasa.xvg</span></code> and <code class="docutils literal notranslate"><span class="pre">salts/</span></code> are explained <a class="reference external" href="aa">here</a></p>
+<p><code class="docutils literal notranslate"><span class="pre">sasa.xvg</span></code> and <code class="docutils literal notranslate"><span class="pre">salts/</span></code> are explained in <a class="reference internal" href="#reading-salt-sasa"><span class="std std-ref">SASA and Salt Bridges</span></a>.</p>
 </div>
 <p>As an example this was my actual input directory named <code class="docutils literal notranslate"><span class="pre">New_AI_MD</span></code>:</p>
 <a class="reference internal image-reference" href="../_images/file_structure.png"><img alt="alternate text" class="align-center" src="../_images/file_structure.png" style="width: 400px; height: 450px;" /></a>
@@ -233,7 +239,19 @@ take as an argument.</p>
 
 </div>
 <div class="section" id="sasa-and-salt-bridges">
-<h2><span class="section-number">2.3. </span>SASA and Salt Bridges<a class="headerlink" href="#sasa-and-salt-bridges" title="Permalink to this headline">¶</a></h2>
+<span id="reading-salt-sasa"></span><h2><span class="section-number">2.3. </span>SASA and Salt Bridges<a class="headerlink" href="#sasa-and-salt-bridges" title="Permalink to this headline">¶</a></h2>
+<p>These two features have a different way of being calculated outside of this package.</p>
+<p>Concerning <strong>SASA</strong> we must first create a <code class="docutils literal notranslate"><span class="pre">sasa.xvg</span></code> file for each simulation and keep it next to the topology and the
+trajectory. The <a class="reference external" href="http://manual.gromacs.org/documentation/5.1/onlinehelp/gmx-sasa.html">GROMACS</a> command is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">gmx</span> <span class="n">sasa</span> <span class="o">-</span><span class="n">f</span> <span class="n">trajecotry</span><span class="o">.</span><span class="n">xtc</span> <span class="o">-</span><span class="n">s</span> <span class="n">topology</span><span class="o">.</span><span class="n">pdb</span> <span class="o">-</span><span class="n">o</span> <span class="n">sasa</span><span class="o">.</span><span class="n">xvg</span>
+</pre></div>
+</div>
+<p>Concerning the <strong>salt bridges</strong> you must use a <a class="reference external" href="https://www.ks.uiuc.edu/Research/vmd/plugins/saltbr/">VMD</a> plugin and
+copy the whole outputted directory named <code class="docutils literal notranslate"><span class="pre">salts/</span></code> next to the trajectory files.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Currently no analysis functions uses salt bridges in this package.</p>
+</div>
 </div>
 </div>
 

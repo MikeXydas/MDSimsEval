@@ -18,12 +18,10 @@ class AnalysisActor:
     is mainly "structural" since it is the base input of all of our analysis functions. In the future a caching
     mechanism should be added so as to not have to perform multiple times the same calculations and instead read
     them from the disk.
-    A full list of possible input formats:
-    https://www.mdanalysis.org/docs/documentation_pages/coordinates/init.html#supported-coordinate-formats
 
     Note:
-        **Solvent Accessible Surface Area (SASA) and Salt bridges** can be given as files from disk to avoid calculation time.
-        More on that on `reading SASA and Salt Bridges files <aa>`_.
+        **Solvent Accessible Surface Area (SASA) and Salt bridges** are calculated outside of the package
+        More info on :ref:`reading_salt_sasa`.
 
     Example:
         Example on one simulation
@@ -36,13 +34,13 @@ class AnalysisActor:
             print(len(ligand.get_radius_of_gyration()))
             >>> 2500
 
-        Example on the whole ``analysis_actors_dict``
+        Example on the whole ``analysis_actors_dict`` (probably what you want)
         ::
 
             from AnalysisActor.utils import create_analysis_actor_dict
             analysis_actors_dict = create_analysis_actor_dict('path_to_data_directory/')
 
-            for ligand in analysis_actors_dict['Agonists'] + analysis_actors_dict['Agonists']:
+            for ligand in analysis_actors_dict['Agonists'] + analysis_actors_dict['Antagonists']:
                 ligand.perform_analysis(metrics=["RMSF", "PCA"])
     Args:
         topology (str): The topology filepath (.pdb, .gro etc)
@@ -57,15 +55,14 @@ class AnalysisActor:
         mdtraj: The trajectory of atoms created by MDTraj tool
                 (`mdtraj.Trajectory <http://mdtraj.org/latest/api/generated/mdtraj.Trajectory.html#mdtraj.Trajectory>`_)
         drug_name (str): The ligand name initialized in the construction of the object
-        rg_res (:obj:`list` of double): Radius of gyration of each frame
-        rmsf_res (:obj:`list` of double): RMSF of each atom of the **protein** (NOT including the ligand)
+        rg_res (:obj:`list` of double): Radius of gyration of each frame (`MDAnalysis <https://www.mdanalysis.org/MDAnalysisTutorial/trajectories.html#trajectory-analysis>`_)
+        rmsf_res (:obj:`list` of double): RMSF of each atom of the **protein** (`MDAnalysis <https://www.mdanalysis.org/pmda/api/rmsf.html>`_)
         pca_res : Object containing eigenvectors and eigenvalues of CA atoms covariance matrix
                 (`MDAnalysis.analysis.pca.PCA <https://www.mdanalysis.org/docs/documentation_pages/analysis/pca.html#MDAnalysis.analysis.pca.PCA>`_)
         pca_xyz (ndarray[#atoms_selected * 3, #frames]): The coordinates of the atoms selected for PCA
         
         sasa_res (ndarray[2, #frames]):  The calculation currently is performed outside of the pipeline
-                                          using gromacs. MDTraj offers an algorithm for calculating SASA 
-                                          but is computationally intensive and cannot run on my laptop
+                                          using `gromacs <http://manual.gromacs.org/documentation/5.1/onlinehelp/gmx-sasa.html>`_.
                                           
         hbonds (ndarray[#frames, #hbonds_of_frame, 3]):    A list containing the atom indices involved in
                                                             each of the identified hydrogen bonds at each frame. 
@@ -75,11 +72,12 @@ class AnalysisActor:
                                                             h_i the index of the hydrogen atom, 
                                                             and a_i the index of the acceptor atom involved 
                                                             in a hydrogen bond which occurs in that frame.
+                                                            (`MDtraj <http://mdtraj.org/1.9.3/api/generated/mdtraj.wernet_nilsson.html?highlight=wernet#mdtraj.wernet_nilsson>`_)
                                                             
         salt_bridges_df (pd.DataFrame[#NumberOfSaltBridges, 2 + DistancesPerFrame]):
                                     A pd.DataFrame with the first two columns ["Residue1", "Residue2"] being the 
                                     residue names that form the salt bridge and the next #frames column the distance
-                                    between these two residues
+                                    between these two residues (`VMD plugin <https://www.ks.uiuc.edu/Research/vmd/plugins/saltbr/>`_)
                                     
         salt_bridges_over_time (ndarray[#frames]): A vector of size #frames containing the number of active salt
                                                     bridges per frame

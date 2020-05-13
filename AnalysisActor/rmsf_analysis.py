@@ -1,3 +1,12 @@
+# -*- coding: utf-8 -*-
+"""
+RMSF is a measure of the deviation of the position of a particle i with respect to a reference position **over time**.
+
+**Difference between RMSD and RMSF**: The latter is averaged over time, giving a value for each particle i. For the
+RMSD the average is taken over the particles, giving time specific values. So **RMSD is time specific** and **RMSF
+is atom specific** `(ref) <http://www.drugdesign.gr/uploads/7/6/0/2/7602318/lecture_mdanalysis.pdf>`_.
+"""
+
 import numpy as np
 import pandas as pd
 import matplotlib.pylab as plt
@@ -8,20 +17,21 @@ from scipy import stats
 from MDAnalysis.analysis.rms import RMSF
 
 
-def get_avg_rmsf_per_residue(drug):
+def get_avg_rmsf_per_residue(ligand):
     """
-    Having the series of resnumbs eg [1, 1, 1, 2, 2, ..., 291, 291] and their respective
+    Having the series of resnumbs eg [1, 1, 1, 2, 2, ..., 290, 290] and their respective
     RMSF create buckets (each bucket represents a residue) and calculate the average
     RMSF of each residue
 
     Args:
-        drug (AnalysisActor.class): The AnalysisActor object on which we have calculated the RMSF
+        ligand (AnalysisActor.class): The AnalysisActor object on which we have calculated the RMSF
 
     Returns:
-        np.array[#unique_resnumbs]: The average RMSF of each residue
+        ndarray[#unique_resnumbs]: The average RMSF of each residue
+
     """
     bucket = 0
-    selected_atoms = drug.uni.select_atoms('protein').resnums
+    selected_atoms = ligand.uni.select_atoms('protein').resnums
 
     total_rmsf = np.zeros(len(np.unique(selected_atoms)))  # Holds the sum of RMSFs of each residue
     total_atoms = np.zeros(len(np.unique(selected_atoms)))  # Holds the number of atoms of each residue
@@ -48,15 +58,12 @@ def return_top_k(input_arr, analysis_actors_dict, k=10):
 
     Args:
         input_arr (ndarray): A vector of the values we want to extract the top-k
-        analysis_actors_dict: Dict(
-                                "Agonists": List[AnalysisActor.class]
-                                "Antagonists": List[AnalysisActor.class]
-                              )
+        analysis_actors_dict: ``{ "Agonists": List[AnalysisActor.class], "Antagonists": List[AnalysisActor.class] }``
         k (int): The top-k residues that will be returned
 
     Returns:
-        pd.DataFrame[Residue Id, RMSF]: A pandas dataframe, on the 1st column are the indexes of the top-k values
-                                        and on the 2nd column the value
+        A ``pd.DataFrame['ResidueId', 'RMSF', 'Res Name']`` of the top-k residues
+
     """
     ind = np.argpartition(input_arr, -k)[-k:]
     ind = ind[np.argsort(input_arr[ind])]
@@ -70,8 +77,9 @@ def return_top_k(input_arr, analysis_actors_dict, k=10):
 
     arr = np.vstack((arr, res_names))
 
-    ret_df = pd.DataFrame(arr.T, columns=['ResidueId', 'RMSF', "Res Name"])
+    ret_df = pd.DataFrame(arr.T, columns=['ResidueId', 'RMSF', 'Res Name'])
     ret_df.ResidueId = pd.to_numeric(ret_df.ResidueId).astype(np.int64)
+
     return ret_df
 
 
@@ -79,17 +87,24 @@ def create_bar_plots_avg_stde(analysis_actors_dict, dir_path, top=50, start=0, s
     """
     The method will create two plots (one for the agonists and one for the antagonists). The plot will have the
     avg rmsf per residue and the standard error of the mean. The color of the bars of the top-k
-    |agon_rmsf_avg - antagon_rmsf_avg| RMSF residues are plotted in a different color easily distinguished.
+    ``|agon_rmsf_avg - antagon_rmsf_avg|`` RMSF residues are plotted in a different color
+    so as to be easily distinguished.
+
+    .. figure:: ../_static/rmsf_barplots.png
+        :width: 550
+        :align: center
+        :height: 500px
+        :alt: rmsf corr figure missing
+
+        Barplots of average RMSF per residue, click for higher resolution.
 
     Args:
-        analysis_actors_dict: Dict(
-                                "Agonists": List[AnalysisActor.class]
-                                "Antagonists": List[AnalysisActor.class]
-                              )
+        analysis_actors_dict: ``{ "Agonists": List[AnalysisActor.class], "Antagonists": List[AnalysisActor.class] }``
         dir_path (str): The path of the directory the plot will be saved
         top(int): The top-k residues that will be plotted with a different color
         start(int): The starting frame of the calculations
         stop(int): The stopping frame of the calculations
+
     """
 
     # Reset the calculations of the RMSF for each ligand
@@ -173,21 +188,38 @@ def create_bar_plots_avg_stde(analysis_actors_dict, dir_path, top=50, start=0, s
 
     plt.savefig(f'{dir_path}rmsf_avg_stde_top_k_{start}_{stop}.png', format='png')
 
+    return None
+
 
 def corr_matrix(analysis_actors_dict, dir_path, top=290, start=0, stop=2500):
     """
-    Creates a correlation matrix of the RMSF which has #agonists + #antagonists x #agonists + #antagonists dimensions.
-    The values correlation is calculated on are the RMSF values of the top-k residues.
+    Creates a correlation matrix of the RMSF which has ``#agonists + #antagonists x #agonists + #antagonists`` dimensions.
+    The correlation values are calculated on the RMSF values of the ``top-k`` residues. On the output file the ligand
+    names have only their first 5 characters for visual reasons.
+
+    |
+
+    .. figure:: ../_static/rmsf_corr.png
+        :width: 600px
+        :align: center
+        :height: 250px
+        :alt: rmsf corr figure missing
+
+        Correlation heatmap, click for higher resolution.
+
+    .. note::
+
+         In order to save the as ``.png`` you must install ``wkhtmltopdf`` via ``sudo apt-get install wkhtmltopdf`` on
+         your machine. Else the output will be in ``.html`` and can be viewed using any browser.
 
     Args:
-        analysis_actors_dict: Dict(
-                                "Agonists": List[AnalysisActor.class]
-                                "Antagonists": List[AnalysisActor.class]
-                              )
+
+        analysis_actors_dict: ``{ "Agonists": List[AnalysisActor.class], "Antagonists": List[AnalysisActor.class] }``
         dir_path (str): The path of the directory the plot will be saved
         top(int): The top-k residues that will be used for the correlation calculations
         start(int): The starting frame of the calculations
         stop(int): The stopping frame of the calculations
+
     """
     # Reset the calculations of the RMSF for each ligand
     for ligand in analysis_actors_dict['Agonists'] + analysis_actors_dict['Antagonists']:

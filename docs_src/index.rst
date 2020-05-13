@@ -1,13 +1,13 @@
-.. MD_Feature_Extraction documentation
+.. MDSimsEval documentation
 
-MD_Feature_Extraction Documentation
+MDSimsEval Documentation
 =================================================
 
 **The main goal of this package is to create a way of summarizing, describing and evaluating collections of
 MD simulations**
 
-**MD_Feature_Extraction** is a package I created as part of my undergraduate thesis that in a flexible way calculates useful
-metrics for **a collection of Molecular Dynamics (MD) simulations**, stores them and provides a number of methods for visualizations.
+**MDSimsEval** is a package I created as part of my undergraduate thesis that in a flexible way calculates useful
+metrics for **a collection of Molecular Dynamics (MD) Simulations**, stores them and provides a number of methods for visualizations.
 
 **This package is use case specific**.The prerequisite of using this package is having a number
 of MD simulations of two classes. In the case of my thesis I had a number of Agonist and Antagonist
@@ -22,7 +22,8 @@ If your goal is simple analysis of MD I suggest these free solutions:
 
 The above solutions are actually used for some of my calculations.
 
-**Concerning usage of the package read** :doc:`Prerequisites <pages/Prerequisites>` .
+**In order to get started you should read** :doc:`Prerequisites <pages/Prerequisites>`,
+:doc:`Reading <pages/ReadingData>`, :doc:`AnalysisActor <pages/AnalysisActor>` in this order.
 
 .. Contents
 .. ========
@@ -35,6 +36,7 @@ The above solutions are actually used for some of my calculations.
    ./pages/Prerequisites
    ./pages/ReadingData
    ./pages/AnalysisActor
+   ./pages/RmsfAnalysis
 
 
 .. Indices and tables

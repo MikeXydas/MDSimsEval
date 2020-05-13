@@ -1,0 +1,302 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>4. RMSF Analysis &mdash; MDSimsEval 0.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="3. AnalysisActor" href="AnalysisActor.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> MDSimsEval
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Prerequisites.html">1. Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ReadingData.html">2. Reading the simulations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="AnalysisActor.html">3. AnalysisActor</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">4. RMSF Analysis</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">MDSimsEval</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li><span class="section-number">4. </span>RMSF Analysis</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/pages/RmsfAnalysis.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-AnalysisActor.rmsf_analysis">
+<span id="rmsf-analysis"></span><h1><span class="section-number">4. </span>RMSF Analysis<a class="headerlink" href="#module-AnalysisActor.rmsf_analysis" title="Permalink to this headline">¶</a></h1>
+<p>RMSF is a measure of the deviation of the position of a particle i with respect to a reference position <strong>over time</strong>.</p>
+<p><strong>Difference between RMSD and RMSF</strong>: The latter is averaged over time, giving a value for each particle i. For the
+RMSD the average is taken over the particles, giving time specific values. So <strong>RMSD is time specific</strong> and <strong>RMSF
+is atom specific</strong> <a class="reference external" href="http://www.drugdesign.gr/uploads/7/6/0/2/7602318/lecture_mdanalysis.pdf">(ref)</a>.</p>
+<dl class="py function">
+<dt id="AnalysisActor.rmsf_analysis.corr_matrix">
+<code class="sig-prename descclassname">AnalysisActor.rmsf_analysis.</code><code class="sig-name descname">corr_matrix</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">analysis_actors_dict</span></em>, <em class="sig-param"><span class="n">dir_path</span></em>, <em class="sig-param"><span class="n">top</span><span class="o">=</span><span class="default_value">290</span></em>, <em class="sig-param"><span class="n">start</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">stop</span><span class="o">=</span><span class="default_value">2500</span></em><span class="sig-paren">)</span><a class="headerlink" href="#AnalysisActor.rmsf_analysis.corr_matrix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a correlation matrix of the RMSF which has <code class="docutils literal notranslate"><span class="pre">#agonists</span> <span class="pre">+</span> <span class="pre">#antagonists</span> <span class="pre">x</span> <span class="pre">#agonists</span> <span class="pre">+</span> <span class="pre">#antagonists</span></code> dimensions.
+The correlation values are calculated on the RMSF values of the <code class="docutils literal notranslate"><span class="pre">top-k</span></code> residues. On the output file the ligand
+names have only their first 5 characters for visual reasons.</p>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<div class="figure align-center" id="id1">
+<a class="reference internal image-reference" href="../_images/rmsf_corr.png"><img alt="rmsf corr figure missing" src="../_images/rmsf_corr.png" style="width: 600px; height: 250px;" /></a>
+<p class="caption"><span class="caption-text">Correlation heatmap, click for higher resolution.</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In order to save the as <code class="docutils literal notranslate"><span class="pre">.png</span></code> you must install <code class="docutils literal notranslate"><span class="pre">wkhtmltopdf</span></code> via <code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">apt-get</span> <span class="pre">install</span> <span class="pre">wkhtmltopdf</span></code> on
+your machine. Else the output will be in <code class="docutils literal notranslate"><span class="pre">.html</span></code> and can be viewed using any browser.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>analysis_actors_dict</strong> – <code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">&quot;Agonists&quot;:</span> <span class="pre">List[AnalysisActor.class],</span> <span class="pre">&quot;Antagonists&quot;:</span> <span class="pre">List[AnalysisActor.class]</span> <span class="pre">}</span></code></p></li>
+<li><p><strong>dir_path</strong> (<em>str</em>) – The path of the directory the plot will be saved</p></li>
+<li><p><strong>top</strong> (<em>int</em>) – The top-k residues that will be used for the correlation calculations</p></li>
+<li><p><strong>start</strong> (<em>int</em>) – The starting frame of the calculations</p></li>
+<li><p><strong>stop</strong> (<em>int</em>) – The stopping frame of the calculations</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="AnalysisActor.rmsf_analysis.create_bar_plots_avg_stde">
+<code class="sig-prename descclassname">AnalysisActor.rmsf_analysis.</code><code class="sig-name descname">create_bar_plots_avg_stde</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">analysis_actors_dict</span></em>, <em class="sig-param"><span class="n">dir_path</span></em>, <em class="sig-param"><span class="n">top</span><span class="o">=</span><span class="default_value">50</span></em>, <em class="sig-param"><span class="n">start</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">stop</span><span class="o">=</span><span class="default_value">2500</span></em><span class="sig-paren">)</span><a class="headerlink" href="#AnalysisActor.rmsf_analysis.create_bar_plots_avg_stde" title="Permalink to this definition">¶</a></dt>
+<dd><p>The method will create two plots (one for the agonists and one for the antagonists). The plot will have the
+avg rmsf per residue and the standard error of the mean. The color of the bars of the top-k
+<code class="docutils literal notranslate"><span class="pre">|agon_rmsf_avg</span> <span class="pre">-</span> <span class="pre">antagon_rmsf_avg|</span></code> RMSF residues are plotted in a different color
+so as to be easily distinguished.</p>
+<div class="figure align-center" id="id2">
+<a class="reference internal image-reference" href="../_images/rmsf_barplots.png"><img alt="rmsf corr figure missing" src="../_images/rmsf_barplots.png" style="width: 550px; height: 500px;" /></a>
+<p class="caption"><span class="caption-text">Barplots of average RMSF per residue, click for higher resolution.</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>analysis_actors_dict</strong> – <code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">&quot;Agonists&quot;:</span> <span class="pre">List[AnalysisActor.class],</span> <span class="pre">&quot;Antagonists&quot;:</span> <span class="pre">List[AnalysisActor.class]</span> <span class="pre">}</span></code></p></li>
+<li><p><strong>dir_path</strong> (<em>str</em>) – The path of the directory the plot will be saved</p></li>
+<li><p><strong>top</strong> (<em>int</em>) – The top-k residues that will be plotted with a different color</p></li>
+<li><p><strong>start</strong> (<em>int</em>) – The starting frame of the calculations</p></li>
+<li><p><strong>stop</strong> (<em>int</em>) – The stopping frame of the calculations</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="AnalysisActor.rmsf_analysis.get_avg_rmsf_per_residue">
+<code class="sig-prename descclassname">AnalysisActor.rmsf_analysis.</code><code class="sig-name descname">get_avg_rmsf_per_residue</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ligand</span></em><span class="sig-paren">)</span><a class="headerlink" href="#AnalysisActor.rmsf_analysis.get_avg_rmsf_per_residue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Having the series of resnumbs eg [1, 1, 1, 2, 2, …, 290, 290] and their respective
+RMSF create buckets (each bucket represents a residue) and calculate the average
+RMSF of each residue</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>ligand</strong> (<em>AnalysisActor.class</em>) – The AnalysisActor object on which we have calculated the RMSF</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The average RMSF of each residue</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>ndarray[#unique_resnumbs]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="AnalysisActor.rmsf_analysis.return_top_k">
+<code class="sig-prename descclassname">AnalysisActor.rmsf_analysis.</code><code class="sig-name descname">return_top_k</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_arr</span></em>, <em class="sig-param"><span class="n">analysis_actors_dict</span></em>, <em class="sig-param"><span class="n">k</span><span class="o">=</span><span class="default_value">10</span></em><span class="sig-paren">)</span><a class="headerlink" href="#AnalysisActor.rmsf_analysis.return_top_k" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a DataFrame of the top 10 values of the input array</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_arr</strong> (<em>ndarray</em>) – A vector of the values we want to extract the top-k</p></li>
+<li><p><strong>analysis_actors_dict</strong> – <code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">&quot;Agonists&quot;:</span> <span class="pre">List[AnalysisActor.class],</span> <span class="pre">&quot;Antagonists&quot;:</span> <span class="pre">List[AnalysisActor.class]</span> <span class="pre">}</span></code></p></li>
+<li><p><strong>k</strong> (<em>int</em>) – The top-k residues that will be returned</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A <code class="docutils literal notranslate"><span class="pre">pd.DataFrame['ResidueId',</span> <span class="pre">'RMSF',</span> <span class="pre">'Res</span> <span class="pre">Name']</span></code> of the top-k residues</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="AnalysisActor.html" class="btn btn-neutral float-left" title="3. AnalysisActor" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Mike Xydas
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
