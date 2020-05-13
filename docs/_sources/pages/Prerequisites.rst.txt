@@ -47,4 +47,4 @@ The features I analyzed are:
  - Root Mean Square Flactuation
  - PCA Loadings and 2D Projections
 
-**Continue with** `reading the data <aa>`_
+**Continue with** :doc:`reading the data <ReadingData>`.

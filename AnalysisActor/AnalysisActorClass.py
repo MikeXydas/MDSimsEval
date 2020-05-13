@@ -26,6 +26,7 @@ class AnalysisActor:
         More on that on `reading SASA and Salt Bridges files <aa>`_.
 
     Example:
+        Example on one simulation
         ::
 
             from AnalysisActor.AnalysisActorClass import AnalysisActor
@@ -35,7 +36,14 @@ class AnalysisActor:
             print(len(ligand.get_radius_of_gyration()))
             >>> 2500
 
+        Example on the whole ``analysis_actors_dict``
+        ::
 
+            from AnalysisActor.utils import create_analysis_actor_dict
+            analysis_actors_dict = create_analysis_actor_dict('path_to_data_directory/')
+
+            for ligand in analysis_actors_dict['Agonists'] + analysis_actors_dict['Agonists']:
+                ligand.perform_analysis(metrics=["RMSF", "PCA"])
     Args:
         topology (str): The topology filepath (.pdb, .gro etc)
         trajectory (str): The trajectory filepath (.xtc etc)

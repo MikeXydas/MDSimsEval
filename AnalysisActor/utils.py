@@ -15,7 +15,7 @@ def create_analysis_actor_dict(root_directory):
      Example:
         ::
 
-            from MD_Analysis.AnalysisActor.utils import create_analysis_actor_dict
+            from AnalysisActor.utils import create_analysis_actor_dict
             analysis_actors_dict = create_analysis_actor_dict('path_to_data_directory/')
 
             analysis_actors_dict['Agonists'][0].info()
@@ -24,7 +24,24 @@ def create_analysis_actor_dict(root_directory):
                 Number of Frames: 2500
                 Number of Atoms: 4743
                 Number of Residues: 291
+
+    Args:
+        root_directory(str): The path of the input directory having the expected structure on the documentation
+
+    Returns:
+        analysis_actors_dict::
+
+                            Dict(
+                                "Agonists": List[AnalysisActor.class]
+                                "Antagonists": List[AnalysisActor.class]
+                              )
+
     """
+
+    # The input directory path must end with a "/"
+    if not root_directory.endswith("/"):
+        root_directory = root_directory + "/"
+
     dir_list = os.listdir(root_directory)
 
     # Check that the root_directory contains the Agonists, Antagonists folders

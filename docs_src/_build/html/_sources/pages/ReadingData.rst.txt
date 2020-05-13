@@ -29,6 +29,9 @@ Our reader function expects a specific directory structure.
 
 On the above structure everything followed by an underscore ``_`` can have a different name.
 
+``Agonists`` and ``Antagonists`` were the class labels of my use case. Currently, you must follow the same names as
+class labels. To be fixed so as class label is also a variable.
+
 .. note::
    ``sasa.xvg`` and ``salts/`` are explained `here <aa>`_
 
@@ -48,3 +51,7 @@ Reading Function
 
 .. automodule:: AnalysisActor.utils
     :members:
+
+SASA and Salt Bridges
+######################
+
