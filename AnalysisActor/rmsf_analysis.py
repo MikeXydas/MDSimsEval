@@ -78,7 +78,8 @@ def return_top_k(input_arr, analysis_actors_dict, k=10):
     arr = np.vstack((arr, res_names))
 
     ret_df = pd.DataFrame(arr.T, columns=['ResidueId', 'RMSF', 'Res Name'])
-    ret_df.ResidueId = pd.to_numeric(ret_df.ResidueId).astype(np.int64)
+    ret_df.ResidueId = pd.to_numeric(ret_df.ResidueId)
+    ret_df.RMSF = pd.to_numeric(ret_df.RMSF)
 
     return ret_df
 
@@ -191,7 +192,7 @@ def create_bar_plots_avg_stde(analysis_actors_dict, dir_path, top=50, start=0, s
     return None
 
 
-def corr_matrix(analysis_actors_dict, dir_path, top=290, start=0, stop=2500):
+def corr_matrix(analysis_actors_dict, dir_path, method='pearson', top=290, start=0, stop=2500):
     """
     Creates a correlation matrix of the RMSF which has ``#agonists + #antagonists x #agonists + #antagonists`` dimensions.
     The correlation values are calculated on the RMSF values of the ``top-k`` residues. On the output file the ligand
@@ -216,6 +217,7 @@ def corr_matrix(analysis_actors_dict, dir_path, top=290, start=0, stop=2500):
 
         analysis_actors_dict: ``{ "Agonists": List[AnalysisActor.class], "Antagonists": List[AnalysisActor.class] }``
         dir_path (str): The path of the directory the plot will be saved
+        method (str): pearson, kendall, spearman
         top(int): The top-k residues that will be used for the correlation calculations
         start(int): The starting frame of the calculations
         stop(int): The stopping frame of the calculations
@@ -255,16 +257,16 @@ def corr_matrix(analysis_actors_dict, dir_path, top=290, start=0, stop=2500):
     rmsf_df = pd.DataFrame(rmsf_array.T, columns=ligand_names)
 
     # Creating the correlation matrix adding a heatmap for easier visualization
-    corr = rmsf_df.corr(method='pearson')
+    corr = rmsf_df.corr(method=method)
     html_render = corr.style.background_gradient(cmap='coolwarm', axis=None).set_precision(2).render()
 
     # Saving the correlation matrix
     try:
         # If wkhtmltopdf is installed save the results as a .png
-        imgkit.from_string(html_render, f"{dir_path}rmsf_corr_map_top{top}_{start}_{stop}.png")
+        imgkit.from_string(html_render, f"{dir_path}rmsf_{method}_map_top{top}_{start}_{stop}.png")
     except IOError:
         # Save the html of the correlation map which can be rendered by a browser
-        with open(f"{dir_path}rmsf_corr_map_top{top}_{start}_{stop}.html", "w") as text_file:
+        with open(f"{dir_path}rmsf_{method}_map_top{top}_{start}_{stop}.html", "w") as text_file:
             text_file.write(html_render)
 
     return None
