@@ -17,6 +17,28 @@ from scipy import stats
 from MDAnalysis.analysis.rms import RMSF
 
 
+def reset_rmsf_calculations(analysis_actors_dict, start, stop):
+    """
+    Resets the RMSF calculations of all the ligands in the ``analysis_actors_dict`` and recalculates them on the
+    given window.
+
+    This function could be part of the ``AnalysisActor`` class but in order to keep the class simple I have avoided it.
+
+    Args:
+        analysis_actors_dict: ``{ "Agonists": List[AnalysisActor.class], "Antagonists": List[AnalysisActor.class] }``
+        start(int): The starting frame of the calculations
+        stop(int): The stopping frame of the calculations
+
+    """
+    # Null the calculations of the RMSF for each ligand
+    for ligand in analysis_actors_dict['Agonists'] + analysis_actors_dict['Antagonists']:
+        ligand.rmsf_res = None
+
+    # Recalculate on the given window
+    for ligand in analysis_actors_dict['Agonists'] + analysis_actors_dict['Antagonists']:
+        ligand.rmsf_res = RMSF(ligand.uni.select_atoms('protein')).run(start=start, stop=stop)
+
+
 def get_avg_rmsf_per_residue(ligand):
     """
     Having the series of resnumbs eg [1, 1, 1, 2, 2, ..., 290, 290] and their respective
@@ -44,7 +66,7 @@ def get_avg_rmsf_per_residue(ligand):
         elif first_time:
             first_time = False
 
-        total_rmsf[bucket] += drug.rmsf_res.rmsf[i]
+        total_rmsf[bucket] += ligand.rmsf_res.rmsf[i]
         total_atoms[bucket] += 1
 
     avg_rmsf_per_residue = total_rmsf / total_atoms  # Calculate the mean
@@ -108,13 +130,7 @@ def create_bar_plots_avg_stde(analysis_actors_dict, dir_path, top=50, start=0, s
 
     """
 
-    # Reset the calculations of the RMSF for each ligand
-    for ligand in analysis_actors_dict['Agonists'] + analysis_actors_dict['Antagonists']:
-        ligand.rmsf_res = None
-
-    # Recalculate on the given window
-    for ligand in analysis_actors_dict['Agonists'] + analysis_actors_dict['Antagonists']:
-        ligand.rmsf_res = RMSF(ligand.uni.select_atoms('protein')).run(start=start, stop=stop)
+    reset_rmsf_calculations(analysis_actors_dict, start, stop)
 
     # Calculate avg RMSF per residue
     residue_rmsfs_agon = np.array([get_avg_rmsf_per_residue(ligand) for ligand in analysis_actors_dict['Agonists']])
@@ -223,13 +239,7 @@ def corr_matrix(analysis_actors_dict, dir_path, method='pearson', top=290, start
         stop(int): The stopping frame of the calculations
 
     """
-    # Reset the calculations of the RMSF for each ligand
-    for ligand in analysis_actors_dict['Agonists'] + analysis_actors_dict['Antagonists']:
-        ligand.rmsf_res = None
-
-    # Recalculate on the given window
-    for ligand in analysis_actors_dict['Agonists'] + analysis_actors_dict['Antagonists']:
-        ligand.rmsf_res = RMSF(ligand.uni.select_atoms('protein')).run(start=start, stop=stop)
+    reset_rmsf_calculations(analysis_actors_dict, start, stop)
 
     # Calculate RMSF per residue
     residue_rmsfs_agon = np.array(

@@ -20,7 +20,7 @@ class AnalysisActor:
     them from the disk.
 
     Note:
-        **Solvent Accessible Surface Area (SASA) and Salt bridges** are calculated outside of the package
+        **Solvent Accessible Surface Area (SASA) and Salt bridges** are calculated outside of the package.
         More info on :ref:`reading_salt_sasa`.
 
     Example:
@@ -55,8 +55,8 @@ class AnalysisActor:
         mdtraj: The trajectory of atoms created by MDTraj tool
                 (`mdtraj.Trajectory <http://mdtraj.org/latest/api/generated/mdtraj.Trajectory.html#mdtraj.Trajectory>`_)
         drug_name (str): The ligand name initialized in the construction of the object
-        rg_res (:obj:`list` of double): Radius of gyration of each frame (`MDAnalysis <https://www.mdanalysis.org/MDAnalysisTutorial/trajectories.html#trajectory-analysis>`_)
-        rmsf_res (:obj:`list` of double): RMSF of each atom of the **protein** (`MDAnalysis <https://www.mdanalysis.org/pmda/api/rmsf.html>`_)
+        rg_res (:obj:`list` of double): Radius of gyration of each frame (`MDAnalysisRg <https://www.mdanalysis.org/MDAnalysisTutorial/trajectories.html#trajectory-analysis>`_)
+        rmsf_res (:obj:`list` of double): RMSF of each atom of the **protein** (`MDAnalysisRMSF <https://www.mdanalysis.org/pmda/api/rmsf.html>`_)
         pca_res : Object containing eigenvectors and eigenvalues of CA atoms covariance matrix
                 (`MDAnalysis.analysis.pca.PCA <https://www.mdanalysis.org/docs/documentation_pages/analysis/pca.html#MDAnalysis.analysis.pca.PCA>`_)
         pca_xyz (ndarray[#atoms_selected * 3, #frames]): The coordinates of the atoms selected for PCA
