@@ -123,7 +123,7 @@ def create_bar_plots_avg_stde(analysis_actors_dict, dir_path, top=50, start=0, s
 
     Args:
         analysis_actors_dict: ``{ "Agonists": List[AnalysisActor.class], "Antagonists": List[AnalysisActor.class] }``
-        dir_path (str): The path of the directory the plot will be saved
+        dir_path (str): The path of the directory the plot will be saved (must end with a ``/``)
         top(int): The top-k residues that will be plotted with a different color
         start(int): The starting frame of the calculations
         stop(int): The stopping frame of the calculations
@@ -232,7 +232,7 @@ def corr_matrix(analysis_actors_dict, dir_path, method='pearson', top=290, start
     Args:
 
         analysis_actors_dict: ``{ "Agonists": List[AnalysisActor.class], "Antagonists": List[AnalysisActor.class] }``
-        dir_path (str): The path of the directory the plot will be saved
+        dir_path (str): The path of the directory the plot will be saved (must end with a ``/``)
         method (str): pearson, kendall, spearman
         top(int): The top-k residues that will be used for the correlation calculations
         start(int): The starting frame of the calculations

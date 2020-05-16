@@ -87,7 +87,8 @@
 <li class="toctree-l1"><a class="reference internal" href="pages/Prerequisites.html">1. Prerequisites</a></li>
 <li class="toctree-l1"><a class="reference internal" href="pages/ReadingData.html">2. Reading the simulations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="pages/AnalysisActor.html">3. AnalysisActor</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pages/RmsfAnalysis.html">4. RMSF Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pages/RgSasaAnalysis.html">4. Rg and SASA Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pages/RmsfAnalysis.html">5. RMSF Analysis</a></li>
 </ul>
 
             
@@ -179,6 +180,13 @@
         <li><a href="pages/AnalysisActor.html#module-AnalysisActor.AnalysisActorClass">module</a>
 </li>
       </ul></li>
+      <li>
+    AnalysisActor.rg_sasa_analysis
+
+      <ul>
+        <li><a href="pages/RgSasaAnalysis.html#module-AnalysisActor.rg_sasa_analysis">module</a>
+</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li>
@@ -201,10 +209,14 @@
 <h2 id="C">C</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="pages/RmsfAnalysis.html#AnalysisActor.rmsf_analysis.corr_matrix">corr_matrix() (in module AnalysisActor.rmsf_analysis)</a>
+      <li><a href="pages/RgSasaAnalysis.html#AnalysisActor.rg_sasa_analysis.calculate_average_cols_rg">calculate_average_cols_rg() (in module AnalysisActor.rg_sasa_analysis)</a>
+</li>
+      <li><a href="pages/RgSasaAnalysis.html#AnalysisActor.rg_sasa_analysis.calculate_average_cols_sasa">calculate_average_cols_sasa() (in module AnalysisActor.rg_sasa_analysis)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="pages/RmsfAnalysis.html#AnalysisActor.rmsf_analysis.corr_matrix">corr_matrix() (in module AnalysisActor.rmsf_analysis)</a>
+</li>
       <li><a href="pages/ReadingData.html#AnalysisActor.utils.create_analysis_actor_dict">create_analysis_actor_dict() (in module AnalysisActor.utils)</a>
 </li>
       <li><a href="pages/RmsfAnalysis.html#AnalysisActor.rmsf_analysis.create_bar_plots_avg_stde">create_bar_plots_avg_stde() (in module AnalysisActor.rmsf_analysis)</a>
@@ -259,6 +271,8 @@
       <ul>
         <li><a href="pages/AnalysisActor.html#module-AnalysisActor.AnalysisActorClass">AnalysisActor.AnalysisActorClass</a>
 </li>
+        <li><a href="pages/RgSasaAnalysis.html#module-AnalysisActor.rg_sasa_analysis">AnalysisActor.rg_sasa_analysis</a>
+</li>
         <li><a href="pages/RmsfAnalysis.html#module-AnalysisActor.rmsf_analysis">AnalysisActor.rmsf_analysis</a>
 </li>
         <li><a href="pages/ReadingData.html#module-AnalysisActor.utils">AnalysisActor.utils</a>
@@ -288,9 +302,13 @@
 </li>
       <li><a href="pages/RmsfAnalysis.html#AnalysisActor.rmsf_analysis.return_top_k">return_top_k() (in module AnalysisActor.rmsf_analysis)</a>
 </li>
+      <li><a href="pages/AnalysisActor.html#AnalysisActor.AnalysisActorClass.AnalysisActor.rg_res">rg_res (AnalysisActor.AnalysisActorClass.AnalysisActor attribute)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="pages/AnalysisActor.html#AnalysisActor.AnalysisActorClass.AnalysisActor.rg_res">rg_res (AnalysisActor.AnalysisActorClass.AnalysisActor attribute)</a>
+      <li><a href="pages/RgSasaAnalysis.html#AnalysisActor.rg_sasa_analysis.rg_sasa_mean_mean_plot">rg_sasa_mean_mean_plot() (in module AnalysisActor.rg_sasa_analysis)</a>
+</li>
+      <li><a href="pages/RgSasaAnalysis.html#AnalysisActor.rg_sasa_analysis.rg_sasa_std_std_plot">rg_sasa_std_std_plot() (in module AnalysisActor.rg_sasa_analysis)</a>
 </li>
       <li><a href="pages/AnalysisActor.html#AnalysisActor.AnalysisActorClass.AnalysisActor.rmsf_res">rmsf_res (AnalysisActor.AnalysisActorClass.AnalysisActor attribute)</a>
 </li>
@@ -302,11 +320,15 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pages/AnalysisActor.html#AnalysisActor.AnalysisActorClass.AnalysisActor.salt_bridges_df">salt_bridges_df (AnalysisActor.AnalysisActorClass.AnalysisActor attribute)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pages/AnalysisActor.html#AnalysisActor.AnalysisActorClass.AnalysisActor.salt_bridges_over_time">salt_bridges_over_time (AnalysisActor.AnalysisActorClass.AnalysisActor attribute)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pages/AnalysisActor.html#AnalysisActor.AnalysisActorClass.AnalysisActor.sasa_res">sasa_res (AnalysisActor.AnalysisActorClass.AnalysisActor attribute)</a>
+</li>
+      <li><a href="pages/RgSasaAnalysis.html#AnalysisActor.rg_sasa_analysis.summarize_rg">summarize_rg() (in module AnalysisActor.rg_sasa_analysis)</a>
+</li>
+      <li><a href="pages/RgSasaAnalysis.html#AnalysisActor.rg_sasa_analysis.summarize_sasa">summarize_sasa() (in module AnalysisActor.rg_sasa_analysis)</a>
 </li>
   </ul></td>
 </tr></table>

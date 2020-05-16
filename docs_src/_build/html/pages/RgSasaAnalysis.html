@@ -1,0 +1,318 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>4. Rg and SASA Analysis &mdash; MDSimsEval 0.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="5. RMSF Analysis" href="RmsfAnalysis.html" />
+    <link rel="prev" title="3. AnalysisActor" href="AnalysisActor.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> MDSimsEval
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Prerequisites.html">1. Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ReadingData.html">2. Reading the simulations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="AnalysisActor.html">3. AnalysisActor</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">4. Rg and SASA Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RmsfAnalysis.html">5. RMSF Analysis</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">MDSimsEval</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li><span class="section-number">4. </span>Rg and SASA Analysis</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/pages/RgSasaAnalysis.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-AnalysisActor.rg_sasa_analysis">
+<span id="rg-and-sasa-analysis"></span><h1><span class="section-number">4. </span>Rg and SASA Analysis<a class="headerlink" href="#module-AnalysisActor.rg_sasa_analysis" title="Permalink to this headline">¶</a></h1>
+<p>Rg and SASA are two correlated metrics which focus on describing how the protein expands or shrinks as frames pass.</p>
+<p>The functions in this module are based on frame aggregating techniques per class. For example we will take the <code class="docutils literal notranslate"><span class="pre">Rg</span></code> of
+all the agonists on frame x and find the average. We will do that for every frame and end up with an average description
+of increases or decreases in <code class="docutils literal notranslate"><span class="pre">Rg</span></code>.</p>
+<dl class="py function">
+<dt id="AnalysisActor.rg_sasa_analysis.calculate_average_cols_rg">
+<code class="sig-prename descclassname">AnalysisActor.rg_sasa_analysis.</code><code class="sig-name descname">calculate_average_cols_rg</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">analysis_actors_dict</span></em><span class="sig-paren">)</span><a class="headerlink" href="#AnalysisActor.rg_sasa_analysis.calculate_average_cols_rg" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the mean of Rg of each frame for both classes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>analysis_actors_dict</strong> – <code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">&quot;Agonists&quot;:</span> <span class="pre">List[AnalysisActor.class],</span> <span class="pre">&quot;Antagonists&quot;:</span> <span class="pre">List[AnalysisActor.class]</span> <span class="pre">}</span></code></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Tuple(np.array[#frames], np.array[#frames])</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="AnalysisActor.rg_sasa_analysis.calculate_average_cols_sasa">
+<code class="sig-prename descclassname">AnalysisActor.rg_sasa_analysis.</code><code class="sig-name descname">calculate_average_cols_sasa</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">analysis_actors_dict</span></em><span class="sig-paren">)</span><a class="headerlink" href="#AnalysisActor.rg_sasa_analysis.calculate_average_cols_sasa" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the mean of SASA of each frame for both classes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>analysis_actors_dict</strong> – <code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">&quot;Agonists&quot;:</span> <span class="pre">List[AnalysisActor.class],</span> <span class="pre">&quot;Antagonists&quot;:</span> <span class="pre">List[AnalysisActor.class]</span> <span class="pre">}</span></code></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Tuple(np.array[#frames], np.array[#frames])</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="AnalysisActor.rg_sasa_analysis.rg_sasa_mean_mean_plot">
+<code class="sig-prename descclassname">AnalysisActor.rg_sasa_analysis.</code><code class="sig-name descname">rg_sasa_mean_mean_plot</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">analysis_actors_dict</span></em>, <em class="sig-param"><span class="n">dir_path</span></em>, <em class="sig-param"><span class="n">start</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">stop</span><span class="o">=</span><span class="default_value">2500</span></em><span class="sig-paren">)</span><a class="headerlink" href="#AnalysisActor.rg_sasa_analysis.rg_sasa_mean_mean_plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a mean of Rg - mean of SASA plot on the specified window with annotations on the plots.</p>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<div class="figure align-center" id="id1">
+<a class="reference internal image-reference" href="../_images/rg_sasa_mean.png"><img alt="rg sasa mean figure missing" src="../_images/rg_sasa_mean.png" style="width: 600px; height: 450px;" /></a>
+<p class="caption"><span class="caption-text">Mean Rg - Mean SASA Plot with ligand name annotations</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>analysis_actors_dict</strong> – <code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">&quot;Agonists&quot;:</span> <span class="pre">List[AnalysisActor.class],</span> <span class="pre">&quot;Antagonists&quot;:</span> <span class="pre">List[AnalysisActor.class]</span> <span class="pre">}</span></code></p></li>
+<li><p><strong>dir_path</strong> (<em>str</em>) – The path of the directory the plot will be saved (must end with a <code class="docutils literal notranslate"><span class="pre">/</span></code>)</p></li>
+<li><p><strong>start</strong> (<em>int</em>) – The starting frame of the calculations</p></li>
+<li><p><strong>stop</strong> (<em>int</em>) – The stopping frame of the calculations</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="AnalysisActor.rg_sasa_analysis.rg_sasa_std_std_plot">
+<code class="sig-prename descclassname">AnalysisActor.rg_sasa_analysis.</code><code class="sig-name descname">rg_sasa_std_std_plot</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">analysis_actors_dict</span></em>, <em class="sig-param"><span class="n">dir_path</span></em>, <em class="sig-param"><span class="n">start</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">stop</span><span class="o">=</span><span class="default_value">2500</span></em><span class="sig-paren">)</span><a class="headerlink" href="#AnalysisActor.rg_sasa_analysis.rg_sasa_std_std_plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a std of Rg - std of SASA plot on the specified window with annotations on the plots.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>analysis_actors_dict</strong> – <code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">&quot;Agonists&quot;:</span> <span class="pre">List[AnalysisActor.class],</span> <span class="pre">&quot;Antagonists&quot;:</span> <span class="pre">List[AnalysisActor.class]</span> <span class="pre">}</span></code></p></li>
+<li><p><strong>dir_path</strong> (<em>str</em>) – The path of the directory the plot will be saved (must end with a <code class="docutils literal notranslate"><span class="pre">/</span></code>)</p></li>
+<li><p><strong>start</strong> (<em>int</em>) – The starting frame of the calculations</p></li>
+<li><p><strong>stop</strong> (<em>int</em>) – The stopping frame of the calculations</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="AnalysisActor.rg_sasa_analysis.summarize_rg">
+<code class="sig-prename descclassname">AnalysisActor.rg_sasa_analysis.</code><code class="sig-name descname">summarize_rg</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">analysis_actors_dict</span></em>, <em class="sig-param"><span class="n">dir_path</span></em>, <em class="sig-param"><span class="n">rolling_window</span><span class="o">=</span><span class="default_value">100</span></em><span class="sig-paren">)</span><a class="headerlink" href="#AnalysisActor.rg_sasa_analysis.summarize_rg" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a plot summarizing how the <code class="docutils literal notranslate"><span class="pre">Rg</span></code> behaves.</p>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<div class="figure align-center" id="id2">
+<a class="reference internal image-reference" href="../_images/rg_averaged_mean_std.png"><img alt="summarizing info rg missing" src="../_images/rg_averaged_mean_std.png" style="width: 500px; height: 550px;" /></a>
+<p class="caption"><span class="caption-text">Summarizing info of Rg for each class (Agonists, Antagonists)</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>analysis_actors_dict</strong> – <code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">&quot;Agonists&quot;:</span> <span class="pre">List[AnalysisActor.class],</span> <span class="pre">&quot;Antagonists&quot;:</span> <span class="pre">List[AnalysisActor.class]</span> <span class="pre">}</span></code></p></li>
+<li><p><strong>dir_path</strong> (<em>str</em>) – The path of the directory the plot will be saved (must end with a <code class="docutils literal notranslate"><span class="pre">/</span></code>)</p></li>
+<li><p><strong>rolling_window</strong> (<em>int</em>) – The size of the window for the rolling avg and std</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="AnalysisActor.rg_sasa_analysis.summarize_sasa">
+<code class="sig-prename descclassname">AnalysisActor.rg_sasa_analysis.</code><code class="sig-name descname">summarize_sasa</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">analysis_actors_dict</span></em>, <em class="sig-param"><span class="n">dir_path</span></em>, <em class="sig-param"><span class="n">rolling_window</span><span class="o">=</span><span class="default_value">100</span></em><span class="sig-paren">)</span><a class="headerlink" href="#AnalysisActor.rg_sasa_analysis.summarize_sasa" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a plot summarizing how the <code class="docutils literal notranslate"><span class="pre">SASA</span></code> behaves.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>analysis_actors_dict</strong> – <code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">&quot;Agonists&quot;:</span> <span class="pre">List[AnalysisActor.class],</span> <span class="pre">&quot;Antagonists&quot;:</span> <span class="pre">List[AnalysisActor.class]</span> <span class="pre">}</span></code></p></li>
+<li><p><strong>dir_path</strong> (<em>str</em>) – The path of the directory the plot will be saved (must end with a <code class="docutils literal notranslate"><span class="pre">/</span></code>)</p></li>
+<li><p><strong>rolling_window</strong> (<em>int</em>) – The size of the window for the rolling avg and std</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="RmsfAnalysis.html" class="btn btn-neutral float-right" title="5. RMSF Analysis" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="AnalysisActor.html" class="btn btn-neutral float-left" title="3. AnalysisActor" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Mike Xydas
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

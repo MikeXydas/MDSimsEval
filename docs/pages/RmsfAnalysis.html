@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>4. RMSF Analysis &mdash; MDSimsEval 0.0.1 documentation</title>
+  <title>5. RMSF Analysis &mdash; MDSimsEval 0.0.1 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="prev" title="3. AnalysisActor" href="AnalysisActor.html" /> 
+    <link rel="prev" title="4. Rg and SASA Analysis" href="RgSasaAnalysis.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -87,7 +87,8 @@
 <li class="toctree-l1"><a class="reference internal" href="Prerequisites.html">1. Prerequisites</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ReadingData.html">2. Reading the simulations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="AnalysisActor.html">3. AnalysisActor</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">4. RMSF Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RgSasaAnalysis.html">4. Rg and SASA Analysis</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">5. RMSF Analysis</a></li>
 </ul>
 
             
@@ -133,7 +134,7 @@
     
       <li><a href="../index.html">Docs</a> &raquo;</li>
         
-      <li><span class="section-number">4. </span>RMSF Analysis</li>
+      <li><span class="section-number">5. </span>RMSF Analysis</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -153,7 +154,7 @@
            <div itemprop="articleBody">
             
   <div class="section" id="module-AnalysisActor.rmsf_analysis">
-<span id="rmsf-analysis"></span><h1><span class="section-number">4. </span>RMSF Analysis<a class="headerlink" href="#module-AnalysisActor.rmsf_analysis" title="Permalink to this headline">¶</a></h1>
+<span id="rmsf-analysis"></span><h1><span class="section-number">5. </span>RMSF Analysis<a class="headerlink" href="#module-AnalysisActor.rmsf_analysis" title="Permalink to this headline">¶</a></h1>
 <p>RMSF is a measure of the deviation of the position of a particle i with respect to a reference position <strong>over time</strong>.</p>
 <p><strong>Difference between RMSD and RMSF</strong>: The latter is averaged over time, giving a value for each particle i. For the
 RMSD the average is taken over the particles, giving time specific values. So <strong>RMSD is time specific</strong> and <strong>RMSF
@@ -180,7 +181,7 @@ your machine. Else the output will be in <code class="docutils literal notransla
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>analysis_actors_dict</strong> – <code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">&quot;Agonists&quot;:</span> <span class="pre">List[AnalysisActor.class],</span> <span class="pre">&quot;Antagonists&quot;:</span> <span class="pre">List[AnalysisActor.class]</span> <span class="pre">}</span></code></p></li>
-<li><p><strong>dir_path</strong> (<em>str</em>) – The path of the directory the plot will be saved</p></li>
+<li><p><strong>dir_path</strong> (<em>str</em>) – The path of the directory the plot will be saved (must end with a <code class="docutils literal notranslate"><span class="pre">/</span></code>)</p></li>
 <li><p><strong>method</strong> (<em>str</em>) – pearson, kendall, spearman</p></li>
 <li><p><strong>top</strong> (<em>int</em>) – The top-k residues that will be used for the correlation calculations</p></li>
 <li><p><strong>start</strong> (<em>int</em>) – The starting frame of the calculations</p></li>
@@ -205,7 +206,7 @@ so as to be easily distinguished.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>analysis_actors_dict</strong> – <code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">&quot;Agonists&quot;:</span> <span class="pre">List[AnalysisActor.class],</span> <span class="pre">&quot;Antagonists&quot;:</span> <span class="pre">List[AnalysisActor.class]</span> <span class="pre">}</span></code></p></li>
-<li><p><strong>dir_path</strong> (<em>str</em>) – The path of the directory the plot will be saved</p></li>
+<li><p><strong>dir_path</strong> (<em>str</em>) – The path of the directory the plot will be saved (must end with a <code class="docutils literal notranslate"><span class="pre">/</span></code>)</p></li>
 <li><p><strong>top</strong> (<em>int</em>) – The top-k residues that will be plotted with a different color</p></li>
 <li><p><strong>start</strong> (<em>int</em>) – The starting frame of the calculations</p></li>
 <li><p><strong>stop</strong> (<em>int</em>) – The stopping frame of the calculations</p></li>
@@ -279,7 +280,7 @@ given window.</p>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
       
-        <a href="AnalysisActor.html" class="btn btn-neutral float-left" title="3. AnalysisActor" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="RgSasaAnalysis.html" class="btn btn-neutral float-left" title="4. Rg and SASA Analysis" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

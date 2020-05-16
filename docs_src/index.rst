@@ -36,6 +36,7 @@ The above solutions are actually used for some of my calculations.
    ./pages/Prerequisites
    ./pages/ReadingData
    ./pages/AnalysisActor
+   ./pages/RgSasaAnalysis
    ./pages/RmsfAnalysis
 
 
