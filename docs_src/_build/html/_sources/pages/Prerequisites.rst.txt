@@ -6,7 +6,8 @@ Prerequisites
 Installation
 ############
 
-The package is not published and is currently **NOT** available with ``pip install package_name``.
+The package was developed on Ubuntu18.04 (but should work on most **linux** distributions) and Python3.6
+(but any version >=3.6 should be working).
 
 The steps for installing are:
 
