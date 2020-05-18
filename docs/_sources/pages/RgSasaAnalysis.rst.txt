@@ -3,5 +3,5 @@
 Rg and SASA Analysis
 =================================================
 
-.. automodule:: AnalysisActor.rg_sasa_analysis
+.. automodule:: MDSimsEval.rg_sasa_analysis
     :members:

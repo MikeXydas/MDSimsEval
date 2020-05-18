@@ -154,11 +154,11 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="module-AnalysisActor.AnalysisActorClass">
-<span id="analysisactor"></span><h1><span class="section-number">3. </span>AnalysisActor<a class="headerlink" href="#module-AnalysisActor.AnalysisActorClass" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-MDSimsEval.AnalysisActorClass">
+<span id="analysisactor"></span><h1><span class="section-number">3. </span>AnalysisActor<a class="headerlink" href="#module-MDSimsEval.AnalysisActorClass" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
-<dt id="AnalysisActor.AnalysisActorClass.AnalysisActor">
-<em class="property">class </em><code class="sig-prename descclassname">AnalysisActor.AnalysisActorClass.</code><code class="sig-name descname">AnalysisActor</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">topology</span></em>, <em class="sig-param"><span class="n">trajectory</span></em>, <em class="sig-param"><span class="n">drug_name</span></em>, <em class="sig-param"><span class="n">sasa_file</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">salts_directory</span><span class="o">=</span><span class="default_value">''</span></em><span class="sig-paren">)</span><a class="headerlink" href="#AnalysisActor.AnalysisActorClass.AnalysisActor" title="Permalink to this definition">¶</a></dt>
+<dt id="MDSimsEval.AnalysisActorClass.AnalysisActor">
+<em class="property">class </em><code class="sig-prename descclassname">MDSimsEval.AnalysisActorClass.</code><code class="sig-name descname">AnalysisActor</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">topology</span></em>, <em class="sig-param"><span class="n">trajectory</span></em>, <em class="sig-param"><span class="n">drug_name</span></em>, <em class="sig-param"><span class="n">sasa_file</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">salts_directory</span><span class="o">=</span><span class="default_value">''</span></em><span class="sig-paren">)</span><a class="headerlink" href="#MDSimsEval.AnalysisActorClass.AnalysisActor" title="Permalink to this definition">¶</a></dt>
 <dd><p>The AnalysisActor is the core object which inputs a single topology and trajectory and performs the analysis.</p>
 <p>The class will be responsible for reading, running calculations and storing the results. The role of the class
 is mainly “structural” since it is the base input of all of our analysis functions. In the future a caching
@@ -171,7 +171,7 @@ More info on <a class="reference internal" href="ReadingData.html#reading-salt-s
 </div>
 <p class="rubric">Example</p>
 <p>Example on one simulation</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">AnalysisActor.AnalysisActorClass</span> <span class="kn">import</span> <span class="n">AnalysisActor</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">MDSimsEval.AnalysisActorClass</span> <span class="kn">import</span> <span class="n">AnalysisActor</span>
 <span class="n">ligand</span> <span class="o">=</span> <span class="n">AnalysisActor</span><span class="p">(</span><span class="s1">&#39;topology&#39;</span><span class="p">,</span> <span class="s1">&#39;trajectory&#39;</span><span class="p">,</span> <span class="s1">&#39;ligand_name&#39;</span><span class="p">)</span>    <span class="c1"># No SASA or Salt Bridges files provided</span>
 
 <span class="n">ligand</span><span class="o">.</span><span class="n">perform_analysis</span><span class="p">([</span><span class="s2">&quot;RMSF&quot;</span><span class="p">,</span> <span class="s2">&quot;Rg&quot;</span><span class="p">])</span>    <span class="c1"># Calculate the Rg and the RMSF of the simulation</span>
@@ -180,7 +180,7 @@ More info on <a class="reference internal" href="ReadingData.html#reading-salt-s
 </pre></div>
 </div>
 <p>Example on the whole <code class="docutils literal notranslate"><span class="pre">analysis_actors_dict</span></code> (probably what you want)</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">AnalysisActor.utils</span> <span class="kn">import</span> <span class="n">create_analysis_actor_dict</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">MDSimsEval.utils</span> <span class="kn">import</span> <span class="n">create_analysis_actor_dict</span>
 <span class="n">analysis_actors_dict</span> <span class="o">=</span> <span class="n">create_analysis_actor_dict</span><span class="p">(</span><span class="s1">&#39;path_to_data_directory/&#39;</span><span class="p">)</span>
 
 <span class="k">for</span> <span class="n">ligand</span> <span class="ow">in</span> <span class="n">analysis_actors_dict</span><span class="p">[</span><span class="s1">&#39;Agonists&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">analysis_actors_dict</span><span class="p">[</span><span class="s1">&#39;Antagonists&#39;</span><span class="p">]:</span>
@@ -199,22 +199,22 @@ More info on <a class="reference internal" href="ReadingData.html#reading-salt-s
 </dd>
 </dl>
 <dl class="py attribute">
-<dt id="AnalysisActor.AnalysisActorClass.AnalysisActor.uni">
-<code class="sig-name descname">uni</code><a class="headerlink" href="#AnalysisActor.AnalysisActorClass.AnalysisActor.uni" title="Permalink to this definition">¶</a></dt>
+<dt id="MDSimsEval.AnalysisActorClass.AnalysisActor.uni">
+<code class="sig-name descname">uni</code><a class="headerlink" href="#MDSimsEval.AnalysisActorClass.AnalysisActor.uni" title="Permalink to this definition">¶</a></dt>
 <dd><p>The universe of atoms created by MDAnalysis tool
 (<a class="reference external" href="https://www.mdanalysis.org/docs/documentation_pages/core/universe.html">MDAnalysis.core.universe</a>)</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="AnalysisActor.AnalysisActorClass.AnalysisActor.mdtraj">
-<code class="sig-name descname">mdtraj</code><a class="headerlink" href="#AnalysisActor.AnalysisActorClass.AnalysisActor.mdtraj" title="Permalink to this definition">¶</a></dt>
+<dt id="MDSimsEval.AnalysisActorClass.AnalysisActor.mdtraj">
+<code class="sig-name descname">mdtraj</code><a class="headerlink" href="#MDSimsEval.AnalysisActorClass.AnalysisActor.mdtraj" title="Permalink to this definition">¶</a></dt>
 <dd><p>The trajectory of atoms created by MDTraj tool
 (<a class="reference external" href="http://mdtraj.org/latest/api/generated/mdtraj.Trajectory.html#mdtraj.Trajectory">mdtraj.Trajectory</a>)</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="AnalysisActor.AnalysisActorClass.AnalysisActor.drug_name">
-<code class="sig-name descname">drug_name</code><a class="headerlink" href="#AnalysisActor.AnalysisActorClass.AnalysisActor.drug_name" title="Permalink to this definition">¶</a></dt>
+<dt id="MDSimsEval.AnalysisActorClass.AnalysisActor.drug_name">
+<code class="sig-name descname">drug_name</code><a class="headerlink" href="#MDSimsEval.AnalysisActorClass.AnalysisActor.drug_name" title="Permalink to this definition">¶</a></dt>
 <dd><p>The ligand name initialized in the construction of the object</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -224,8 +224,8 @@ More info on <a class="reference internal" href="ReadingData.html#reading-salt-s
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="AnalysisActor.AnalysisActorClass.AnalysisActor.rg_res">
-<code class="sig-name descname">rg_res</code><a class="headerlink" href="#AnalysisActor.AnalysisActorClass.AnalysisActor.rg_res" title="Permalink to this definition">¶</a></dt>
+<dt id="MDSimsEval.AnalysisActorClass.AnalysisActor.rg_res">
+<code class="sig-name descname">rg_res</code><a class="headerlink" href="#MDSimsEval.AnalysisActorClass.AnalysisActor.rg_res" title="Permalink to this definition">¶</a></dt>
 <dd><p>Radius of gyration of each frame (<a class="reference external" href="https://www.mdanalysis.org/MDAnalysisTutorial/trajectories.html#trajectory-analysis">MDAnalysisRg</a>)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -235,8 +235,8 @@ More info on <a class="reference internal" href="ReadingData.html#reading-salt-s
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="AnalysisActor.AnalysisActorClass.AnalysisActor.rmsf_res">
-<code class="sig-name descname">rmsf_res</code><a class="headerlink" href="#AnalysisActor.AnalysisActorClass.AnalysisActor.rmsf_res" title="Permalink to this definition">¶</a></dt>
+<dt id="MDSimsEval.AnalysisActorClass.AnalysisActor.rmsf_res">
+<code class="sig-name descname">rmsf_res</code><a class="headerlink" href="#MDSimsEval.AnalysisActorClass.AnalysisActor.rmsf_res" title="Permalink to this definition">¶</a></dt>
 <dd><p>RMSF of each atom of the <strong>protein</strong> (<a class="reference external" href="https://www.mdanalysis.org/pmda/api/rmsf.html">MDAnalysisRMSF</a>)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -246,15 +246,15 @@ More info on <a class="reference internal" href="ReadingData.html#reading-salt-s
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="AnalysisActor.AnalysisActorClass.AnalysisActor.pca_res">
-<code class="sig-name descname">pca_res</code><a class="headerlink" href="#AnalysisActor.AnalysisActorClass.AnalysisActor.pca_res" title="Permalink to this definition">¶</a></dt>
+<dt id="MDSimsEval.AnalysisActorClass.AnalysisActor.pca_res">
+<code class="sig-name descname">pca_res</code><a class="headerlink" href="#MDSimsEval.AnalysisActorClass.AnalysisActor.pca_res" title="Permalink to this definition">¶</a></dt>
 <dd><p>Object containing eigenvectors and eigenvalues of CA atoms covariance matrix
 (<a class="reference external" href="https://www.mdanalysis.org/docs/documentation_pages/analysis/pca.html#MDAnalysis.analysis.pca.PCA">MDAnalysis.analysis.pca.PCA</a>)</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="AnalysisActor.AnalysisActorClass.AnalysisActor.pca_xyz">
-<code class="sig-name descname">pca_xyz</code><a class="headerlink" href="#AnalysisActor.AnalysisActorClass.AnalysisActor.pca_xyz" title="Permalink to this definition">¶</a></dt>
+<dt id="MDSimsEval.AnalysisActorClass.AnalysisActor.pca_xyz">
+<code class="sig-name descname">pca_xyz</code><a class="headerlink" href="#MDSimsEval.AnalysisActorClass.AnalysisActor.pca_xyz" title="Permalink to this definition">¶</a></dt>
 <dd><p>The coordinates of the atoms selected for PCA</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -264,8 +264,8 @@ More info on <a class="reference internal" href="ReadingData.html#reading-salt-s
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="AnalysisActor.AnalysisActorClass.AnalysisActor.sasa_res">
-<code class="sig-name descname">sasa_res</code><a class="headerlink" href="#AnalysisActor.AnalysisActorClass.AnalysisActor.sasa_res" title="Permalink to this definition">¶</a></dt>
+<dt id="MDSimsEval.AnalysisActorClass.AnalysisActor.sasa_res">
+<code class="sig-name descname">sasa_res</code><a class="headerlink" href="#MDSimsEval.AnalysisActorClass.AnalysisActor.sasa_res" title="Permalink to this definition">¶</a></dt>
 <dd><p>The calculation currently is performed outside of the pipeline
 using <a class="reference external" href="http://manual.gromacs.org/documentation/5.1/onlinehelp/gmx-sasa.html">gromacs</a>.</p>
 <dl class="field-list simple">
@@ -276,8 +276,8 @@ using <a class="reference external" href="http://manual.gromacs.org/documentatio
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="AnalysisActor.AnalysisActorClass.AnalysisActor.hbonds">
-<code class="sig-name descname">hbonds</code><a class="headerlink" href="#AnalysisActor.AnalysisActorClass.AnalysisActor.hbonds" title="Permalink to this definition">¶</a></dt>
+<dt id="MDSimsEval.AnalysisActorClass.AnalysisActor.hbonds">
+<code class="sig-name descname">hbonds</code><a class="headerlink" href="#MDSimsEval.AnalysisActorClass.AnalysisActor.hbonds" title="Permalink to this definition">¶</a></dt>
 <dd><p>A list containing the atom indices involved in
 each of the identified hydrogen bonds at each frame.
 Each element in the list is an array where each row contains
@@ -295,8 +295,8 @@ in a hydrogen bond which occurs in that frame.
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="AnalysisActor.AnalysisActorClass.AnalysisActor.salt_bridges_df">
-<code class="sig-name descname">salt_bridges_df</code><a class="headerlink" href="#AnalysisActor.AnalysisActorClass.AnalysisActor.salt_bridges_df" title="Permalink to this definition">¶</a></dt>
+<dt id="MDSimsEval.AnalysisActorClass.AnalysisActor.salt_bridges_df">
+<code class="sig-name descname">salt_bridges_df</code><a class="headerlink" href="#MDSimsEval.AnalysisActorClass.AnalysisActor.salt_bridges_df" title="Permalink to this definition">¶</a></dt>
 <dd><p>A pd.DataFrame with the first two columns [“Residue1”, “Residue2”] being the
 residue names that form the salt bridge and the next #frames column the distance
 between these two residues (<a class="reference external" href="https://www.ks.uiuc.edu/Research/vmd/plugins/saltbr/">VMD plugin</a>)</p>
@@ -308,8 +308,8 @@ between these two residues (<a class="reference external" href="https://www.ks.u
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="AnalysisActor.AnalysisActorClass.AnalysisActor.salt_bridges_over_time">
-<code class="sig-name descname">salt_bridges_over_time</code><a class="headerlink" href="#AnalysisActor.AnalysisActorClass.AnalysisActor.salt_bridges_over_time" title="Permalink to this definition">¶</a></dt>
+<dt id="MDSimsEval.AnalysisActorClass.AnalysisActor.salt_bridges_over_time">
+<code class="sig-name descname">salt_bridges_over_time</code><a class="headerlink" href="#MDSimsEval.AnalysisActorClass.AnalysisActor.salt_bridges_over_time" title="Permalink to this definition">¶</a></dt>
 <dd><p>A vector of size #frames containing the number of active salt
 bridges per frame</p>
 <dl class="field-list simple">
@@ -320,20 +320,20 @@ bridges per frame</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="AnalysisActor.AnalysisActorClass.AnalysisActor.get_frames_number">
-<code class="sig-name descname">get_frames_number</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#AnalysisActor.AnalysisActorClass.AnalysisActor.get_frames_number" title="Permalink to this definition">¶</a></dt>
+<dt id="MDSimsEval.AnalysisActorClass.AnalysisActor.get_frames_number">
+<code class="sig-name descname">get_frames_number</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MDSimsEval.AnalysisActorClass.AnalysisActor.get_frames_number" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the number of frames of the trajectory</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="AnalysisActor.AnalysisActorClass.AnalysisActor.info">
-<code class="sig-name descname">info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#AnalysisActor.AnalysisActorClass.AnalysisActor.info" title="Permalink to this definition">¶</a></dt>
+<dt id="MDSimsEval.AnalysisActorClass.AnalysisActor.info">
+<code class="sig-name descname">info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MDSimsEval.AnalysisActorClass.AnalysisActor.info" title="Permalink to this definition">¶</a></dt>
 <dd><p>Prints basic info of the simulation</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="AnalysisActor.AnalysisActorClass.AnalysisActor.perform_analysis">
-<code class="sig-name descname">perform_analysis</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">metrics</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="headerlink" href="#AnalysisActor.AnalysisActorClass.AnalysisActor.perform_analysis" title="Permalink to this definition">¶</a></dt>
+<dt id="MDSimsEval.AnalysisActorClass.AnalysisActor.perform_analysis">
+<code class="sig-name descname">perform_analysis</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">metrics</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="headerlink" href="#MDSimsEval.AnalysisActorClass.AnalysisActor.perform_analysis" title="Permalink to this definition">¶</a></dt>
 <dd><p>Runs the analysis methods for calculating the metrics specified by metrics argument</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>

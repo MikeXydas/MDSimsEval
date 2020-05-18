@@ -3,5 +3,5 @@
 AnalysisActor
 =================================================
 
-.. automodule:: AnalysisActor.AnalysisActorClass
+.. automodule:: MDSimsEval.AnalysisActorClass
     :members:

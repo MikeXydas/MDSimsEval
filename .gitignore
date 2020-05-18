@@ -26,3 +26,5 @@ MD_Analysis/Agonists_Antagonists/AnalysisAgonistsAntagonists/__pycache__/
 /deprecated/
 /.ipynb_checkpoints/
 /figures/
+/MDSimsEval.egg-info/
+/AnalysisPipeline_5HT2A.ipynb

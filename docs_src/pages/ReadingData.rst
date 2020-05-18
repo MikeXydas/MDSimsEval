@@ -50,7 +50,7 @@ As an example this was my actual input directory named ``New_AI_MD``:
 Reading Function
 #################
 
-.. automodule:: AnalysisActor.utils
+.. automodule:: MDSimsEval.utils
     :members:
 
 .. _reading_salt_sasa:

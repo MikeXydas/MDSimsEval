@@ -162,9 +162,28 @@
 <h1><span class="section-number">1. </span>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="installation">
 <h2><span class="section-number">1.1. </span>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
-<p>The package was developed on Ubuntu18.04 (but should work on most <strong>linux</strong> distributions) and Python3.6
-(but any version &gt;=3.6 should be working).</p>
-<p>The steps for installing are:</p>
+<div class="line-block">
+<div class="line"><strong>OS</strong>: Developed on Ubuntu18.04 but ay linux distribution should work</div>
+<div class="line"><strong>Python</strong>: Developed on 3.6 but any version &gt;=3.6 should work</div>
+</div>
+<p><strong>Package Only</strong></p>
+<p>The steps for <strong>installing the package only</strong> are:</p>
+<ol class="arabic simple">
+<li><p>Clone the repository</p></li>
+<li><p>Run <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">setup.py</span> <span class="pre">develop</span></code></p></li>
+</ol>
+<p>Then you can import any method or class</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">MDSimsEval.utils</span> <span class="kn">import</span> <span class="n">create_analysis_actor_dict</span>  <span class="c1"># Example import</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><strong>Optional</strong>: The <code class="docutils literal notranslate"><span class="pre">rmsf_analysis.corr_matrix</span></code> function in order to provide as ouput a .png requires <code class="docutils literal notranslate"><span class="pre">wkhtmltopdf</span></code>
+to be installed via <code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">apt-get</span> <span class="pre">install</span> <span class="pre">wkhtmltopdf</span></code>. More on the <a class="reference external" href="https://github.com/kamalkraj/imgkit">imgkit package</a>.
+If not installed the output will be an <code class="docutils literal notranslate"><span class="pre">.html</span></code> file which can be opened with any browser.</p>
+</div>
+<p><strong>Development Environment</strong></p>
+<p>If you are looking for adding functionality or changing the code you will need more packages (eg for the docs).</p>
 <ol class="arabic simple">
 <li><p>Clone the repository</p></li>
 <li><p>Install the <code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code></p></li>
@@ -176,18 +195,8 @@
 </ul>
 </div></blockquote>
 <ol class="arabic simple" start="3">
-<li><p>Copy the <cite>AnalysisActor</cite> directory to your project</p></li>
+<li><p>Copy the <cite>MDSimsEval</cite> directory to your project</p></li>
 </ol>
-<p>Then you can import any method or class</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">AnalysisActor.utils</span> <span class="kn">import</span> <span class="n">create_analysis_actor_dict</span>  <span class="c1"># Example import</span>
-</pre></div>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p><strong>Optional</strong>: The <code class="docutils literal notranslate"><span class="pre">rmsf_analysis.corr_matrix</span></code> function in order to provide as ouput a .png requires <code class="docutils literal notranslate"><span class="pre">wkhtmltopdf</span></code>
-to be installed via <code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">apt-get</span> <span class="pre">install</span> <span class="pre">wkhtmltopdf</span></code>. More on the <a class="reference external" href="https://github.com/kamalkraj/imgkit">imgkit package</a>.
-If not installed the output will be an <code class="docutils literal notranslate"><span class="pre">.html</span></code> file which can be opened with any browser.</p>
-</div>
 </div>
 <div class="section" id="data">
 <h2><span class="section-number">1.2. </span>Data<a class="headerlink" href="#data" title="Permalink to this headline">¶</a></h2>

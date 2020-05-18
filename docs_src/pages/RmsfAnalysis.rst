@@ -3,5 +3,5 @@
 RMSF Analysis
 =================================================
 
-.. automodule:: AnalysisActor.rmsf_analysis
+.. automodule:: MDSimsEval.rmsf_analysis
     :members:

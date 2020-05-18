@@ -88,7 +88,7 @@
 <li class="toctree-l1"><a class="reference internal" href="Prerequisites.html">1. Prerequisites</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">2. Reading the simulations</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#directory-structure">2.1. Directory Structure</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-AnalysisActor.utils">2.2. Reading Function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-MDSimsEval.utils">2.2. Reading Function</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#sasa-and-salt-bridges">2.3. SASA and Salt Bridges</a></li>
 </ul>
 </li>
@@ -197,17 +197,17 @@ class labels. To be fixed so as class label is also a variable.</p>
 <div class="line"><br /></div>
 </div>
 </div>
-<div class="section" id="module-AnalysisActor.utils">
-<span id="reading-function"></span><h2><span class="section-number">2.2. </span>Reading Function<a class="headerlink" href="#module-AnalysisActor.utils" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-MDSimsEval.utils">
+<span id="reading-function"></span><h2><span class="section-number">2.2. </span>Reading Function<a class="headerlink" href="#module-MDSimsEval.utils" title="Permalink to this headline">¶</a></h2>
 <dl class="py function">
-<dt id="AnalysisActor.utils.create_analysis_actor_dict">
-<code class="sig-prename descclassname">AnalysisActor.utils.</code><code class="sig-name descname">create_analysis_actor_dict</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">root_directory</span></em><span class="sig-paren">)</span><a class="headerlink" href="#AnalysisActor.utils.create_analysis_actor_dict" title="Permalink to this definition">¶</a></dt>
+<dt id="MDSimsEval.utils.create_analysis_actor_dict">
+<code class="sig-prename descclassname">MDSimsEval.utils.</code><code class="sig-name descname">create_analysis_actor_dict</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">root_directory</span></em><span class="sig-paren">)</span><a class="headerlink" href="#MDSimsEval.utils.create_analysis_actor_dict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reads the simulations (topologies, trajectories and sasa.xvg, salts/ if available and stores them in dictionary
 structure. The dictionary structure called <code class="docutils literal notranslate"><span class="pre">analysis_actors_dict</span></code> is the core structure that our functions
 take as an argument.</p>
 <blockquote>
 <div><dl>
-<dt>Example:</dt><dd><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">AnalysisActor.utils</span> <span class="kn">import</span> <span class="n">create_analysis_actor_dict</span>
+<dt>Example:</dt><dd><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">MDSimsEval.utils</span> <span class="kn">import</span> <span class="n">create_analysis_actor_dict</span>
 <span class="n">analysis_actors_dict</span> <span class="o">=</span> <span class="n">create_analysis_actor_dict</span><span class="p">(</span><span class="s1">&#39;path_to_data_directory/&#39;</span><span class="p">)</span>
 
 <span class="n">analysis_actors_dict</span><span class="p">[</span><span class="s1">&#39;Agonists&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>

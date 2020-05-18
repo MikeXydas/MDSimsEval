@@ -6,10 +6,29 @@ Prerequisites
 Installation
 ############
 
-The package was developed on Ubuntu18.04 (but should work on most **linux** distributions) and Python3.6
-(but any version >=3.6 should be working).
+| **OS**: Developed on Ubuntu18.04 but ay linux distribution should work
+| **Python**: Developed on 3.6 but any version >=3.6 should work
 
-The steps for installing are:
+**Package Only**
+
+The steps for **installing the package only** are:
+
+1. Clone the repository
+2. Run ``python setup.py develop``
+
+Then you can import any method or class
+::
+
+    from MDSimsEval.utils import create_analysis_actor_dict  # Example import
+
+.. note::
+   **Optional**: The ``rmsf_analysis.corr_matrix`` function in order to provide as ouput a .png requires ``wkhtmltopdf``
+   to be installed via ``sudo apt-get install wkhtmltopdf``. More on the `imgkit package <https://github.com/kamalkraj/imgkit>`_.
+   If not installed the output will be an ``.html`` file which can be opened with any browser.
+
+**Development Environment**
+
+If you are looking for adding functionality or changing the code you will need more packages (eg for the docs).
 
 1. Clone the repository
 2. Install the ``requirements.txt``
@@ -17,17 +36,7 @@ The steps for installing are:
  - Conda Env: ``conda install --file requirements.txt``
  - VirtualEnv: ``pip install -r requirements.txt``
 
-3. Copy the `AnalysisActor` directory to your project
-
-Then you can import any method or class
-::
-
-    from AnalysisActor.utils import create_analysis_actor_dict  # Example import
-
-.. note::
-   **Optional**: The ``rmsf_analysis.corr_matrix`` function in order to provide as ouput a .png requires ``wkhtmltopdf``
-   to be installed via ``sudo apt-get install wkhtmltopdf``. More on the `imgkit package <https://github.com/kamalkraj/imgkit>`_.
-   If not installed the output will be an ``.html`` file which can be opened with any browser.
+3. Copy the `MDSimsEval` directory to your project
 
 Data
 ####

@@ -153,15 +153,15 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="module-AnalysisActor.rmsf_analysis">
-<span id="rmsf-analysis"></span><h1><span class="section-number">5. </span>RMSF Analysis<a class="headerlink" href="#module-AnalysisActor.rmsf_analysis" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-MDSimsEval.rmsf_analysis">
+<span id="rmsf-analysis"></span><h1><span class="section-number">5. </span>RMSF Analysis<a class="headerlink" href="#module-MDSimsEval.rmsf_analysis" title="Permalink to this headline">¶</a></h1>
 <p>RMSF is a measure of the deviation of the position of a particle i with respect to a reference position <strong>over time</strong>.</p>
 <p><strong>Difference between RMSD and RMSF</strong>: The latter is averaged over time, giving a value for each particle i. For the
 RMSD the average is taken over the particles, giving time specific values. So <strong>RMSD is time specific</strong> and <strong>RMSF
 is atom specific</strong> <a class="reference external" href="http://www.drugdesign.gr/uploads/7/6/0/2/7602318/lecture_mdanalysis.pdf">(ref)</a>.</p>
 <dl class="py function">
-<dt id="AnalysisActor.rmsf_analysis.corr_matrix">
-<code class="sig-prename descclassname">AnalysisActor.rmsf_analysis.</code><code class="sig-name descname">corr_matrix</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">analysis_actors_dict</span></em>, <em class="sig-param"><span class="n">dir_path</span></em>, <em class="sig-param"><span class="n">method</span><span class="o">=</span><span class="default_value">'pearson'</span></em>, <em class="sig-param"><span class="n">top</span><span class="o">=</span><span class="default_value">290</span></em>, <em class="sig-param"><span class="n">start</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">stop</span><span class="o">=</span><span class="default_value">2500</span></em><span class="sig-paren">)</span><a class="headerlink" href="#AnalysisActor.rmsf_analysis.corr_matrix" title="Permalink to this definition">¶</a></dt>
+<dt id="MDSimsEval.rmsf_analysis.corr_matrix">
+<code class="sig-prename descclassname">MDSimsEval.rmsf_analysis.</code><code class="sig-name descname">corr_matrix</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">analysis_actors_dict</span></em>, <em class="sig-param"><span class="n">dir_path</span></em>, <em class="sig-param"><span class="n">method</span><span class="o">=</span><span class="default_value">'pearson'</span></em>, <em class="sig-param"><span class="n">top</span><span class="o">=</span><span class="default_value">290</span></em>, <em class="sig-param"><span class="n">start</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">stop</span><span class="o">=</span><span class="default_value">2500</span></em><span class="sig-paren">)</span><a class="headerlink" href="#MDSimsEval.rmsf_analysis.corr_matrix" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a correlation matrix of the RMSF which has <code class="docutils literal notranslate"><span class="pre">#agonists</span> <span class="pre">+</span> <span class="pre">#antagonists</span> <span class="pre">x</span> <span class="pre">#agonists</span> <span class="pre">+</span> <span class="pre">#antagonists</span></code> dimensions.
 The correlation values are calculated on the RMSF values of the <code class="docutils literal notranslate"><span class="pre">top-k</span></code> residues. On the output file the ligand
 names have only their first 5 characters for visual reasons.</p>
@@ -192,8 +192,8 @@ your machine. Else the output will be in <code class="docutils literal notransla
 </dd></dl>
 
 <dl class="py function">
-<dt id="AnalysisActor.rmsf_analysis.create_bar_plots_avg_stde">
-<code class="sig-prename descclassname">AnalysisActor.rmsf_analysis.</code><code class="sig-name descname">create_bar_plots_avg_stde</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">analysis_actors_dict</span></em>, <em class="sig-param"><span class="n">dir_path</span></em>, <em class="sig-param"><span class="n">top</span><span class="o">=</span><span class="default_value">50</span></em>, <em class="sig-param"><span class="n">start</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">stop</span><span class="o">=</span><span class="default_value">2500</span></em><span class="sig-paren">)</span><a class="headerlink" href="#AnalysisActor.rmsf_analysis.create_bar_plots_avg_stde" title="Permalink to this definition">¶</a></dt>
+<dt id="MDSimsEval.rmsf_analysis.create_bar_plots_avg_stde">
+<code class="sig-prename descclassname">MDSimsEval.rmsf_analysis.</code><code class="sig-name descname">create_bar_plots_avg_stde</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">analysis_actors_dict</span></em>, <em class="sig-param"><span class="n">dir_path</span></em>, <em class="sig-param"><span class="n">top</span><span class="o">=</span><span class="default_value">50</span></em>, <em class="sig-param"><span class="n">start</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">stop</span><span class="o">=</span><span class="default_value">2500</span></em><span class="sig-paren">)</span><a class="headerlink" href="#MDSimsEval.rmsf_analysis.create_bar_plots_avg_stde" title="Permalink to this definition">¶</a></dt>
 <dd><p>The method will create two plots (one for the agonists and one for the antagonists). The plot will have the
 avg rmsf per residue and the standard error of the mean. The color of the bars of the top-k
 <code class="docutils literal notranslate"><span class="pre">|agon_rmsf_avg</span> <span class="pre">-</span> <span class="pre">antagon_rmsf_avg|</span></code> RMSF residues are plotted in a different color
@@ -216,8 +216,8 @@ so as to be easily distinguished.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="AnalysisActor.rmsf_analysis.get_avg_rmsf_per_residue">
-<code class="sig-prename descclassname">AnalysisActor.rmsf_analysis.</code><code class="sig-name descname">get_avg_rmsf_per_residue</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ligand</span></em><span class="sig-paren">)</span><a class="headerlink" href="#AnalysisActor.rmsf_analysis.get_avg_rmsf_per_residue" title="Permalink to this definition">¶</a></dt>
+<dt id="MDSimsEval.rmsf_analysis.get_avg_rmsf_per_residue">
+<code class="sig-prename descclassname">MDSimsEval.rmsf_analysis.</code><code class="sig-name descname">get_avg_rmsf_per_residue</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ligand</span></em><span class="sig-paren">)</span><a class="headerlink" href="#MDSimsEval.rmsf_analysis.get_avg_rmsf_per_residue" title="Permalink to this definition">¶</a></dt>
 <dd><p>Having the series of resnumbs eg [1, 1, 1, 2, 2, …, 290, 290] and their respective
 RMSF create buckets (each bucket represents a residue) and calculate the average
 RMSF of each residue</p>
@@ -235,8 +235,8 @@ RMSF of each residue</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="AnalysisActor.rmsf_analysis.reset_rmsf_calculations">
-<code class="sig-prename descclassname">AnalysisActor.rmsf_analysis.</code><code class="sig-name descname">reset_rmsf_calculations</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">analysis_actors_dict</span></em>, <em class="sig-param"><span class="n">start</span></em>, <em class="sig-param"><span class="n">stop</span></em><span class="sig-paren">)</span><a class="headerlink" href="#AnalysisActor.rmsf_analysis.reset_rmsf_calculations" title="Permalink to this definition">¶</a></dt>
+<dt id="MDSimsEval.rmsf_analysis.reset_rmsf_calculations">
+<code class="sig-prename descclassname">MDSimsEval.rmsf_analysis.</code><code class="sig-name descname">reset_rmsf_calculations</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">analysis_actors_dict</span></em>, <em class="sig-param"><span class="n">start</span></em>, <em class="sig-param"><span class="n">stop</span></em><span class="sig-paren">)</span><a class="headerlink" href="#MDSimsEval.rmsf_analysis.reset_rmsf_calculations" title="Permalink to this definition">¶</a></dt>
 <dd><p>Resets the RMSF calculations of all the ligands in the <code class="docutils literal notranslate"><span class="pre">analysis_actors_dict</span></code> and recalculates them on the
 given window.</p>
 <p>This function could be part of the <code class="docutils literal notranslate"><span class="pre">AnalysisActor</span></code> class but in order to keep the class simple I have avoided it.</p>
@@ -252,8 +252,8 @@ given window.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="AnalysisActor.rmsf_analysis.return_top_k">
-<code class="sig-prename descclassname">AnalysisActor.rmsf_analysis.</code><code class="sig-name descname">return_top_k</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_arr</span></em>, <em class="sig-param"><span class="n">analysis_actors_dict</span></em>, <em class="sig-param"><span class="n">k</span><span class="o">=</span><span class="default_value">10</span></em><span class="sig-paren">)</span><a class="headerlink" href="#AnalysisActor.rmsf_analysis.return_top_k" title="Permalink to this definition">¶</a></dt>
+<dt id="MDSimsEval.rmsf_analysis.return_top_k">
+<code class="sig-prename descclassname">MDSimsEval.rmsf_analysis.</code><code class="sig-name descname">return_top_k</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_arr</span></em>, <em class="sig-param"><span class="n">analysis_actors_dict</span></em>, <em class="sig-param"><span class="n">k</span><span class="o">=</span><span class="default_value">10</span></em><span class="sig-paren">)</span><a class="headerlink" href="#MDSimsEval.rmsf_analysis.return_top_k" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a DataFrame of the top 10 values of the input array</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -265,6 +265,32 @@ given window.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>A <code class="docutils literal notranslate"><span class="pre">pd.DataFrame['ResidueId',</span> <span class="pre">'RMSF',</span> <span class="pre">'Res</span> <span class="pre">Name']</span></code> of the top-k residues</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="MDSimsEval.rmsf_analysis.stat_test_residues">
+<code class="sig-prename descclassname">MDSimsEval.rmsf_analysis.</code><code class="sig-name descname">stat_test_residues</code><span class="sig-paren">(</span><em class="sig-param">analysis_actors_dict</em>, <em class="sig-param">stat_test=&lt;function ttest_ind&gt;</em>, <em class="sig-param">threshold=0.05</em>, <em class="sig-param">start=-1</em>, <em class="sig-param">stop=-1</em><span class="sig-paren">)</span><a class="headerlink" href="#MDSimsEval.rmsf_analysis.stat_test_residues" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finds the most differentiating residues based on a statistical test on their RMSF. If <code class="docutils literal notranslate"><span class="pre">start==-1</span></code> and <code class="docutils literal notranslate"><span class="pre">stop==-1</span></code>
+then we do not recalculate RMSF on the given window.</p>
+<div class="line-block">
+<div class="line">For example on the T-test we have:</div>
+<div class="line">Null Hypothesis: The RMSFs of a specific residue have identical average (expected) values</div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>analysis_actors_dict</strong> – : <code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">&quot;Agonists&quot;:</span> <span class="pre">List[AnalysisActor.class],</span> <span class="pre">&quot;Antagonists&quot;:</span> <span class="pre">List[AnalysisActor.class]</span> <span class="pre">}</span></code></p></li>
+<li><p><strong>stat_test</strong> (<em>scipy.stats</em>) – A statistical test method with the interface of scipy.stats methods</p></li>
+<li><p><strong>threshold</strong> (<em>float</em>) – The p-value threshold of the accepted and returned residues</p></li>
+<li><p><strong>start</strong> (<em>int</em>) – The starting frame of the calculations</p></li>
+<li><p><strong>stop</strong> (<em>int</em>) – The stopping frame of the calculations</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of tuples of the residue ids (0-indexed) that had below the threshold p-value, the p_value.
+Eg <code class="docutils literal notranslate"><span class="pre">[(10,</span> <span class="pre">0.03),</span> <span class="pre">(5,</span> <span class="pre">0.042),</span> <span class="pre">...]</span></code></p>
 </dd>
 </dl>
 </dd></dl>

@@ -154,15 +154,15 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="module-AnalysisActor.rg_sasa_analysis">
-<span id="rg-and-sasa-analysis"></span><h1><span class="section-number">4. </span>Rg and SASA Analysis<a class="headerlink" href="#module-AnalysisActor.rg_sasa_analysis" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-MDSimsEval.rg_sasa_analysis">
+<span id="rg-and-sasa-analysis"></span><h1><span class="section-number">4. </span>Rg and SASA Analysis<a class="headerlink" href="#module-MDSimsEval.rg_sasa_analysis" title="Permalink to this headline">¶</a></h1>
 <p>Rg and SASA are two correlated metrics which focus on describing how the protein expands or shrinks as frames pass.</p>
 <p>The functions in this module are based on frame aggregating techniques per class. For example we will take the <code class="docutils literal notranslate"><span class="pre">Rg</span></code> of
 all the agonists on frame x and find the average. We will do that for every frame and end up with an average description
 of increases or decreases in <code class="docutils literal notranslate"><span class="pre">Rg</span></code>.</p>
 <dl class="py function">
-<dt id="AnalysisActor.rg_sasa_analysis.calculate_average_cols_rg">
-<code class="sig-prename descclassname">AnalysisActor.rg_sasa_analysis.</code><code class="sig-name descname">calculate_average_cols_rg</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">analysis_actors_dict</span></em><span class="sig-paren">)</span><a class="headerlink" href="#AnalysisActor.rg_sasa_analysis.calculate_average_cols_rg" title="Permalink to this definition">¶</a></dt>
+<dt id="MDSimsEval.rg_sasa_analysis.calculate_average_cols_rg">
+<code class="sig-prename descclassname">MDSimsEval.rg_sasa_analysis.</code><code class="sig-name descname">calculate_average_cols_rg</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">analysis_actors_dict</span></em><span class="sig-paren">)</span><a class="headerlink" href="#MDSimsEval.rg_sasa_analysis.calculate_average_cols_rg" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculates the mean of Rg of each frame for both classes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -175,8 +175,8 @@ of increases or decreases in <code class="docutils literal notranslate"><span cl
 </dd></dl>
 
 <dl class="py function">
-<dt id="AnalysisActor.rg_sasa_analysis.calculate_average_cols_sasa">
-<code class="sig-prename descclassname">AnalysisActor.rg_sasa_analysis.</code><code class="sig-name descname">calculate_average_cols_sasa</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">analysis_actors_dict</span></em><span class="sig-paren">)</span><a class="headerlink" href="#AnalysisActor.rg_sasa_analysis.calculate_average_cols_sasa" title="Permalink to this definition">¶</a></dt>
+<dt id="MDSimsEval.rg_sasa_analysis.calculate_average_cols_sasa">
+<code class="sig-prename descclassname">MDSimsEval.rg_sasa_analysis.</code><code class="sig-name descname">calculate_average_cols_sasa</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">analysis_actors_dict</span></em><span class="sig-paren">)</span><a class="headerlink" href="#MDSimsEval.rg_sasa_analysis.calculate_average_cols_sasa" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculates the mean of SASA of each frame for both classes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -189,8 +189,8 @@ of increases or decreases in <code class="docutils literal notranslate"><span cl
 </dd></dl>
 
 <dl class="py function">
-<dt id="AnalysisActor.rg_sasa_analysis.rg_sasa_mean_mean_plot">
-<code class="sig-prename descclassname">AnalysisActor.rg_sasa_analysis.</code><code class="sig-name descname">rg_sasa_mean_mean_plot</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">analysis_actors_dict</span></em>, <em class="sig-param"><span class="n">dir_path</span></em>, <em class="sig-param"><span class="n">start</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">stop</span><span class="o">=</span><span class="default_value">2500</span></em><span class="sig-paren">)</span><a class="headerlink" href="#AnalysisActor.rg_sasa_analysis.rg_sasa_mean_mean_plot" title="Permalink to this definition">¶</a></dt>
+<dt id="MDSimsEval.rg_sasa_analysis.rg_sasa_mean_mean_plot">
+<code class="sig-prename descclassname">MDSimsEval.rg_sasa_analysis.</code><code class="sig-name descname">rg_sasa_mean_mean_plot</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">analysis_actors_dict</span></em>, <em class="sig-param"><span class="n">dir_path</span></em>, <em class="sig-param"><span class="n">start</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">stop</span><span class="o">=</span><span class="default_value">2500</span></em><span class="sig-paren">)</span><a class="headerlink" href="#MDSimsEval.rg_sasa_analysis.rg_sasa_mean_mean_plot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a mean of Rg - mean of SASA plot on the specified window with annotations on the plots.</p>
 <div class="line-block">
 <div class="line"><br /></div>
@@ -212,8 +212,8 @@ of increases or decreases in <code class="docutils literal notranslate"><span cl
 </dd></dl>
 
 <dl class="py function">
-<dt id="AnalysisActor.rg_sasa_analysis.rg_sasa_std_std_plot">
-<code class="sig-prename descclassname">AnalysisActor.rg_sasa_analysis.</code><code class="sig-name descname">rg_sasa_std_std_plot</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">analysis_actors_dict</span></em>, <em class="sig-param"><span class="n">dir_path</span></em>, <em class="sig-param"><span class="n">start</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">stop</span><span class="o">=</span><span class="default_value">2500</span></em><span class="sig-paren">)</span><a class="headerlink" href="#AnalysisActor.rg_sasa_analysis.rg_sasa_std_std_plot" title="Permalink to this definition">¶</a></dt>
+<dt id="MDSimsEval.rg_sasa_analysis.rg_sasa_std_std_plot">
+<code class="sig-prename descclassname">MDSimsEval.rg_sasa_analysis.</code><code class="sig-name descname">rg_sasa_std_std_plot</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">analysis_actors_dict</span></em>, <em class="sig-param"><span class="n">dir_path</span></em>, <em class="sig-param"><span class="n">start</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">stop</span><span class="o">=</span><span class="default_value">2500</span></em><span class="sig-paren">)</span><a class="headerlink" href="#MDSimsEval.rg_sasa_analysis.rg_sasa_std_std_plot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a std of Rg - std of SASA plot on the specified window with annotations on the plots.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -228,8 +228,8 @@ of increases or decreases in <code class="docutils literal notranslate"><span cl
 </dd></dl>
 
 <dl class="py function">
-<dt id="AnalysisActor.rg_sasa_analysis.summarize_rg">
-<code class="sig-prename descclassname">AnalysisActor.rg_sasa_analysis.</code><code class="sig-name descname">summarize_rg</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">analysis_actors_dict</span></em>, <em class="sig-param"><span class="n">dir_path</span></em>, <em class="sig-param"><span class="n">rolling_window</span><span class="o">=</span><span class="default_value">100</span></em><span class="sig-paren">)</span><a class="headerlink" href="#AnalysisActor.rg_sasa_analysis.summarize_rg" title="Permalink to this definition">¶</a></dt>
+<dt id="MDSimsEval.rg_sasa_analysis.summarize_rg">
+<code class="sig-prename descclassname">MDSimsEval.rg_sasa_analysis.</code><code class="sig-name descname">summarize_rg</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">analysis_actors_dict</span></em>, <em class="sig-param"><span class="n">dir_path</span></em>, <em class="sig-param"><span class="n">rolling_window</span><span class="o">=</span><span class="default_value">100</span></em><span class="sig-paren">)</span><a class="headerlink" href="#MDSimsEval.rg_sasa_analysis.summarize_rg" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a plot summarizing how the <code class="docutils literal notranslate"><span class="pre">Rg</span></code> behaves.</p>
 <div class="line-block">
 <div class="line"><br /></div>
@@ -250,8 +250,8 @@ of increases or decreases in <code class="docutils literal notranslate"><span cl
 </dd></dl>
 
 <dl class="py function">
-<dt id="AnalysisActor.rg_sasa_analysis.summarize_sasa">
-<code class="sig-prename descclassname">AnalysisActor.rg_sasa_analysis.</code><code class="sig-name descname">summarize_sasa</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">analysis_actors_dict</span></em>, <em class="sig-param"><span class="n">dir_path</span></em>, <em class="sig-param"><span class="n">rolling_window</span><span class="o">=</span><span class="default_value">100</span></em><span class="sig-paren">)</span><a class="headerlink" href="#AnalysisActor.rg_sasa_analysis.summarize_sasa" title="Permalink to this definition">¶</a></dt>
+<dt id="MDSimsEval.rg_sasa_analysis.summarize_sasa">
+<code class="sig-prename descclassname">MDSimsEval.rg_sasa_analysis.</code><code class="sig-name descname">summarize_sasa</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">analysis_actors_dict</span></em>, <em class="sig-param"><span class="n">dir_path</span></em>, <em class="sig-param"><span class="n">rolling_window</span><span class="o">=</span><span class="default_value">100</span></em><span class="sig-paren">)</span><a class="headerlink" href="#MDSimsEval.rg_sasa_analysis.summarize_sasa" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a plot summarizing how the <code class="docutils literal notranslate"><span class="pre">SASA</span></code> behaves.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
