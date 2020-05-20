@@ -1,0 +1,303 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>6. PCA Analysis &mdash; MDSimsEval 0.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="5. RMSF Analysis" href="RmsfAnalysis.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> MDSimsEval
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Prerequisites.html">1. Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ReadingData.html">2. Reading the simulations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="AnalysisActor.html">3. AnalysisActor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RgSasaAnalysis.html">4. Rg and SASA Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RmsfAnalysis.html">5. RMSF Analysis</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">6. PCA Analysis</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">MDSimsEval</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li><span class="section-number">6. </span>PCA Analysis</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/pages/PcaAnalysis.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-MDSimsEval.pca_analysis">
+<span id="pca-analysis"></span><h1><span class="section-number">6. </span>PCA Analysis<a class="headerlink" href="#module-MDSimsEval.pca_analysis" title="Permalink to this headline">¶</a></h1>
+<dl class="py function">
+<dt id="MDSimsEval.pca_analysis.loadings_heatmap">
+<code class="sig-prename descclassname">MDSimsEval.pca_analysis.</code><code class="sig-name descname">loadings_heatmap</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">analysis_actors_dict</span></em>, <em class="sig-param"><span class="n">dir_path</span></em>, <em class="sig-param"><span class="n">explained_variance</span><span class="o">=</span><span class="default_value">0.75</span></em><span class="sig-paren">)</span><a class="headerlink" href="#MDSimsEval.pca_analysis.loadings_heatmap" title="Permalink to this definition">¶</a></dt>
+<dd><div class="line-block">
+<div class="line">Creates a heatmap of the loadings of the residues for all the ligands. The blue line separates Class 1 fromClass 2</div>
+<div class="line"><br /></div>
+</div>
+<div class="figure align-center" id="id1">
+<a class="reference internal image-reference" href="../_images/pca_loadings_heatmap.png"><img alt="pca loadings heatmap missing" src="../_images/pca_loadings_heatmap.png" style="width: 550px; height: 500px;" /></a>
+<p class="caption"><span class="caption-text">PCA Loadings Heatmap, click for higher resolution.</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>analysis_actors_dict</strong> – <code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">&quot;Agonists&quot;:</span> <span class="pre">List[AnalysisActor.class],</span> <span class="pre">&quot;Antagonists&quot;:</span> <span class="pre">List[AnalysisActor.class]</span> <span class="pre">}</span></code></p></li>
+<li><p><strong>dir_path</strong> (<em>str</em>) – The path of the directory the plot will be saved (must end with a <code class="docutils literal notranslate"><span class="pre">/</span></code>)</p></li>
+<li><p><strong>explained_variance</strong> (<em>float 0.0 - 1.0</em>) – Defines the number of PCs that will be used for the loadings calculation</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="MDSimsEval.pca_analysis.populate_variance_showcase_df">
+<code class="sig-prename descclassname">MDSimsEval.pca_analysis.</code><code class="sig-name descname">populate_variance_showcase_df</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">analysis_actors_dict</span></em>, <em class="sig-param"><span class="n">drug_type</span></em><span class="sig-paren">)</span><a class="headerlink" href="#MDSimsEval.pca_analysis.populate_variance_showcase_df" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a DataFrame having for each drug the number of PCs needed in order to have 50%, 75% and 95% variance</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>analysis_actors_dict</strong> – <code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">&quot;Agonists&quot;:</span> <span class="pre">List[AnalysisActor.class],</span> <span class="pre">&quot;Antagonists&quot;:</span> <span class="pre">List[AnalysisActor.class]</span> <span class="pre">}</span></code></p></li>
+<li><p><strong>drug_type</strong> (<em>str</em>) – The class name (‘Agonists’ or ‘Antagonists’)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A DataFrame with columns <code class="docutils literal notranslate"><span class="pre">['Drug</span> <span class="pre">Name',</span> <span class="pre">'Type',</span> <span class="pre">'50%</span> <span class="pre">Variance',</span> <span class="pre">'75%</span> <span class="pre">Variance',</span> <span class="pre">'95%</span> <span class="pre">Variance']</span></code></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="MDSimsEval.pca_analysis.project_pca_on_2d">
+<code class="sig-prename descclassname">MDSimsEval.pca_analysis.</code><code class="sig-name descname">project_pca_on_2d</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">analysis_actors_dict</span></em>, <em class="sig-param"><span class="n">drug_type</span></em>, <em class="sig-param"><span class="n">dir_path</span></em><span class="sig-paren">)</span><a class="headerlink" href="#MDSimsEval.pca_analysis.project_pca_on_2d" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plots the 2d projection on the first two PCs of the atom space. The colorbar expresses the progression
+of the frames (color0 -&gt; frame0, color1 -&gt; last_frame).
+The plot is shown inside the function but if need can be easily be changed to return it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>analysis_actors_dict</strong> – <code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">&quot;Agonists&quot;:</span> <span class="pre">List[AnalysisActor.class],</span> <span class="pre">&quot;Antagonists&quot;:</span> <span class="pre">List[AnalysisActor.class]</span> <span class="pre">}</span></code></p></li>
+<li><p><strong>drug_type</strong> (<em>str</em>) – ‘Agonists’ or ‘Antagonists’</p></li>
+<li><p><strong>dir_path</strong> (<em>str</em>) – The path of the directory the plot will be saved (must end with a <code class="docutils literal notranslate"><span class="pre">/</span></code>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="MDSimsEval.pca_analysis.scree_plot">
+<code class="sig-prename descclassname">MDSimsEval.pca_analysis.</code><code class="sig-name descname">scree_plot</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">analysis_actors_dict</span></em>, <em class="sig-param"><span class="n">dir_path</span></em>, <em class="sig-param"><span class="n">pcs_on_scree_plot</span><span class="o">=</span><span class="default_value">50</span></em>, <em class="sig-param"><span class="n">variance_ratio_line</span><span class="o">=</span><span class="default_value">0.75</span></em><span class="sig-paren">)</span><a class="headerlink" href="#MDSimsEval.pca_analysis.scree_plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a plot with the scree plots for each ligand and saves it on the specified <code class="docutils literal notranslate"><span class="pre">dir_path</span></code>. With blue color is
+class 1 and with orange color class 2.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>analysis_actors_dict</strong> – <code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">&quot;Agonists&quot;:</span> <span class="pre">List[AnalysisActor.class],</span> <span class="pre">&quot;Antagonists&quot;:</span> <span class="pre">List[AnalysisActor.class]</span> <span class="pre">}</span></code></p></li>
+<li><p><strong>dir_path</strong> (<em>str</em>) – The path of the directory the plot will be saved (must end with a <code class="docutils literal notranslate"><span class="pre">/</span></code>)</p></li>
+<li><p><strong>pcs_on_scree_plot</strong> (<em>int</em>) – The number of the first PCs that will be used on the scree plots</p></li>
+<li><p><strong>variance_ratio_line</strong> (<em>float</em>) – Float from 0.0 to 1.0 which specifies the variance ratio that a vertical line will</p></li>
+<li><p><strong>plotted</strong> (<em>be</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="MDSimsEval.pca_analysis.sort_residues_by_loadings">
+<code class="sig-prename descclassname">MDSimsEval.pca_analysis.</code><code class="sig-name descname">sort_residues_by_loadings</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ligand</span></em>, <em class="sig-param"><span class="n">variance_explained</span><span class="o">=</span><span class="default_value">0.5</span></em><span class="sig-paren">)</span><a class="headerlink" href="#MDSimsEval.pca_analysis.sort_residues_by_loadings" title="Permalink to this definition">¶</a></dt>
+<dd><p>Having as an input <strong>a ligand</strong> find the loadings of each residue and return them in descending order.
+The method combines first k PCs where k is defined by the variance_explained argument.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ligand</strong> (<em>AnalysisActor.class</em>) – An AnalysisActor object in which PCA is calculated</p></li>
+<li><p><strong>variance_explained</strong> (<em>float</em>) – Defines which PCs will be combined to calcualte the final loadings</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>pd.DataFrame where ResidueId is the index and each row contains the loadings of the residue</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="RmsfAnalysis.html" class="btn btn-neutral float-left" title="5. RMSF Analysis" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Mike Xydas
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

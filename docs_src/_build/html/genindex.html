@@ -89,6 +89,7 @@
 <li class="toctree-l1"><a class="reference internal" href="pages/AnalysisActor.html">3. AnalysisActor</a></li>
 <li class="toctree-l1"><a class="reference internal" href="pages/RgSasaAnalysis.html">4. Rg and SASA Analysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="pages/RmsfAnalysis.html">5. RMSF Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pages/PcaAnalysis.html">6. PCA Analysis</a></li>
 </ul>
 
             
@@ -161,6 +162,7 @@
  | <a href="#G"><strong>G</strong></a>
  | <a href="#H"><strong>H</strong></a>
  | <a href="#I"><strong>I</strong></a>
+ | <a href="#L"><strong>L</strong></a>
  | <a href="#M"><strong>M</strong></a>
  | <a href="#P"><strong>P</strong></a>
  | <a href="#R"><strong>R</strong></a>
@@ -230,6 +232,14 @@
   </ul></td>
 </tr></table>
 
+<h2 id="L">L</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="pages/PcaAnalysis.html#MDSimsEval.pca_analysis.loadings_heatmap">loadings_heatmap() (in module MDSimsEval.pca_analysis)</a>
+</li>
+  </ul></td>
+</tr></table>
+
 <h2 id="M">M</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -238,6 +248,13 @@
 
       <ul>
         <li><a href="pages/AnalysisActor.html#module-MDSimsEval.AnalysisActorClass">module</a>
+</li>
+      </ul></li>
+      <li>
+    MDSimsEval.pca_analysis
+
+      <ul>
+        <li><a href="pages/PcaAnalysis.html#module-MDSimsEval.pca_analysis">module</a>
 </li>
       </ul></li>
       <li>
@@ -254,6 +271,8 @@
         <li><a href="pages/RmsfAnalysis.html#module-MDSimsEval.rmsf_analysis">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     MDSimsEval.utils
 
@@ -261,8 +280,6 @@
         <li><a href="pages/ReadingData.html#module-MDSimsEval.utils">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pages/AnalysisActor.html#MDSimsEval.AnalysisActorClass.AnalysisActor.mdtraj">mdtraj (MDSimsEval.AnalysisActorClass.AnalysisActor attribute)</a>
 </li>
       <li>
@@ -270,6 +287,8 @@
 
       <ul>
         <li><a href="pages/AnalysisActor.html#module-MDSimsEval.AnalysisActorClass">MDSimsEval.AnalysisActorClass</a>
+</li>
+        <li><a href="pages/PcaAnalysis.html#module-MDSimsEval.pca_analysis">MDSimsEval.pca_analysis</a>
 </li>
         <li><a href="pages/RgSasaAnalysis.html#module-MDSimsEval.rg_sasa_analysis">MDSimsEval.rg_sasa_analysis</a>
 </li>
@@ -286,11 +305,15 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pages/AnalysisActor.html#MDSimsEval.AnalysisActorClass.AnalysisActor.pca_res">pca_res (MDSimsEval.AnalysisActorClass.AnalysisActor attribute)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pages/AnalysisActor.html#MDSimsEval.AnalysisActorClass.AnalysisActor.pca_xyz">pca_xyz (MDSimsEval.AnalysisActorClass.AnalysisActor attribute)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pages/AnalysisActor.html#MDSimsEval.AnalysisActorClass.AnalysisActor.perform_analysis">perform_analysis() (MDSimsEval.AnalysisActorClass.AnalysisActor method)</a>
+</li>
+      <li><a href="pages/PcaAnalysis.html#MDSimsEval.pca_analysis.populate_variance_showcase_df">populate_variance_showcase_df() (in module MDSimsEval.pca_analysis)</a>
+</li>
+      <li><a href="pages/PcaAnalysis.html#MDSimsEval.pca_analysis.project_pca_on_2d">project_pca_on_2d() (in module MDSimsEval.pca_analysis)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -324,8 +347,12 @@
 </li>
       <li><a href="pages/AnalysisActor.html#MDSimsEval.AnalysisActorClass.AnalysisActor.sasa_res">sasa_res (MDSimsEval.AnalysisActorClass.AnalysisActor attribute)</a>
 </li>
+      <li><a href="pages/PcaAnalysis.html#MDSimsEval.pca_analysis.scree_plot">scree_plot() (in module MDSimsEval.pca_analysis)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="pages/PcaAnalysis.html#MDSimsEval.pca_analysis.sort_residues_by_loadings">sort_residues_by_loadings() (in module MDSimsEval.pca_analysis)</a>
+</li>
       <li><a href="pages/RmsfAnalysis.html#MDSimsEval.rmsf_analysis.stat_test_residues">stat_test_residues() (in module MDSimsEval.rmsf_analysis)</a>
 </li>
       <li><a href="pages/RgSasaAnalysis.html#MDSimsEval.rg_sasa_analysis.summarize_rg">summarize_rg() (in module MDSimsEval.rg_sasa_analysis)</a>

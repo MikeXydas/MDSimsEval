@@ -6,7 +6,7 @@ Prerequisites
 Installation
 ############
 
-| **OS**: Developed on Ubuntu18.04 but ay linux distribution should work
+| **OS**: Developed on Ubuntu18.04 but any linux distribution should work
 | **Python**: Developed on 3.6 but any version >=3.6 should work
 
 **Package Only**

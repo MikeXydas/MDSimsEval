@@ -12,7 +12,8 @@ setup(name='MDSimsEval',
             'scipy>=1.4.1',
             'MDAnalysis>=0.20.1',
             'mdtraj>=1.9.3',
-            'scikit-learn>=0.22.1'
+            'scikit-learn>=0.22.1',
+            'seaborn>=0.10.0'
       ],
       packages=find_packages(),
       zip_safe=False)
