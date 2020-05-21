@@ -246,6 +246,7 @@ take as an argument.</p>
 <p>Concerning <strong>SASA</strong> we must first create a <code class="docutils literal notranslate"><span class="pre">sasa.xvg</span></code> file for each simulation and keep it next to the topology and the
 trajectory. The <a class="reference external" href="http://manual.gromacs.org/documentation/5.1/onlinehelp/gmx-sasa.html">GROMACS</a> command is:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">gmx</span> <span class="n">sasa</span> <span class="o">-</span><span class="n">f</span> <span class="n">trajecotry</span><span class="o">.</span><span class="n">xtc</span> <span class="o">-</span><span class="n">s</span> <span class="n">topology</span><span class="o">.</span><span class="n">pdb</span> <span class="o">-</span><span class="n">o</span> <span class="n">sasa</span><span class="o">.</span><span class="n">xvg</span>
+<span class="c1"># Select Group 1 (Protein)</span>
 </pre></div>
 </div>
 <p>Concerning the <strong>salt bridges</strong> you must use a <a class="reference external" href="https://www.ks.uiuc.edu/Research/vmd/plugins/saltbr/">VMD</a> plugin and

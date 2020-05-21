@@ -64,6 +64,7 @@ Concerning **SASA** we must first create a ``sasa.xvg`` file for each simulation
 trajectory. The `GROMACS <http://manual.gromacs.org/documentation/5.1/onlinehelp/gmx-sasa.html>`_ command is::
 
  gmx sasa -f trajecotry.xtc -s topology.pdb -o sasa.xvg
+ # Select Group 1 (Protein)
 
 Concerning the **salt bridges** you must use a `VMD <https://www.ks.uiuc.edu/Research/vmd/plugins/saltbr/>`_ plugin and
 copy the whole outputted directory named ``salts/`` next to the trajectory files.

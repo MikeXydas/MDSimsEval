@@ -315,7 +315,7 @@ def rg_sasa_std_std_plot(analysis_actors_dict, dir_path, start=0, stop=2500):
     plt.xticks(np.arange(0.05, 0.14, 0.01), fontsize=18)
     plt.yticks(np.arange(1.75, 4.5, 0.25), fontsize=18)
     plt.ylabel("Std SASA", fontsize=24)
-    plt.title(f"Rg Std on time - SASA Std on time  | Frames: {start} - {end}", fontsize=28)
+    plt.title(f"Rg Std on time - SASA Std on time  | Frames: {start} - {stop}", fontsize=28)
     plt.legend(prop={'size': 26}, markerscale=3)
     plt.grid(linewidth=2)
 

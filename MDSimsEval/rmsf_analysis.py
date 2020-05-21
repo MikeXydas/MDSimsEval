@@ -215,6 +215,9 @@ def corr_matrix(analysis_actors_dict, dir_path, method='pearson', top=290, start
     The correlation values are calculated on the RMSF values of the ``top-k`` residues. On the output file the ligand
     names have only their first 5 characters for visual reasons.
 
+    Warning:
+        We must NOT have ligand names that have the same first 5 characters.
+
     |
 
     .. figure:: ../_static/rmsf_corr.png
@@ -263,11 +266,14 @@ def corr_matrix(analysis_actors_dict, dir_path, method='pearson', top=290, start
 
     # Creating dataframe which will have as columns the ligand names and as rows the residues
     rmsf_array = np.array([res_rmsf[mask] for res_rmsf in np.vstack((residue_rmsfs_agon, residue_rmsfs_antagon))])
-    ligand_names = [ligand.drug_name[:5]    # I use only the first 5 chars of the ligand name for easier fitting
+
+    # Use only the first 5 chars of the ligand name for better visual result
+    ligand_names = [ligand.drug_name[:5]
                     for ligand in analysis_actors_dict['Agonists'] + analysis_actors_dict['Antagonists']]
     rmsf_df = pd.DataFrame(rmsf_array.T, columns=ligand_names)
 
     # Creating the correlation matrix adding a heatmap for easier visualization
+
     corr = rmsf_df.corr(method=method)
     html_render = corr.style.background_gradient(cmap='coolwarm', axis=None).set_precision(2).render()
 

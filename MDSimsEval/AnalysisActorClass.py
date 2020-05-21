@@ -87,8 +87,8 @@ class AnalysisActor:
 
     def __init__(self, topology, trajectory, drug_name, sasa_file="", salts_directory=""):
         self.uni = MDAnalysis.Universe(topology, trajectory)
-        self.mdtraj = md_traj.load(trajectory, top=topology)
-        self.mdtraj = self.mdtraj.superpose(self.mdtraj)    # Align to the first frame to avoid simulation anomalies
+        # self.mdtraj = md_traj.load(trajectory, top=topology) Removed due to memory constraints, PCA will not work
+        # self.mdtraj = self.mdtraj.superpose(self.mdtraj)    # Align to the first frame to avoid simulation anomalies
         self.drug_name = drug_name
         self.rg_res = None
         self.rmsf_res = None
@@ -189,7 +189,7 @@ class AnalysisActor:
         return bridges_per_frame
 
     def info(self):
-        ''' Prints basic info of the simulation '''
+        """ Prints basic info of the simulation """
         print(f'\n<<< Info of {self.drug_name} >>>')
         print(f'\tNumber of Frames: {len(self.uni.trajectory)}')
         print(f'\tNumber of Atoms: {len(self.uni.atoms)}')
@@ -199,7 +199,7 @@ class AnalysisActor:
         """ Returns the number of frames of the trajectory """
         return len(self.uni.trajectory)
 
-    def perform_analysis(self, metrics=[]):
+    def perform_analysis(self, metrics=()):
         """
         Runs the analysis methods for calculating the metrics specified by metrics argument
         
