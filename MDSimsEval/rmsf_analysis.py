@@ -297,6 +297,10 @@ def stat_test_residues(analysis_actors_dict, stat_test=stats.ttest_ind, threshol
     | For example on the T-test we have:
     | Null Hypothesis: The RMSFs of a specific residue have identical average (expected) values
 
+    Warning:
+        I suggest firstly using the :ref:`bootstrapped_rmsf_analysis` which provides a more time consuming but also more
+        generalized way of finding the most significant residues.
+
     Args:
         analysis_actors_dict: : ``{ "Agonists": List[AnalysisActor.class], "Antagonists": List[AnalysisActor.class] }``
         stat_test (scipy.stats): A statistical test method with the interface of scipy.stats methods

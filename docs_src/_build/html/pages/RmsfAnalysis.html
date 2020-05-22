@@ -89,7 +89,11 @@
 <li class="toctree-l1"><a class="reference internal" href="ReadingData.html">2. Reading the simulations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="AnalysisActor.html">3. AnalysisActor</a></li>
 <li class="toctree-l1"><a class="reference internal" href="RgSasaAnalysis.html">4. Rg and SASA Analysis</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">5. RMSF Analysis</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">5. RMSF Analysis</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-MDSimsEval.rmsf_analysis">5.1. Top and High RMSF Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-MDSimsEval.rmsf_bootstrapped_analysis">5.2. Bootstrapped RMSF Analysis</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="PcaAnalysis.html">6. PCA Analysis</a></li>
 </ul>
 
@@ -155,8 +159,10 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="module-MDSimsEval.rmsf_analysis">
-<span id="rmsf-analysis"></span><h1><span class="section-number">5. </span>RMSF Analysis<a class="headerlink" href="#module-MDSimsEval.rmsf_analysis" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="rmsf-analysis">
+<h1><span class="section-number">5. </span>RMSF Analysis<a class="headerlink" href="#rmsf-analysis" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-MDSimsEval.rmsf_analysis">
+<span id="top-and-high-rmsf-analysis"></span><h2><span class="section-number">5.1. </span>Top and High RMSF Analysis<a class="headerlink" href="#module-MDSimsEval.rmsf_analysis" title="Permalink to this headline">¶</a></h2>
 <p>RMSF is a measure of the deviation of the position of a particle i with respect to a reference position <strong>over time</strong>.</p>
 <p><strong>Difference between RMSD and RMSF</strong>: The latter is averaged over time, giving a value for each particle i. For the
 RMSD the average is taken over the particles, giving time specific values. So <strong>RMSD is time specific</strong> and <strong>RMSF
@@ -174,9 +180,9 @@ names have only their first 5 characters for visual reasons.</p>
 <div class="line-block">
 <div class="line"><br /></div>
 </div>
-<div class="figure align-center" id="id1">
+<div class="figure align-center" id="id3">
 <a class="reference internal image-reference" href="../_images/rmsf_corr.png"><img alt="rmsf corr figure missing" src="../_images/rmsf_corr.png" style="width: 600px; height: 250px;" /></a>
-<p class="caption"><span class="caption-text">Correlation heatmap, click for higher resolution.</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-text">Correlation heatmap, click for higher resolution.</span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -204,9 +210,9 @@ your machine. Else the output will be in <code class="docutils literal notransla
 avg rmsf per residue and the standard error of the mean. The color of the bars of the top-k
 <code class="docutils literal notranslate"><span class="pre">|agon_rmsf_avg</span> <span class="pre">-</span> <span class="pre">antagon_rmsf_avg|</span></code> RMSF residues are plotted in a different color
 so as to be easily distinguished.</p>
-<div class="figure align-center" id="id2">
+<div class="figure align-center" id="id4">
 <a class="reference internal image-reference" href="../_images/rmsf_barplots.png"><img alt="rmsf corr figure missing" src="../_images/rmsf_barplots.png" style="width: 550px; height: 500px;" /></a>
-<p class="caption"><span class="caption-text">Barplots of average RMSF per residue, click for higher resolution.</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-text">Barplots of average RMSF per residue, click for higher resolution.</span><a class="headerlink" href="#id4" title="Permalink to this image">¶</a></p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -284,6 +290,11 @@ then we do not recalculate RMSF on the given window.</p>
 <div class="line">For example on the T-test we have:</div>
 <div class="line">Null Hypothesis: The RMSFs of a specific residue have identical average (expected) values</div>
 </div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>I suggest firstly using the <a class="reference internal" href="#bootstrapped-rmsf-analysis"><span class="std std-ref">Bootstrapped RMSF Analysis</span></a> which provides a more time consuming but also more
+generalized way of finding the most significant residues.</p>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -301,6 +312,115 @@ Eg <code class="docutils literal notranslate"><span class="pre">[(10,</span> <sp
 </dl>
 </dd></dl>
 
+</div>
+<div class="section" id="module-MDSimsEval.rmsf_bootstrapped_analysis">
+<span id="id1"></span><span id="bootstrapped-rmsf-analysis"></span><h2><span class="section-number">5.2. </span>Bootstrapped RMSF Analysis<a class="headerlink" href="#module-MDSimsEval.rmsf_bootstrapped_analysis" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="MDSimsEval.rmsf_bootstrapped_analysis.bootstrapped_residue_analysis">
+<code class="sig-prename descclassname">MDSimsEval.rmsf_bootstrapped_analysis.</code><code class="sig-name descname">bootstrapped_residue_analysis</code><span class="sig-paren">(</span><em class="sig-param">analysis_actors_dict</em>, <em class="sig-param">windows</em>, <em class="sig-param">stat_test=&lt;function ks_2samp&gt;</em>, <em class="sig-param">threshold=0.05</em>, <em class="sig-param">input_size=12</em>, <em class="sig-param">replacement_size=8</em>, <em class="sig-param">replacements=1</em>, <em class="sig-param">iterations=5</em><span class="sig-paren">)</span><a class="headerlink" href="#MDSimsEval.rmsf_bootstrapped_analysis.bootstrapped_residue_analysis" title="Permalink to this definition">¶</a></dt>
+<dd><div class="line-block">
+<div class="line">This is the main method of finding the most significant RMSF residues in a general enough way in order to avoid
+overfitting.</div>
+<div class="line">To do that we follow the below bootstrapping method:</div>
+</div>
+<ol class="arabic simple">
+<li><p>We pick <code class="docutils literal notranslate"><span class="pre">input_size</span> <span class="pre">+</span> <span class="pre">replacement_size</span></code> agonists and <code class="docutils literal notranslate"><span class="pre">input_size</span> <span class="pre">+</span> <span class="pre">replacement_size</span></code> antagonists</p></li>
+<li><p>We randomly pick <code class="docutils literal notranslate"><span class="pre">input_size</span></code> agonists and <code class="docutils literal notranslate"><span class="pre">input_size</span></code> antagonists that will be our input set.</p></li>
+<li><dl class="simple">
+<dt>We repeat for a given number of iterations:</dt><dd><ol class="arabic simple">
+<li><p>Find the union of the most significant residues on specific windows</p></li>
+<li><p>Save the most significant residues</p></li>
+<li><p>Replace <code class="docutils literal notranslate"><span class="pre">replacement</span></code> agonists and <code class="docutils literal notranslate"><span class="pre">replacement</span></code> antagonists with random ligands
+from their respective replacement pools</p></li>
+</ol>
+</dd>
+</dl>
+</li>
+<li><p>Return the sensitivity of the results</p></li>
+</ol>
+<div class="line-block">
+<div class="line">The returned sensitivity of each residue is calculated by calculating <code class="docutils literal notranslate"><span class="pre">residue_appearances</span> <span class="pre">/</span> <span class="pre">iterations</span></code>.</div>
+<div class="line"><br /></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>analysis_actors_dict</strong> – <code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">&quot;Agonists&quot;:</span> <span class="pre">List[AnalysisActor.class],</span> <span class="pre">&quot;Antagonists&quot;:</span> <span class="pre">List[AnalysisActor.class]</span> <span class="pre">}</span></code></p></li>
+<li><p><strong>windows</strong> – List of (start, stop) tuples of each window</p></li>
+<li><p><strong>stat_test</strong> (<em>scipy.stats</em>) – A statistical test method with the interface of scipy.stats methods</p></li>
+<li><p><strong>threshold</strong> (<em>float</em>) – The p-value threshold of the accepted and returned residues</p></li>
+<li><p><strong>input_size</strong> (<em>int</em>) – The size of set for each class on which we will find the significant residues</p></li>
+<li><p><strong>replacement_size</strong> (<em>int</em>) – The size of the replacement set for each class</p></li>
+<li><p><strong>replacements</strong> (<em>int</em>) – How many replacements will occur on each iteration</p></li>
+<li><p><strong>iterations</strong> (<em>int</em>) – How many times we will repeat the finding of the significant residues</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A dictionary of <code class="docutils literal notranslate"><span class="pre">ResidueId,</span> <span class="pre">Sensitivity</span></code> for all the residues that appeared at least on one iteration</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="MDSimsEval.rmsf_bootstrapped_analysis.initialize_pools">
+<code class="sig-prename descclassname">MDSimsEval.rmsf_bootstrapped_analysis.</code><code class="sig-name descname">initialize_pools</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ligands_list</span></em>, <em class="sig-param"><span class="n">total_ligands</span><span class="o">=</span><span class="default_value">20</span></em>, <em class="sig-param"><span class="n">set_ligands</span><span class="o">=</span><span class="default_value">12</span></em><span class="sig-paren">)</span><a class="headerlink" href="#MDSimsEval.rmsf_bootstrapped_analysis.initialize_pools" title="Permalink to this definition">¶</a></dt>
+<dd><p>Inputs a list of <code class="docutils literal notranslate"><span class="pre">MDSimsEval.AnalysisActor</span></code> objects and returns initial input and replacement
+sets of the given size.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ligands_List</strong> – List of <code class="docutils literal notranslate"><span class="pre">MDSimsEval.AnalysisActor</span></code> objects</p></li>
+<li><p><strong>total_ligands</strong> (<em>int</em>) – How many ligands will be used in the experiment (input + replacement sets sizes)</p></li>
+<li><p><strong>set_ligands</strong> (<em>int</em>) – How many ligands will be on the initial input set. The rest of them will be on the</p></li>
+<li><p><strong>set</strong> (<em>replacement</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><div class="line-block">
+<div class="line">Tuple of (List of <code class="docutils literal notranslate"><span class="pre">MDSimsEval.AnalysisActor</span></code> that will be our initial input set,</div>
+<div class="line-block">
+<div class="line">List of <code class="docutils literal notranslate"><span class="pre">MDSimsEval.AnalysisActor</span></code> that will be our initial replacement set)</div>
+</div>
+</div>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="MDSimsEval.rmsf_bootstrapped_analysis.minimal_stat_test">
+<code class="sig-prename descclassname">MDSimsEval.rmsf_bootstrapped_analysis.</code><code class="sig-name descname">minimal_stat_test</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">agonists</span></em>, <em class="sig-param"><span class="n">antagonists</span></em>, <em class="sig-param"><span class="n">stat_test</span></em>, <em class="sig-param"><span class="n">start</span></em>, <em class="sig-param"><span class="n">stop</span></em>, <em class="sig-param"><span class="n">threshold</span><span class="o">=</span><span class="default_value">0.05</span></em><span class="sig-paren">)</span><a class="headerlink" href="#MDSimsEval.rmsf_bootstrapped_analysis.minimal_stat_test" title="Permalink to this definition">¶</a></dt>
+<dd><p>Inputs a list of agonists and a list of antagonists and finds the most significant residues. We do not return
+the p_value but only the residue ids.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>agonists</strong> – List of <code class="docutils literal notranslate"><span class="pre">MDSimsEval.AnalysisActor</span></code> agonists</p></li>
+<li><p><strong>antagonists</strong> – List of <code class="docutils literal notranslate"><span class="pre">MDSimsEval.AnalysisActor</span></code> antagonists</p></li>
+<li><p><strong>stat_test</strong> (<em>scipy.stats</em>) – A statistical test method with the interface of scipy.stats methods</p></li>
+<li><p><strong>start</strong> (<em>int</em>) – The starting frame of the calculations</p></li>
+<li><p><strong>stop</strong> (<em>int</em>) – The stopping frame of the calculations</p></li>
+<li><p><strong>threshold</strong> (<em>float</em>) – The p-value threshold of the accepted and returned residues</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="MDSimsEval.rmsf_bootstrapped_analysis.replacement_swap">
+<code class="sig-prename descclassname">MDSimsEval.rmsf_bootstrapped_analysis.</code><code class="sig-name descname">replacement_swap</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_set</span></em>, <em class="sig-param"><span class="n">replacement_set</span></em>, <em class="sig-param"><span class="n">numb_of_replacements</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#MDSimsEval.rmsf_bootstrapped_analysis.replacement_swap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs given number of swaps between the input_set and the replacement_set.The swaps are inplace.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_set</strong> – List of <code class="docutils literal notranslate"><span class="pre">MDSimsEval.AnalysisActor</span></code> that is our input set</p></li>
+<li><p><strong>replacement_set</strong> – List of <code class="docutils literal notranslate"><span class="pre">MDSimsEval.AnalysisActor</span></code> that is our replacement set</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
 </div>
 
 
