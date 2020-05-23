@@ -118,6 +118,7 @@ def bootstrapped_residue_analysis(analysis_actors_dict, windows, stat_test=stats
     4. Return the sensitivity of the results
 
     | The returned sensitivity of each residue is calculated by calculating ``residue_appearances / iterations``.
+    | A sensitivity of 1 is ideal meaing that the residue was significant to all the iterations.
     |
 
     Args:
@@ -157,4 +158,4 @@ def bootstrapped_residue_analysis(analysis_actors_dict, windows, stat_test=stats
         replacement_swap(inp_set_antagon, rep_set_antagon, replacements)
 
     # Calculate the sensitivity of each significant residue
-    return sensitivity_calc(significant_residues_per_iter)
+    return significant_residues_per_iter
