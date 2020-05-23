@@ -158,4 +158,4 @@ def bootstrapped_residue_analysis(analysis_actors_dict, windows, stat_test=stats
         replacement_swap(inp_set_antagon, rep_set_antagon, replacements)
 
     # Calculate the sensitivity of each significant residue
-    return significant_residues_per_iter
+    return sensitivity_calc(significant_residues_per_iter)

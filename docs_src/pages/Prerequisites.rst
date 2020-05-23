@@ -14,7 +14,8 @@ Installation
 The steps for **installing the package only** are:
 
 1. Clone the repository
-2. Run ``python setup.py develop``
+2. ``cd MDSimsEval``
+3. ``pip install .``
 
 Then you can import any method or class
 ::
