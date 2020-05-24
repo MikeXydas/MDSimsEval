@@ -1,12 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-RMSF is a measure of the deviation of the position of a particle i with respect to a reference position **over time**.
-
-**Difference between RMSD and RMSF**: The latter is averaged over time, giving a value for each particle i. For the
-RMSD the average is taken over the particles, giving time specific values. So **RMSD is time specific** and **RMSF
-is atom specific** `(ref) <http://www.drugdesign.gr/uploads/7/6/0/2/7602318/lecture_mdanalysis.pdf>`_.
-"""
-
 import numpy as np
 import pandas as pd
 import matplotlib.pylab as plt

@@ -90,8 +90,8 @@
 <li class="toctree-l1"><a class="reference internal" href="AnalysisActor.html">3. AnalysisActor</a></li>
 <li class="toctree-l1"><a class="reference internal" href="RgSasaAnalysis.html">4. Rg and SASA Analysis</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">5. RMSF Analysis</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#module-MDSimsEval.rmsf_analysis">5.1. Top and High RMSF Analysis</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-MDSimsEval.rmsf_bootstrapped_analysis">5.2. Bootstrapped RMSF Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#top-and-high-rmsf-analysis">5.1. Top and High RMSF Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#bootstrapped-rmsf-analysis">5.2. Bootstrapped RMSF Analysis</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="PcaAnalysis.html">6. PCA Analysis</a></li>
@@ -161,13 +161,22 @@
             
   <div class="section" id="rmsf-analysis">
 <h1><span class="section-number">5. </span>RMSF Analysis<a class="headerlink" href="#rmsf-analysis" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="module-MDSimsEval.rmsf_analysis">
-<span id="top-and-high-rmsf-analysis"></span><h2><span class="section-number">5.1. </span>Top and High RMSF Analysis<a class="headerlink" href="#module-MDSimsEval.rmsf_analysis" title="Permalink to this headline">¶</a></h2>
 <p>RMSF is a measure of the deviation of the position of a particle i with respect to a reference position <strong>over time</strong>.</p>
 <p><strong>Difference between RMSD and RMSF</strong>: The latter is averaged over time, giving a value for each particle i. For the
 RMSD the average is taken over the particles, giving time specific values. So <strong>RMSD is time specific</strong> and <strong>RMSF
 is atom specific</strong> <a class="reference external" href="http://www.drugdesign.gr/uploads/7/6/0/2/7602318/lecture_mdanalysis.pdf">(ref)</a>.</p>
-<dl class="py function">
+<p>This module aims on finding which are <strong>the most differentiating residues of the two classes based on their RMSF</strong>.
+To achieve that I followed two paths:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#top-high-rmsf-analysis"><span class="std std-ref">Top and High RMSF Analysis</span></a>, which is a more simplistic and prone to overfitting approach</p></li>
+<li><p><a class="reference internal" href="#bootstrapped-rmsf-analysis"><span class="std std-ref">Bootstrapped RMSF Analysis</span></a>, which is more complex, time consuming but more robust to the results it gives</p></li>
+</ul>
+<div class="section" id="top-and-high-rmsf-analysis">
+<span id="top-high-rmsf-analysis"></span><h2><span class="section-number">5.1. </span>Top and High RMSF Analysis<a class="headerlink" href="#top-and-high-rmsf-analysis" title="Permalink to this headline">¶</a></h2>
+<p>We define as <strong>High-k</strong>, the k residues that had the highest RMSF on their respective class. This creates two
+lists of residues, one for each class.</p>
+<p>We define as <strong>Top-k</strong>, the k residues that had the biggest <code class="docutils literal notranslate"><span class="pre">abs(high_k_class1</span> <span class="pre">-</span> <span class="pre">high_k_class2)</span></code>.</p>
+<span class="target" id="module-MDSimsEval.rmsf_analysis"></span><dl class="py function">
 <dt id="MDSimsEval.rmsf_analysis.corr_matrix">
 <code class="sig-prename descclassname">MDSimsEval.rmsf_analysis.</code><code class="sig-name descname">corr_matrix</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">analysis_actors_dict</span></em>, <em class="sig-param"><span class="n">dir_path</span></em>, <em class="sig-param"><span class="n">method</span><span class="o">=</span><span class="default_value">'pearson'</span></em>, <em class="sig-param"><span class="n">top</span><span class="o">=</span><span class="default_value">290</span></em>, <em class="sig-param"><span class="n">start</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">stop</span><span class="o">=</span><span class="default_value">2500</span></em><span class="sig-paren">)</span><a class="headerlink" href="#MDSimsEval.rmsf_analysis.corr_matrix" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a correlation matrix of the RMSF which has <code class="docutils literal notranslate"><span class="pre">#agonists</span> <span class="pre">+</span> <span class="pre">#antagonists</span> <span class="pre">x</span> <span class="pre">#agonists</span> <span class="pre">+</span> <span class="pre">#antagonists</span></code> dimensions.
@@ -313,9 +322,60 @@ Eg <code class="docutils literal notranslate"><span class="pre">[(10,</span> <sp
 </dd></dl>
 
 </div>
-<div class="section" id="module-MDSimsEval.rmsf_bootstrapped_analysis">
-<span id="id1"></span><span id="bootstrapped-rmsf-analysis"></span><h2><span class="section-number">5.2. </span>Bootstrapped RMSF Analysis<a class="headerlink" href="#module-MDSimsEval.rmsf_bootstrapped_analysis" title="Permalink to this headline">¶</a></h2>
-<dl class="py function">
+<div class="section" id="bootstrapped-rmsf-analysis">
+<span id="id1"></span><h2><span class="section-number">5.2. </span>Bootstrapped RMSF Analysis<a class="headerlink" href="#bootstrapped-rmsf-analysis" title="Permalink to this headline">¶</a></h2>
+<p>Bootstrapped RMSF analysis aims on finding the most significant residues which their RMSF helps us differentiate
+our two classes. It differs from the <em>Top and High Analysis</em> above since it uses good data science practises to <strong>avoid
+overfitting and providing with an evaluation of how general enough are our results</strong>.</p>
+<p>More on the method used to achieve this can be found on <code class="docutils literal notranslate"><span class="pre">bootstrapped_residue_analysis</span></code> function below.</p>
+<dl>
+<dt>Example:</dt><dd><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">MDSimsEval.utils</span> <span class="kn">import</span> <span class="n">create_analysis_actor_dict</span>
+
+<span class="kn">from</span> <span class="nn">MDSimsEval.rmsf_bootstrapped_analysis</span> <span class="kn">import</span> <span class="n">bootstrapped_residue_analysis</span>
+<span class="kn">from</span> <span class="nn">MDSimsEval.rmsf_bootstrapped_analysis</span> <span class="kn">import</span> <span class="n">sensitivity_calc</span>
+
+<span class="n">analysis_actors_dict</span> <span class="o">=</span> <span class="n">create_analysis_actor_dict</span><span class="p">(</span><span class="s1">&#39;path_to_data_directory/&#39;</span><span class="p">)</span>
+
+<span class="c1"># Find the most significant residues per iteration</span>
+<span class="n">significant_res_per_iter</span> <span class="o">=</span> <span class="n">bootstrapped_residue_analysis</span><span class="p">(</span><span class="n">analysis_actors_dict</span><span class="p">,</span> <span class="n">windows</span><span class="o">=</span><span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">500</span><span class="p">],</span> <span class="p">[</span><span class="mi">500</span><span class="p">,</span> <span class="mi">1000</span><span class="p">]],</span>
+                           <span class="n">stat_test</span><span class="o">=</span><span class="n">stats</span><span class="o">.</span><span class="n">ks_2samp</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">input_size</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">replacement_size</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
+                           <span class="n">iterations</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">replacements</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Calculate the sensitivity of the residues that are significant on at least one iteration</span>
+<span class="n">sensitivity</span> <span class="o">=</span> <span class="n">sensitivity_calc</span><span class="p">(</span><span class="n">significant_res_per_iter</span><span class="p">)</span>
+
+<span class="c1"># Create a histogram of the most significant residues</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">7</span><span class="p">))</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+
+<span class="c1"># Flatten the sets of significant residue to a single list</span>
+<span class="n">flat_res</span> <span class="o">=</span> <span class="p">[</span><span class="n">residue</span> <span class="k">for</span> <span class="n">iteration_residues</span> <span class="ow">in</span> <span class="n">res</span> <span class="k">for</span> <span class="n">residue</span> <span class="ow">in</span> <span class="n">iteration_residues</span><span class="p">]</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">flat_res</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">292</span><span class="p">))</span>    <span class="c1"># Hardcoded number of residues</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Residue Id&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Number of Appearances&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Histogram of Significant Residues on 1 - 500 OR 501 - 1000&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">291</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">292</span><span class="p">,</span> <span class="mi">25</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">110</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">hlines</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">xmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="mi">291</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">linestyles</span><span class="o">=</span><span class="s1">&#39;dashed&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Number of Iterations&quot;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+<p><strong>Output:</strong></p>
+<div class="figure align-center" id="id5">
+<a class="reference internal image-reference" href="../_images/rmsf_sign_hist.png"><img alt="rmsf hist of sign residues missing" src="../_images/rmsf_sign_hist.png" style="width: 550px; height: 400px;" /></a>
+<p class="caption"><span class="caption-text">Histogram of significant residues from bootstrapped method</span><a class="headerlink" href="#id5" title="Permalink to this image">¶</a></p>
+</div>
+<span class="target" id="module-MDSimsEval.rmsf_bootstrapped_analysis"></span><dl class="py function">
 <dt id="MDSimsEval.rmsf_bootstrapped_analysis.bootstrapped_residue_analysis">
 <code class="sig-prename descclassname">MDSimsEval.rmsf_bootstrapped_analysis.</code><code class="sig-name descname">bootstrapped_residue_analysis</code><span class="sig-paren">(</span><em class="sig-param">analysis_actors_dict</em>, <em class="sig-param">windows</em>, <em class="sig-param">stat_test=&lt;function ks_2samp&gt;</em>, <em class="sig-param">threshold=0.05</em>, <em class="sig-param">input_size=12</em>, <em class="sig-param">replacement_size=8</em>, <em class="sig-param">replacements=1</em>, <em class="sig-param">iterations=5</em><span class="sig-paren">)</span><a class="headerlink" href="#MDSimsEval.rmsf_bootstrapped_analysis.bootstrapped_residue_analysis" title="Permalink to this definition">¶</a></dt>
 <dd><div class="line-block">
@@ -336,13 +396,8 @@ from their respective replacement pools</p></li>
 </dd>
 </dl>
 </li>
-<li><p>Return the sensitivity of the results</p></li>
+<li><p>Return which residues where significant on each iteration</p></li>
 </ol>
-<div class="line-block">
-<div class="line">The returned sensitivity of each residue is calculated by calculating <code class="docutils literal notranslate"><span class="pre">residue_appearances</span> <span class="pre">/</span> <span class="pre">iterations</span></code>.</div>
-<div class="line">A sensitivity of 1 is ideal meaing that the residue was significant to all the iterations.</div>
-<div class="line"><br /></div>
-</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -357,7 +412,8 @@ from their respective replacement pools</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A dictionary of <code class="docutils literal notranslate"><span class="pre">ResidueId,</span> <span class="pre">Sensitivity</span></code> for all the residues that appeared at least on one iteration</p>
+<dd class="field-even"><p>A list of sets containing which residues were statistically significant on each iteration,
+<code class="docutils literal notranslate"><span class="pre">[{12,</span> <span class="pre">17,</span> <span class="pre">53},</span> <span class="pre">{17,</span> <span class="pre">62},</span> <span class="pre">...,</span> <span class="pre">{53,</span> <span class="pre">17}]</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -417,6 +473,26 @@ the p_value but only the residue ids.</p>
 <li><p><strong>input_set</strong> – List of <code class="docutils literal notranslate"><span class="pre">MDSimsEval.AnalysisActor</span></code> that is our input set</p></li>
 <li><p><strong>replacement_set</strong> – List of <code class="docutils literal notranslate"><span class="pre">MDSimsEval.AnalysisActor</span></code> that is our replacement set</p></li>
 </ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="MDSimsEval.rmsf_bootstrapped_analysis.sensitivity_calc">
+<code class="sig-prename descclassname">MDSimsEval.rmsf_bootstrapped_analysis.</code><code class="sig-name descname">sensitivity_calc</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">sign_residues_per_iter</span></em><span class="sig-paren">)</span><a class="headerlink" href="#MDSimsEval.rmsf_bootstrapped_analysis.sensitivity_calc" title="Permalink to this definition">¶</a></dt>
+<dd><div class="line-block">
+<div class="line">Inputs the output of <code class="docutils literal notranslate"><span class="pre">bootstrapped_residue_analysis</span></code> and calculates the sensitivity of each residue.</div>
+<div class="line">The returned sensitivity of each residue is calculated by calculating <code class="docutils literal notranslate"><span class="pre">residue_appearances</span> <span class="pre">/</span> <span class="pre">iterations</span></code>.</div>
+<div class="line">A sensitivity of 1 is ideal meaning that the residue was significant to all the iterations.</div>
+<div class="line"><br /></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>sign_residues_per_iter</strong> – A list of sets containing the residue ids of the significant residues on each iteration</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A dictionary of <code class="docutils literal notranslate"><span class="pre">ResidueId(key),</span> <span class="pre">Sensitivity(value)</span></code> for all the residues that appeared at least on one
+iteration</p>
 </dd>
 </dl>
 </dd></dl>

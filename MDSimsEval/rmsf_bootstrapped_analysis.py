@@ -87,6 +87,20 @@ def minimal_stat_test(agonists, antagonists, stat_test, start, stop, threshold=0
 
 
 def sensitivity_calc(sign_residues_per_iter):
+    """
+    | Inputs the output of ``bootstrapped_residue_analysis`` and calculates the sensitivity of each residue.
+    | The returned sensitivity of each residue is calculated by calculating ``residue_appearances / iterations``.
+    | A sensitivity of 1 is ideal meaning that the residue was significant to all the iterations.
+    |
+
+    Args:
+        sign_residues_per_iter: A list of sets containing the residue ids of the significant residues on each iteration
+
+    Returns:
+        A dictionary of ``ResidueId(key), Sensitivity(value)`` for all the residues that appeared at least on one
+        iteration
+
+    """
     sens_dict = {}
     for which_iter in sign_residues_per_iter:
         for which_res in which_iter:
@@ -115,11 +129,7 @@ def bootstrapped_residue_analysis(analysis_actors_dict, windows, stat_test=stats
         2. Save the most significant residues
         3. Replace ``replacement`` agonists and ``replacement`` antagonists with random ligands
            from their respective replacement pools
-    4. Return the sensitivity of the results
-
-    | The returned sensitivity of each residue is calculated by calculating ``residue_appearances / iterations``.
-    | A sensitivity of 1 is ideal meaing that the residue was significant to all the iterations.
-    |
+    4. Return which residues where significant on each iteration
 
     Args:
         analysis_actors_dict: ``{ "Agonists": List[AnalysisActor.class], "Antagonists": List[AnalysisActor.class] }``
@@ -132,7 +142,8 @@ def bootstrapped_residue_analysis(analysis_actors_dict, windows, stat_test=stats
         iterations(int): How many times we will repeat the finding of the significant residues
 
     Returns:
-        A dictionary of ``ResidueId, Sensitivity`` for all the residues that appeared at least on one iteration
+        A list of sets containing which residues were statistically significant on each iteration,
+        ``[{12, 17, 53}, {17, 62}, ..., {53, 17}]``
 
     """
     # Create our initial input and replacement set for both agonist and antagonists
@@ -158,4 +169,4 @@ def bootstrapped_residue_analysis(analysis_actors_dict, windows, stat_test=stats
         replacement_swap(inp_set_antagon, rep_set_antagon, replacements)
 
     # Calculate the sensitivity of each significant residue
-    return sensitivity_calc(significant_residues_per_iter)
+    return significant_residues_per_iter
