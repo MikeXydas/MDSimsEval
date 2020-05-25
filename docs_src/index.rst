@@ -39,6 +39,7 @@ The above solutions are actually used for some of my calculations.
    ./pages/RgSasaAnalysis
    ./pages/RmsfAnalysis
    ./pages/PcaAnalysis
+   ./pages/Utils
 
 
 .. Indices and tables

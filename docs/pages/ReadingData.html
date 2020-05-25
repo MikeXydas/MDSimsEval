@@ -88,7 +88,7 @@
 <li class="toctree-l1"><a class="reference internal" href="Prerequisites.html">1. Prerequisites</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">2. Reading the simulations</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#directory-structure">2.1. Directory Structure</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-MDSimsEval.utils">2.2. Reading Function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-MDSimsEval.utils.create_analysis_actor_dict">2.2. Reading Function</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#sasa-and-salt-bridges">2.3. SASA and Salt Bridges</a></li>
 </ul>
 </li>
@@ -96,6 +96,7 @@
 <li class="toctree-l1"><a class="reference internal" href="RgSasaAnalysis.html">4. Rg and SASA Analysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="RmsfAnalysis.html">5. RMSF Analysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="PcaAnalysis.html">6. PCA Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Utils.html">7. Utility Functions</a></li>
 </ul>
 
             
@@ -198,12 +199,9 @@ class labels. To be fixed so as class label is also a variable.</p>
 <div class="line"><br /></div>
 </div>
 </div>
-<div class="section" id="module-MDSimsEval.utils">
-<span id="reading-function"></span><h2><span class="section-number">2.2. </span>Reading Function<a class="headerlink" href="#module-MDSimsEval.utils" title="Permalink to this headline">¶</a></h2>
-<dl class="py function">
-<dt id="MDSimsEval.utils.create_analysis_actor_dict">
-<code class="sig-prename descclassname">MDSimsEval.utils.</code><code class="sig-name descname">create_analysis_actor_dict</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">root_directory</span></em><span class="sig-paren">)</span><a class="headerlink" href="#MDSimsEval.utils.create_analysis_actor_dict" title="Permalink to this definition">¶</a></dt>
-<dd><p>Reads the simulations (topologies, trajectories and sasa.xvg, salts/ if available and stores them in dictionary
+<div class="section" id="module-MDSimsEval.utils.create_analysis_actor_dict">
+<span id="reading-function"></span><h2><span class="section-number">2.2. </span>Reading Function<a class="headerlink" href="#module-MDSimsEval.utils.create_analysis_actor_dict" title="Permalink to this headline">¶</a></h2>
+<p>Reads the simulations (topologies, trajectories and sasa.xvg, salts/ if available and stores them in dictionary
 structure. The dictionary structure called <code class="docutils literal notranslate"><span class="pre">analysis_actors_dict</span></code> is the core structure that our functions
 take as an argument.</p>
 <blockquote>
@@ -222,23 +220,23 @@ take as an argument.</p>
 </dd>
 </dl>
 </div></blockquote>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>root_directory</strong> (<em>str</em>) – The path of the input directory having the expected structure on the documentation</p>
+<dl class="field-list">
+<dt class="field-odd">param root_directory</dt>
+<dd class="field-odd"><p>The path of the input directory having the expected structure on the documentation</p>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><p>analysis_actors_dict:</p>
+<dt class="field-even">type root_directory</dt>
+<dd class="field-even"><p>str</p>
+</dd>
+<dt class="field-odd">returns</dt>
+<dd class="field-odd"><p>analysis_actors_dict:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Dict</span><span class="p">(</span>
     <span class="s2">&quot;Agonists&quot;</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">AnalysisActor</span><span class="o">.</span><span class="n">class</span><span class="p">]</span>
     <span class="s2">&quot;Antagonists&quot;</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">AnalysisActor</span><span class="o">.</span><span class="n">class</span><span class="p">]</span>
   <span class="p">)</span>
 </pre></div>
 </div>
-</p>
 </dd>
 </dl>
-</dd></dl>
-
 </div>
 <div class="section" id="sasa-and-salt-bridges">
 <span id="reading-salt-sasa"></span><h2><span class="section-number">2.3. </span>SASA and Salt Bridges<a class="headerlink" href="#sasa-and-salt-bridges" title="Permalink to this headline">¶</a></h2>

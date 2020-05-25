@@ -9,7 +9,7 @@ from scipy import stats
 from MDAnalysis.analysis.rms import RMSF
 
 
-def reset_rmsf_calculations(analysis_actors_dict, start, stop):
+def reset_rmsf_calculations(analysis_actors_dict, start, stop, cache=None):
     """
     Resets the RMSF calculations of all the ligands in the ``analysis_actors_dict`` and recalculates them on the
     given window.
@@ -20,6 +20,8 @@ def reset_rmsf_calculations(analysis_actors_dict, start, stop):
         analysis_actors_dict: ``{ "Agonists": List[AnalysisActor.class], "Antagonists": List[AnalysisActor.class] }``
         start(int): The starting frame of the calculations
         stop(int): The stopping frame of the calculations
+        cache: Dictionary with key ``ligand_name_start_stop`` and value the RMSF run result. If set to ``None`` no cache
+               will be kept
 
     """
     # Null the calculations of the RMSF for each ligand
@@ -28,7 +30,14 @@ def reset_rmsf_calculations(analysis_actors_dict, start, stop):
 
     # Recalculate on the given window
     for ligand in analysis_actors_dict['Agonists'] + analysis_actors_dict['Antagonists']:
-        ligand.rmsf_res = RMSF(ligand.uni.select_atoms('protein')).run(start=start, stop=stop)
+        key_name = f'{ligand.drug_name}_{start}_{stop}'
+        if cache is not None and key_name in cache:
+            ligand.rmsf_res = cache[key_name]    # RMSF calculation exists in cache
+        else:
+            ligand.rmsf_res = RMSF(ligand.uni.select_atoms('protein')).run(start=start, stop=stop)
+            if cache is not None:    # Cache is enabled and RMSF calculation does NOT exist in cache
+                cache[key_name] = ligand.rmsf_res
+
 
 
 def get_avg_rmsf_per_residue(ligand):
@@ -200,38 +209,28 @@ def create_bar_plots_avg_stde(analysis_actors_dict, dir_path, top=50, start=0, s
     return None
 
 
-def corr_matrix(analysis_actors_dict, dir_path, method='pearson', top=290, start=0, stop=2500):
+def corr_matrix(analysis_actors_dict, method='pearson', top=290, start=0, stop=2500):
     """
     Creates a correlation matrix of the RMSF which has ``#agonists + #antagonists x #agonists + #antagonists`` dimensions.
-    The correlation values are calculated on the RMSF values of the ``top-k`` residues. On the output file the ligand
+    The correlation values are calculated on the RMSF values of the ``top-k`` residues. On the output DataFrame the ligand
     names have only their first 5 characters for visual reasons.
 
-    Warning:
-        We must NOT have ligand names that have the same first 5 characters.
+    The result is not in a readable format and could be passed in ``MDSimsEval.utils.render_corr_df``.
 
-    |
-
-    .. figure:: ../_static/rmsf_corr.png
-        :width: 600px
-        :align: center
-        :height: 250px
-        :alt: rmsf corr figure missing
-
-        Correlation heatmap, click for higher resolution.
-
-    .. note::
-
-         In order to save the as ``.png`` you must install ``wkhtmltopdf`` via ``sudo apt-get install wkhtmltopdf`` on
-         your machine. Else the output will be in ``.html`` and can be viewed using any browser.
+    .. warning::
+        This method should be deleted / refactored. I suggest using
+        ``MDSimsEval.rmsf_bootstrapped_analysis.create_correlation_df``
 
     Args:
 
         analysis_actors_dict: ``{ "Agonists": List[AnalysisActor.class], "Antagonists": List[AnalysisActor.class] }``
-        dir_path (str): The path of the directory the plot will be saved (must end with a ``/``)
         method (str): pearson, kendall, spearman
         top(int): The top-k residues that will be used for the correlation calculations
         start(int): The starting frame of the calculations
         stop(int): The stopping frame of the calculations
+
+    Returns:
+        A ``pd.DataFrame`` which has the pair correlations of all the ligands
 
     """
     reset_rmsf_calculations(analysis_actors_dict, start, stop)
@@ -266,18 +265,8 @@ def corr_matrix(analysis_actors_dict, dir_path, method='pearson', top=290, start
     # Creating the correlation matrix adding a heatmap for easier visualization
 
     corr = rmsf_df.corr(method=method)
-    html_render = corr.style.background_gradient(cmap='coolwarm', axis=None).set_precision(2).render()
 
-    # Saving the correlation matrix
-    try:
-        # If wkhtmltopdf is installed save the results as a .png
-        imgkit.from_string(html_render, f"{dir_path}rmsf_{method}_map_top{top}_{start}_{stop}.png")
-    except IOError:
-        # Save the html of the correlation map which can be rendered by a browser
-        with open(f"{dir_path}rmsf_{method}_map_top{top}_{start}_{stop}.html", "w") as text_file:
-            text_file.write(html_render)
-
-    return None
+    return corr
 
 
 def stat_test_residues(analysis_actors_dict, stat_test=stats.ttest_ind, threshold=0.05, start=-1, stop=-1):

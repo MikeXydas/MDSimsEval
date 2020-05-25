@@ -1,5 +1,6 @@
 import os
 import logging
+import imgkit
 
 from tqdm import tqdm
 
@@ -98,3 +99,37 @@ def create_analysis_actor_dict(root_directory):
     analysis_actors_dict['Antagonists'] = sorted(analysis_actors_dict['Antagonists'], key=lambda x: x.drug_name)
 
     return analysis_actors_dict
+
+
+def render_corr_df(corr_df, filepath):
+    """
+    Renders and saves a correlation heatmap which is visually interpretable.
+
+    .. figure:: ../_static/rmsf_corr.png
+        :width: 600px
+        :align: center
+        :height: 250px
+        :alt: rmsf corr figure missing
+
+        Correlation heatmap, click for higher resolution.
+
+    .. note::
+
+         In order to save the image as ``.png`` you must install ``wkhtmltopdf`` via ``sudo apt-get install
+         wkhtmltopdf`` on your machine. Else the output will be in a ``.html`` file and can be viewed using any browser.
+
+    Args:
+        corr_df(pd.DataFrame): A DataFrame of pairwise correlations
+        filepath(str): The full path the heatmap save location eg. ``/dir1/dir2/name_of_file``
+
+    """
+    html_render = corr_df.style.background_gradient(cmap='coolwarm', axis=None).set_precision(2).render()
+
+    # Saving the correlation matrix
+    try:
+        # If wkhtmltopdf is installed save the results as a .png
+        imgkit.from_string(html_render, f"{filepath}.png")
+    except IOError:
+        # Save the html of the correlation map, which can be rendered by a browser
+        with open(f"{filepath}.html", "w") as text_file:
+            text_file.write(html_render)

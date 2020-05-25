@@ -95,6 +95,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="PcaAnalysis.html">6. PCA Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Utils.html">7. Utility Functions</a></li>
 </ul>
 
             
@@ -178,36 +179,28 @@ lists of residues, one for each class.</p>
 <p>We define as <strong>Top-k</strong>, the k residues that had the biggest <code class="docutils literal notranslate"><span class="pre">abs(high_k_class1</span> <span class="pre">-</span> <span class="pre">high_k_class2)</span></code>.</p>
 <span class="target" id="module-MDSimsEval.rmsf_analysis"></span><dl class="py function">
 <dt id="MDSimsEval.rmsf_analysis.corr_matrix">
-<code class="sig-prename descclassname">MDSimsEval.rmsf_analysis.</code><code class="sig-name descname">corr_matrix</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">analysis_actors_dict</span></em>, <em class="sig-param"><span class="n">dir_path</span></em>, <em class="sig-param"><span class="n">method</span><span class="o">=</span><span class="default_value">'pearson'</span></em>, <em class="sig-param"><span class="n">top</span><span class="o">=</span><span class="default_value">290</span></em>, <em class="sig-param"><span class="n">start</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">stop</span><span class="o">=</span><span class="default_value">2500</span></em><span class="sig-paren">)</span><a class="headerlink" href="#MDSimsEval.rmsf_analysis.corr_matrix" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">MDSimsEval.rmsf_analysis.</code><code class="sig-name descname">corr_matrix</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">analysis_actors_dict</span></em>, <em class="sig-param"><span class="n">method</span><span class="o">=</span><span class="default_value">'pearson'</span></em>, <em class="sig-param"><span class="n">top</span><span class="o">=</span><span class="default_value">290</span></em>, <em class="sig-param"><span class="n">start</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">stop</span><span class="o">=</span><span class="default_value">2500</span></em><span class="sig-paren">)</span><a class="headerlink" href="#MDSimsEval.rmsf_analysis.corr_matrix" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a correlation matrix of the RMSF which has <code class="docutils literal notranslate"><span class="pre">#agonists</span> <span class="pre">+</span> <span class="pre">#antagonists</span> <span class="pre">x</span> <span class="pre">#agonists</span> <span class="pre">+</span> <span class="pre">#antagonists</span></code> dimensions.
-The correlation values are calculated on the RMSF values of the <code class="docutils literal notranslate"><span class="pre">top-k</span></code> residues. On the output file the ligand
+The correlation values are calculated on the RMSF values of the <code class="docutils literal notranslate"><span class="pre">top-k</span></code> residues. On the output DataFrame the ligand
 names have only their first 5 characters for visual reasons.</p>
+<p>The result is not in a readable format and could be passed in <code class="docutils literal notranslate"><span class="pre">MDSimsEval.utils.render_corr_df</span></code>.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>We must NOT have ligand names that have the same first 5 characters.</p>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="figure align-center" id="id3">
-<a class="reference internal image-reference" href="../_images/rmsf_corr.png"><img alt="rmsf corr figure missing" src="../_images/rmsf_corr.png" style="width: 600px; height: 250px;" /></a>
-<p class="caption"><span class="caption-text">Correlation heatmap, click for higher resolution.</span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>In order to save the as <code class="docutils literal notranslate"><span class="pre">.png</span></code> you must install <code class="docutils literal notranslate"><span class="pre">wkhtmltopdf</span></code> via <code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">apt-get</span> <span class="pre">install</span> <span class="pre">wkhtmltopdf</span></code> on
-your machine. Else the output will be in <code class="docutils literal notranslate"><span class="pre">.html</span></code> and can be viewed using any browser.</p>
+<p>This method should be deleted / refactored. I suggest using
+<code class="docutils literal notranslate"><span class="pre">MDSimsEval.rmsf_bootstrapped_analysis.create_correlation_df</span></code></p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>analysis_actors_dict</strong> – <code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">&quot;Agonists&quot;:</span> <span class="pre">List[AnalysisActor.class],</span> <span class="pre">&quot;Antagonists&quot;:</span> <span class="pre">List[AnalysisActor.class]</span> <span class="pre">}</span></code></p></li>
-<li><p><strong>dir_path</strong> (<em>str</em>) – The path of the directory the plot will be saved (must end with a <code class="docutils literal notranslate"><span class="pre">/</span></code>)</p></li>
 <li><p><strong>method</strong> (<em>str</em>) – pearson, kendall, spearman</p></li>
 <li><p><strong>top</strong> (<em>int</em>) – The top-k residues that will be used for the correlation calculations</p></li>
 <li><p><strong>start</strong> (<em>int</em>) – The starting frame of the calculations</p></li>
 <li><p><strong>stop</strong> (<em>int</em>) – The stopping frame of the calculations</p></li>
 </ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A <code class="docutils literal notranslate"><span class="pre">pd.DataFrame</span></code> which has the pair correlations of all the ligands</p>
 </dd>
 </dl>
 </dd></dl>
@@ -219,9 +212,9 @@ your machine. Else the output will be in <code class="docutils literal notransla
 avg rmsf per residue and the standard error of the mean. The color of the bars of the top-k
 <code class="docutils literal notranslate"><span class="pre">|agon_rmsf_avg</span> <span class="pre">-</span> <span class="pre">antagon_rmsf_avg|</span></code> RMSF residues are plotted in a different color
 so as to be easily distinguished.</p>
-<div class="figure align-center" id="id4">
+<div class="figure align-center" id="id2">
 <a class="reference internal image-reference" href="../_images/rmsf_barplots.png"><img alt="rmsf corr figure missing" src="../_images/rmsf_barplots.png" style="width: 550px; height: 500px;" /></a>
-<p class="caption"><span class="caption-text">Barplots of average RMSF per residue, click for higher resolution.</span><a class="headerlink" href="#id4" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-text">Barplots of average RMSF per residue, click for higher resolution.</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -257,7 +250,7 @@ RMSF of each residue</p>
 
 <dl class="py function">
 <dt id="MDSimsEval.rmsf_analysis.reset_rmsf_calculations">
-<code class="sig-prename descclassname">MDSimsEval.rmsf_analysis.</code><code class="sig-name descname">reset_rmsf_calculations</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">analysis_actors_dict</span></em>, <em class="sig-param"><span class="n">start</span></em>, <em class="sig-param"><span class="n">stop</span></em><span class="sig-paren">)</span><a class="headerlink" href="#MDSimsEval.rmsf_analysis.reset_rmsf_calculations" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">MDSimsEval.rmsf_analysis.</code><code class="sig-name descname">reset_rmsf_calculations</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">analysis_actors_dict</span></em>, <em class="sig-param"><span class="n">start</span></em>, <em class="sig-param"><span class="n">stop</span></em>, <em class="sig-param"><span class="n">cache</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#MDSimsEval.rmsf_analysis.reset_rmsf_calculations" title="Permalink to this definition">¶</a></dt>
 <dd><p>Resets the RMSF calculations of all the ligands in the <code class="docutils literal notranslate"><span class="pre">analysis_actors_dict</span></code> and recalculates them on the
 given window.</p>
 <p>This function could be part of the <code class="docutils literal notranslate"><span class="pre">AnalysisActor</span></code> class but in order to keep the class simple I have avoided it.</p>
@@ -267,6 +260,8 @@ given window.</p>
 <li><p><strong>analysis_actors_dict</strong> – <code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">&quot;Agonists&quot;:</span> <span class="pre">List[AnalysisActor.class],</span> <span class="pre">&quot;Antagonists&quot;:</span> <span class="pre">List[AnalysisActor.class]</span> <span class="pre">}</span></code></p></li>
 <li><p><strong>start</strong> (<em>int</em>) – The starting frame of the calculations</p></li>
 <li><p><strong>stop</strong> (<em>int</em>) – The stopping frame of the calculations</p></li>
+<li><p><strong>cache</strong> – Dictionary with key <code class="docutils literal notranslate"><span class="pre">ligand_name_start_stop</span></code> and value the RMSF run result. If set to <code class="docutils literal notranslate"><span class="pre">None</span></code> no cache
+will be kept</p></li>
 </ul>
 </dd>
 </dl>
@@ -339,7 +334,7 @@ overfitting and providing with an evaluation of how general enough are our resul
 <span class="c1"># Find the most significant residues per iteration</span>
 <span class="n">significant_res_per_iter</span> <span class="o">=</span> <span class="n">bootstrapped_residue_analysis</span><span class="p">(</span><span class="n">analysis_actors_dict</span><span class="p">,</span> <span class="n">windows</span><span class="o">=</span><span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">500</span><span class="p">],</span> <span class="p">[</span><span class="mi">500</span><span class="p">,</span> <span class="mi">1000</span><span class="p">]],</span>
                            <span class="n">stat_test</span><span class="o">=</span><span class="n">stats</span><span class="o">.</span><span class="n">ks_2samp</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">input_size</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">replacement_size</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
-                           <span class="n">iterations</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">replacements</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                           <span class="n">iterations</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">replacements</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
 <span class="c1"># Calculate the sensitivity of the residues that are significant on at least one iteration</span>
 <span class="n">sensitivity</span> <span class="o">=</span> <span class="n">sensitivity_calc</span><span class="p">(</span><span class="n">significant_res_per_iter</span><span class="p">)</span>
@@ -371,9 +366,9 @@ overfitting and providing with an evaluation of how general enough are our resul
 </dd>
 </dl>
 <p><strong>Output:</strong></p>
-<div class="figure align-center" id="id5">
+<div class="figure align-center" id="id3">
 <a class="reference internal image-reference" href="../_images/rmsf_sign_hist.png"><img alt="rmsf hist of sign residues missing" src="../_images/rmsf_sign_hist.png" style="width: 550px; height: 400px;" /></a>
-<p class="caption"><span class="caption-text">Histogram of significant residues from bootstrapped method</span><a class="headerlink" href="#id5" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-text">Histogram of significant residues from bootstrapped method</span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
 </div>
 <span class="target" id="module-MDSimsEval.rmsf_bootstrapped_analysis"></span><dl class="py function">
 <dt id="MDSimsEval.rmsf_bootstrapped_analysis.bootstrapped_residue_analysis">
@@ -419,6 +414,31 @@ from their respective replacement pools</p></li>
 </dd></dl>
 
 <dl class="py function">
+<dt id="MDSimsEval.rmsf_bootstrapped_analysis.create_correlation_df">
+<code class="sig-prename descclassname">MDSimsEval.rmsf_bootstrapped_analysis.</code><code class="sig-name descname">create_correlation_df</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">analysis_actors_dict</span></em>, <em class="sig-param"><span class="n">residue_ids</span></em>, <em class="sig-param"><span class="n">method</span></em>, <em class="sig-param"><span class="n">start</span></em>, <em class="sig-param"><span class="n">stop</span></em>, <em class="sig-param"><span class="n">rmsf_cache</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#MDSimsEval.rmsf_bootstrapped_analysis.create_correlation_df" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a <code class="docutils literal notranslate"><span class="pre">numb_of_ligands</span> <span class="pre">x</span> <span class="pre">numb_of_ligands</span></code> dataframe which has the pair correlations calculated
+on the rmsf of the given <code class="docutils literal notranslate"><span class="pre">residue_ids</span></code>.</p>
+<p>The result is not in a readable format and could be passed in <code class="docutils literal notranslate"><span class="pre">MDSimsEval.utils.render_corr_df</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>analysis_actors_dict</strong> – <code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">&quot;Agonists&quot;:</span> <span class="pre">List[AnalysisActor.class],</span> <span class="pre">&quot;Antagonists&quot;:</span> <span class="pre">List[AnalysisActor.class]</span> <span class="pre">}</span></code></p></li>
+<li><p><strong>residue_ids</strong> – List of residue ids that we want to use in order to calculate the calculations.</p></li>
+<li><p><strong>the top-k</strong><strong>, </strong><strong>high-k</strong><strong>, </strong><strong>most statistically significant.</strong> (<em>Eg</em>) – </p></li>
+<li><p><strong>method</strong> (<em>str</em>) – pearson, kendall, spearman</p></li>
+<li><p><strong>start</strong> (<em>int</em>) – The starting frame of the calculations</p></li>
+<li><p><strong>stop</strong> (<em>int</em>) – The stopping frame of the calculations</p></li>
+<li><p><strong>rmsf_cache</strong> – Dictionary with key <code class="docutils literal notranslate"><span class="pre">ligand_name_start_stop</span></code> and value the RMSF run result. If set to <code class="docutils literal notranslate"><span class="pre">None</span></code> no
+cache will be kept</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A <code class="docutils literal notranslate"><span class="pre">pd.DataFrame</span></code> which has the pair correlations of all the ligands</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt id="MDSimsEval.rmsf_bootstrapped_analysis.initialize_pools">
 <code class="sig-prename descclassname">MDSimsEval.rmsf_bootstrapped_analysis.</code><code class="sig-name descname">initialize_pools</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ligands_list</span></em>, <em class="sig-param"><span class="n">total_ligands</span><span class="o">=</span><span class="default_value">20</span></em>, <em class="sig-param"><span class="n">set_ligands</span><span class="o">=</span><span class="default_value">12</span></em><span class="sig-paren">)</span><a class="headerlink" href="#MDSimsEval.rmsf_bootstrapped_analysis.initialize_pools" title="Permalink to this definition">¶</a></dt>
 <dd><p>Inputs a list of <code class="docutils literal notranslate"><span class="pre">MDSimsEval.AnalysisActor</span></code> objects and returns initial input and replacement
@@ -446,9 +466,14 @@ sets of the given size.</p>
 
 <dl class="py function">
 <dt id="MDSimsEval.rmsf_bootstrapped_analysis.minimal_stat_test">
-<code class="sig-prename descclassname">MDSimsEval.rmsf_bootstrapped_analysis.</code><code class="sig-name descname">minimal_stat_test</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">agonists</span></em>, <em class="sig-param"><span class="n">antagonists</span></em>, <em class="sig-param"><span class="n">stat_test</span></em>, <em class="sig-param"><span class="n">start</span></em>, <em class="sig-param"><span class="n">stop</span></em>, <em class="sig-param"><span class="n">threshold</span><span class="o">=</span><span class="default_value">0.05</span></em><span class="sig-paren">)</span><a class="headerlink" href="#MDSimsEval.rmsf_bootstrapped_analysis.minimal_stat_test" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">MDSimsEval.rmsf_bootstrapped_analysis.</code><code class="sig-name descname">minimal_stat_test</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">agonists</span></em>, <em class="sig-param"><span class="n">antagonists</span></em>, <em class="sig-param"><span class="n">stat_test</span></em>, <em class="sig-param"><span class="n">start</span></em>, <em class="sig-param"><span class="n">stop</span></em>, <em class="sig-param"><span class="n">threshold</span><span class="o">=</span><span class="default_value">0.05</span></em>, <em class="sig-param"><span class="n">cache</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#MDSimsEval.rmsf_bootstrapped_analysis.minimal_stat_test" title="Permalink to this definition">¶</a></dt>
 <dd><p>Inputs a list of agonists and a list of antagonists and finds the most significant residues. We do not return
 the p_value but only the residue ids.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>RMSF calculations are cached to avoid recalculating them. In order to use the caching mechanism we give as an
+argument an empty dictionary <code class="docutils literal notranslate"><span class="pre">{}</span></code>.</p>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -458,6 +483,8 @@ the p_value but only the residue ids.</p>
 <li><p><strong>start</strong> (<em>int</em>) – The starting frame of the calculations</p></li>
 <li><p><strong>stop</strong> (<em>int</em>) – The stopping frame of the calculations</p></li>
 <li><p><strong>threshold</strong> (<em>float</em>) – The p-value threshold of the accepted and returned residues</p></li>
+<li><p><strong>cache</strong> – Dictionary with key <code class="docutils literal notranslate"><span class="pre">ligand_name_start_stop</span></code> and value the RMSF run result. If set to <code class="docutils literal notranslate"><span class="pre">None</span></code> no cache
+will be kept</p></li>
 </ul>
 </dd>
 </dl>

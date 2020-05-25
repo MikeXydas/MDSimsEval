@@ -5,6 +5,7 @@ import numpy as np
 from scipy import stats
 import random
 from tqdm import tqdm
+import pandas as pd
 
 
 def initialize_pools(ligands_list, total_ligands=20, set_ligands=12):
@@ -50,14 +51,15 @@ def replacement_swap(input_set, replacement_set, numb_of_replacements=1):
     return None
 
 
-def minimal_stat_test(agonists, antagonists, stat_test, start, stop, threshold=0.05):
+def minimal_stat_test(agonists, antagonists, stat_test, start, stop, threshold=0.05, cache=None):
     """
     Inputs a list of agonists and a list of antagonists and finds the most significant residues. We do not return
     the p_value but only the residue ids.
 
-    .. todo::
+    .. note::
 
-         RMSF calcualtions get repeated. I should in the near feature create a caching mechanism.
+         RMSF calculations are cached to avoid recalculating them. In order to use the caching mechanism we give as an
+         argument an empty dictionary ``{}``.
 
     Args:
         agonists: List of ``MDSimsEval.AnalysisActor`` agonists
@@ -66,10 +68,12 @@ def minimal_stat_test(agonists, antagonists, stat_test, start, stop, threshold=0
         start(int): The starting frame of the calculations
         stop(int): The stopping frame of the calculations
         threshold (float): The p-value threshold of the accepted and returned residues
+        cache: Dictionary with key ``ligand_name_start_stop`` and value the RMSF run result. If set to ``None`` no cache
+               will be kept
 
 
     """
-    reset_rmsf_calculations({'Agonists': agonists, 'Antagonists': antagonists}, start=start, stop=stop)
+    reset_rmsf_calculations({'Agonists': agonists, 'Antagonists': antagonists}, start=start, stop=stop, cache=cache)
 
     stacked_agonists_rmsf = np.array([get_avg_rmsf_per_residue(ligand) for ligand in agonists])
     stacked_antagonists_rmsf = np.array([get_avg_rmsf_per_residue(ligand) for ligand in antagonists])
@@ -154,11 +158,12 @@ def bootstrapped_residue_analysis(analysis_actors_dict, windows, stat_test=stats
                                                         set_ligands=input_size)
 
     significant_residues_per_iter = []
+    rmsf_cache = {}    # Memoization of the RMSF calculations
 
     for i in tqdm(range(iterations), desc='Iterations'):
         iteration_residues = []
         for start, stop in windows:
-            sign_residues = minimal_stat_test(inp_set_agon, inp_set_antagon, stat_test, start, stop, threshold)
+            sign_residues = minimal_stat_test(inp_set_agon, inp_set_antagon, stat_test, start, stop, threshold, rmsf_cache)
             iteration_residues.append(sign_residues)
 
         # Extract the union of the significant residues from all the windows
@@ -170,3 +175,51 @@ def bootstrapped_residue_analysis(analysis_actors_dict, windows, stat_test=stats
 
     # Calculate the sensitivity of each significant residue
     return significant_residues_per_iter
+
+
+def create_correlation_df(analysis_actors_dict, residue_ids, method, start, stop, rmsf_cache=None):
+    """
+    Creates a ``numb_of_ligands x numb_of_ligands`` dataframe which has the pair correlations calculated
+    on the rmsf of the given ``residue_ids``.
+
+    The result is not in a readable format and could be passed in ``MDSimsEval.utils.render_corr_df``.
+
+    Args:
+        analysis_actors_dict: ``{ "Agonists": List[AnalysisActor.class], "Antagonists": List[AnalysisActor.class] }``
+        residue_ids: List of residue ids that we want to use in order to calculate the calculations.
+        Eg the top-k, high-k, most statistically significant.
+        method (str): pearson, kendall, spearman
+        start(int): The starting frame of the calculations
+        stop(int): The stopping frame of the calculations
+        rmsf_cache: Dictionary with key ``ligand_name_start_stop`` and value the RMSF run result. If set to ``None`` no
+                    cache will be kept
+
+    Returns:
+        A ``pd.DataFrame`` which has the pair correlations of all the ligands
+
+    """
+    reset_rmsf_calculations(analysis_actors_dict, start, stop, rmsf_cache)
+
+    # Calculating the RMSFs of each residue instead of each atom
+    residue_rmsfs_agon = np.array([get_avg_rmsf_per_residue(ligand) for ligand in analysis_actors_dict['Agonists']])
+    residue_rmsfs_antagon = np.array(
+        [get_avg_rmsf_per_residue(ligand) for ligand in analysis_actors_dict['Antagonists']])
+
+    # We need the number of total residues to create the mask below
+    residues_numb = len(residue_rmsfs_agon[0])
+
+    # Create a True, False mask of the given residues
+    top_mask = [res_id in residue_ids for res_id in np.arange(residues_numb)]
+
+    # Creating a DataFrame which will have as columns the ligand names and as rows the residues
+    rmsf_array = np.array([res_rmsf[top_mask] for res_rmsf in np.vstack((residue_rmsfs_agon, residue_rmsfs_antagon))])
+
+    # Use only the first 5 chars of the ligand name for better visual results
+    ligand_names = [ligand.drug_name[:5]
+                    for ligand in analysis_actors_dict['Agonists'] + analysis_actors_dict['Antagonists']]
+    rmsf_df = pd.DataFrame(rmsf_array.T, columns=ligand_names)
+
+    # Create the correlation dataframe
+    corr = rmsf_df.corr(method=method)
+
+    return corr

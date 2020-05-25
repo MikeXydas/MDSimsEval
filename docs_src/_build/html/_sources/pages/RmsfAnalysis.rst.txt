@@ -53,7 +53,7 @@ Example:
             # Find the most significant residues per iteration
             significant_res_per_iter = bootstrapped_residue_analysis(analysis_actors_dict, windows=[[0, 500], [500, 1000]],
                                        stat_test=stats.ks_2samp, threshold=0.05, input_size=12, replacement_size=8,
-                                       iterations=3, replacements=1)
+                                       iterations=100, replacements=1)
 
             # Calculate the sensitivity of the residues that are significant on at least one iteration
             sensitivity = sensitivity_calc(significant_res_per_iter)
