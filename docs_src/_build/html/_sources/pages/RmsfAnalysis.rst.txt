@@ -14,7 +14,7 @@ This module aims on finding which are **the most differentiating residues of the
 To achieve that I followed two paths:
 
 * :ref:`top_high_rmsf_analysis`, which is a more simplistic and prone to overfitting approach
-* :ref:`bootstrapped_rmsf_analysis`, which is more complex, time consuming but more robust to the results it gives
+* :ref:`bootstrapped_rmsf_analysis` (*recommended*), which is more complex and time consuming but more robust to the results it gives
 
 .. _top_high_rmsf_analysis:
 
