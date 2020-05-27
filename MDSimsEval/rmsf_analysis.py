@@ -32,12 +32,11 @@ def reset_rmsf_calculations(analysis_actors_dict, start, stop, cache=None):
     for ligand in analysis_actors_dict['Agonists'] + analysis_actors_dict['Antagonists']:
         key_name = f'{ligand.drug_name}_{start}_{stop}'
         if cache is not None and key_name in cache:
-            ligand.rmsf_res = cache[key_name]    # RMSF calculation exists in cache
+            ligand.rmsf_res = cache[key_name]  # RMSF calculation exists in cache
         else:
             ligand.rmsf_res = RMSF(ligand.uni.select_atoms('protein')).run(start=start, stop=stop)
-            if cache is not None:    # Cache is enabled and RMSF calculation does NOT exist in cache
+            if cache is not None:  # Cache is enabled and RMSF calculation does NOT exist in cache
                 cache[key_name] = ligand.rmsf_res
-
 
 
 def get_avg_rmsf_per_residue(ligand):
@@ -77,7 +76,7 @@ def get_avg_rmsf_per_residue(ligand):
 
 def return_top_k(input_arr, analysis_actors_dict, k=10):
     """
-    Returns a DataFrame of the top 10 values of the input array
+    Returns a DataFrame of the top 10 values of the input array. Used as a helper function mostly.
 
     Args:
         input_arr (ndarray): A vector of the values we want to extract the top-k
@@ -105,6 +104,98 @@ def return_top_k(input_arr, analysis_actors_dict, k=10):
     ret_df.RMSF = pd.to_numeric(ret_df.RMSF)
 
     return ret_df
+
+
+def find_top_k(analysis_actors_dict, start=0, stop=2500, k=10, rmsf_cache=None):
+    """
+    Returns a DataFrame with the residues that had the biggest absolute difference between agonists and antagonists
+    on their average RMSF [``abs(agon_avg_rmsf_per_residue - antagon_avg_rmsf_per_residue)``].
+
+    Args:
+        analysis_actors_dict: ``{ "Agonists": List[AnalysisActor.class], "Antagonists": List[AnalysisActor.class] }``
+        start(int): The starting frame of the calculations
+        stop(int): The stopping frame of the calculations
+        k(int): The number of the top residues that will be included in the returned DataFrame
+        rmsf_cache: Dictionary with key ``ligand_name_start_stop`` and value the RMSF run result. If set to ``None``
+                    no cache will be kept
+
+    Returns:
+          A ``pd.DataFrame['ResidueId', 'RMSF', 'Res Name']`` of the top-k residues, where on ``RMSF`` column we have
+          absolute difference.
+
+    """
+    reset_rmsf_calculations(analysis_actors_dict, start, stop, rmsf_cache)
+
+    # Calculate avg RMSF per residue
+    residue_rmsfs_agon = np.array(
+        [get_avg_rmsf_per_residue(ligand) for ligand in analysis_actors_dict['Agonists']])
+    residue_rmsfs_antagon = np.array(
+        [get_avg_rmsf_per_residue(ligand) for ligand in analysis_actors_dict['Antagonists']])
+
+    # Average per residue
+    residue_rmsfs_agon_avg = np.mean(residue_rmsfs_agon, axis=0)
+    residue_rmsfs_antagon_avg = np.mean(residue_rmsfs_antagon, axis=0)
+
+    return return_top_k(np.abs(residue_rmsfs_agon_avg - residue_rmsfs_antagon_avg), analysis_actors_dict, k=k)
+
+
+def find_high_k(analysis_actors_dict, start=0, stop=2500, k=10, rmsf_cache=None):
+    """
+    Returns two DataFrames for each class with the residues that had the highest average RMSF on the specified window.
+
+     Example:
+        ::
+
+            from MDSimsEval.utils import create_analysis_actor_dict
+            from MDSimsEval.rmsf_analysis import find_high_k
+
+            analysis_actors_dict = create_analysis_actor_dict('/path_to_dataset/') # Read Agonists/Antagonists
+
+            agon_df, antagon_df = find_high_k(analysis_actors_dict, 500, 1000, 20, None)
+
+            # Printing the DataFrame of the residues that had the highest average RMSF across the agonists
+            print(agon_df)
+                ResidueId     RMSF Res Name
+            0       116.0  3.63539      ARG
+            1       117.0  3.31561      PHE
+            2         0.0  3.01161      THR
+            3       200.0  2.86724      ARG
+            4       199.0  2.84393      CYS
+            5       114.0  2.78910      HIE
+            6         1.0  2.78634      HIE
+            7       198.0  2.76465      LEU
+            8         2.0  2.47342      LEU
+            9       203.0  2.44867      GLN
+            10      115.0  2.41584      SER
+
+    Args:
+        analysis_actors_dict: ``{ "Agonists": List[AnalysisActor.class], "Antagonists": List[AnalysisActor.class] }``
+        start(int): The starting frame of the calculations
+        stop(int): The stopping frame of the calculations
+        k(int): The number of the top residues that will be included in the returned DataFrame
+        rmsf_cache: Dictionary with key ``ligand_name_start_stop`` and value the RMSF run result. If set to ``None``
+                    no cache will be kept
+
+    Returns:
+          A tuple of 2 ``pd.DataFrame['ResidueId', 'RMSF', 'Res Name']`` of the high-k residues, where on ``RMSF``
+          column we have the residues with the highest average RMSF. The first DataFrame is for the 1st class (in our
+          case Agonists and the second one for the 2nd class (in our case Antagonists).
+
+    """
+    reset_rmsf_calculations(analysis_actors_dict, start, stop, rmsf_cache)
+
+    # Calculate avg RMSF per residue
+    residue_rmsfs_agon = np.array(
+        [get_avg_rmsf_per_residue(ligand) for ligand in analysis_actors_dict['Agonists']])
+    residue_rmsfs_antagon = np.array(
+        [get_avg_rmsf_per_residue(ligand) for ligand in analysis_actors_dict['Antagonists']])
+
+    # Average per residue
+    residue_rmsfs_agon_avg = np.mean(residue_rmsfs_agon, axis=0)
+    residue_rmsfs_antagon_avg = np.mean(residue_rmsfs_antagon, axis=0)
+
+    return return_top_k(residue_rmsfs_agon_avg, analysis_actors_dict, k=k), \
+        return_top_k(residue_rmsfs_antagon_avg, analysis_actors_dict, k=k)
 
 
 def create_bar_plots_avg_stde(analysis_actors_dict, dir_path, top=50, start=0, stop=2500):

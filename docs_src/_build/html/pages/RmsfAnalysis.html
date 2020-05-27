@@ -230,6 +230,80 @@ so as to be easily distinguished.</p>
 </dd></dl>
 
 <dl class="py function">
+<dt id="MDSimsEval.rmsf_analysis.find_high_k">
+<code class="sig-prename descclassname">MDSimsEval.rmsf_analysis.</code><code class="sig-name descname">find_high_k</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">analysis_actors_dict</span></em>, <em class="sig-param"><span class="n">start</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">stop</span><span class="o">=</span><span class="default_value">2500</span></em>, <em class="sig-param"><span class="n">k</span><span class="o">=</span><span class="default_value">10</span></em>, <em class="sig-param"><span class="n">rmsf_cache</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#MDSimsEval.rmsf_analysis.find_high_k" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns two DataFrames for each class with the residues that had the highest average RMSF on the specified window.</p>
+<blockquote>
+<div><dl>
+<dt>Example:</dt><dd><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">MDSimsEval.utils</span> <span class="kn">import</span> <span class="n">create_analysis_actor_dict</span>
+<span class="kn">from</span> <span class="nn">MDSimsEval.rmsf_analysis</span> <span class="kn">import</span> <span class="n">find_high_k</span>
+
+<span class="n">analysis_actors_dict</span> <span class="o">=</span> <span class="n">create_analysis_actor_dict</span><span class="p">(</span><span class="s1">&#39;/path_to_dataset/&#39;</span><span class="p">)</span> <span class="c1"># Read Agonists/Antagonists</span>
+
+<span class="n">agon_df</span><span class="p">,</span> <span class="n">antagon_df</span> <span class="o">=</span> <span class="n">find_high_k</span><span class="p">(</span><span class="n">analysis_actors_dict</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+<span class="c1"># Printing the DataFrame of the residues that had the highest average RMSF across the agonists</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">agon_df</span><span class="p">)</span>
+    <span class="n">ResidueId</span>     <span class="n">RMSF</span> <span class="n">Res</span> <span class="n">Name</span>
+<span class="mi">0</span>       <span class="mf">116.0</span>  <span class="mf">3.63539</span>      <span class="n">ARG</span>
+<span class="mi">1</span>       <span class="mf">117.0</span>  <span class="mf">3.31561</span>      <span class="n">PHE</span>
+<span class="mi">2</span>         <span class="mf">0.0</span>  <span class="mf">3.01161</span>      <span class="n">THR</span>
+<span class="mi">3</span>       <span class="mf">200.0</span>  <span class="mf">2.86724</span>      <span class="n">ARG</span>
+<span class="mi">4</span>       <span class="mf">199.0</span>  <span class="mf">2.84393</span>      <span class="n">CYS</span>
+<span class="mi">5</span>       <span class="mf">114.0</span>  <span class="mf">2.78910</span>      <span class="n">HIE</span>
+<span class="mi">6</span>         <span class="mf">1.0</span>  <span class="mf">2.78634</span>      <span class="n">HIE</span>
+<span class="mi">7</span>       <span class="mf">198.0</span>  <span class="mf">2.76465</span>      <span class="n">LEU</span>
+<span class="mi">8</span>         <span class="mf">2.0</span>  <span class="mf">2.47342</span>      <span class="n">LEU</span>
+<span class="mi">9</span>       <span class="mf">203.0</span>  <span class="mf">2.44867</span>      <span class="n">GLN</span>
+<span class="mi">10</span>      <span class="mf">115.0</span>  <span class="mf">2.41584</span>      <span class="n">SER</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>analysis_actors_dict</strong> – <code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">&quot;Agonists&quot;:</span> <span class="pre">List[AnalysisActor.class],</span> <span class="pre">&quot;Antagonists&quot;:</span> <span class="pre">List[AnalysisActor.class]</span> <span class="pre">}</span></code></p></li>
+<li><p><strong>start</strong> (<em>int</em>) – The starting frame of the calculations</p></li>
+<li><p><strong>stop</strong> (<em>int</em>) – The stopping frame of the calculations</p></li>
+<li><p><strong>k</strong> (<em>int</em>) – The number of the top residues that will be included in the returned DataFrame</p></li>
+<li><p><strong>rmsf_cache</strong> – Dictionary with key <code class="docutils literal notranslate"><span class="pre">ligand_name_start_stop</span></code> and value the RMSF run result. If set to <code class="docutils literal notranslate"><span class="pre">None</span></code>
+no cache will be kept</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A tuple of 2 <code class="docutils literal notranslate"><span class="pre">pd.DataFrame['ResidueId',</span> <span class="pre">'RMSF',</span> <span class="pre">'Res</span> <span class="pre">Name']</span></code> of the high-k residues, where on <code class="docutils literal notranslate"><span class="pre">RMSF</span></code>
+column we have the residues with the highest average RMSF. The first DataFrame is for the 1st class (in our
+case Agonists and the second one for the 2nd class (in our case Antagonists).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="MDSimsEval.rmsf_analysis.find_top_k">
+<code class="sig-prename descclassname">MDSimsEval.rmsf_analysis.</code><code class="sig-name descname">find_top_k</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">analysis_actors_dict</span></em>, <em class="sig-param"><span class="n">start</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">stop</span><span class="o">=</span><span class="default_value">2500</span></em>, <em class="sig-param"><span class="n">k</span><span class="o">=</span><span class="default_value">10</span></em>, <em class="sig-param"><span class="n">rmsf_cache</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#MDSimsEval.rmsf_analysis.find_top_k" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a DataFrame with the residues that had the biggest absolute difference between agonists and antagonists
+on their average RMSF [<code class="docutils literal notranslate"><span class="pre">abs(agon_avg_rmsf_per_residue</span> <span class="pre">-</span> <span class="pre">antagon_avg_rmsf_per_residue)</span></code>].</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>analysis_actors_dict</strong> – <code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">&quot;Agonists&quot;:</span> <span class="pre">List[AnalysisActor.class],</span> <span class="pre">&quot;Antagonists&quot;:</span> <span class="pre">List[AnalysisActor.class]</span> <span class="pre">}</span></code></p></li>
+<li><p><strong>start</strong> (<em>int</em>) – The starting frame of the calculations</p></li>
+<li><p><strong>stop</strong> (<em>int</em>) – The stopping frame of the calculations</p></li>
+<li><p><strong>k</strong> (<em>int</em>) – The number of the top residues that will be included in the returned DataFrame</p></li>
+<li><p><strong>rmsf_cache</strong> – Dictionary with key <code class="docutils literal notranslate"><span class="pre">ligand_name_start_stop</span></code> and value the RMSF run result. If set to <code class="docutils literal notranslate"><span class="pre">None</span></code>
+no cache will be kept</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A <code class="docutils literal notranslate"><span class="pre">pd.DataFrame['ResidueId',</span> <span class="pre">'RMSF',</span> <span class="pre">'Res</span> <span class="pre">Name']</span></code> of the top-k residues, where on <code class="docutils literal notranslate"><span class="pre">RMSF</span></code> column we have
+absolute difference.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt id="MDSimsEval.rmsf_analysis.get_avg_rmsf_per_residue">
 <code class="sig-prename descclassname">MDSimsEval.rmsf_analysis.</code><code class="sig-name descname">get_avg_rmsf_per_residue</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ligand</span></em><span class="sig-paren">)</span><a class="headerlink" href="#MDSimsEval.rmsf_analysis.get_avg_rmsf_per_residue" title="Permalink to this definition">¶</a></dt>
 <dd><p>Having the series of resnumbs eg [1, 1, 1, 2, 2, …, 290, 290] and their respective
@@ -263,24 +337,6 @@ given window.</p>
 <li><p><strong>cache</strong> – Dictionary with key <code class="docutils literal notranslate"><span class="pre">ligand_name_start_stop</span></code> and value the RMSF run result. If set to <code class="docutils literal notranslate"><span class="pre">None</span></code> no cache
 will be kept</p></li>
 </ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt id="MDSimsEval.rmsf_analysis.return_top_k">
-<code class="sig-prename descclassname">MDSimsEval.rmsf_analysis.</code><code class="sig-name descname">return_top_k</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_arr</span></em>, <em class="sig-param"><span class="n">analysis_actors_dict</span></em>, <em class="sig-param"><span class="n">k</span><span class="o">=</span><span class="default_value">10</span></em><span class="sig-paren">)</span><a class="headerlink" href="#MDSimsEval.rmsf_analysis.return_top_k" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a DataFrame of the top 10 values of the input array</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>input_arr</strong> (<em>ndarray</em>) – A vector of the values we want to extract the top-k</p></li>
-<li><p><strong>analysis_actors_dict</strong> – <code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">&quot;Agonists&quot;:</span> <span class="pre">List[AnalysisActor.class],</span> <span class="pre">&quot;Antagonists&quot;:</span> <span class="pre">List[AnalysisActor.class]</span> <span class="pre">}</span></code></p></li>
-<li><p><strong>k</strong> (<em>int</em>) – The top-k residues that will be returned</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A <code class="docutils literal notranslate"><span class="pre">pd.DataFrame['ResidueId',</span> <span class="pre">'RMSF',</span> <span class="pre">'Res</span> <span class="pre">Name']</span></code> of the top-k residues</p>
 </dd>
 </dl>
 </dd></dl>

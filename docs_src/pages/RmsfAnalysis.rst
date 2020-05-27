@@ -28,6 +28,7 @@ We define as **Top-k**, the k residues that had the biggest ``abs(high_k_class1 
 
 .. automodule:: MDSimsEval.rmsf_analysis
     :members:
+    :exclude-members: return_top_k
 
 .. _bootstrapped_rmsf_analysis:
 
