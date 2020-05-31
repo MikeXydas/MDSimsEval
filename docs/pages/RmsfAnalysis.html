@@ -428,43 +428,28 @@ overfitting and providing with an evaluation of how general enough are our resul
 </div>
 <span class="target" id="module-MDSimsEval.rmsf_bootstrapped_analysis"></span><dl class="py function">
 <dt id="MDSimsEval.rmsf_bootstrapped_analysis.bootstrapped_residue_analysis">
-<code class="sig-prename descclassname">MDSimsEval.rmsf_bootstrapped_analysis.</code><code class="sig-name descname">bootstrapped_residue_analysis</code><span class="sig-paren">(</span><em class="sig-param">analysis_actors_dict</em>, <em class="sig-param">windows</em>, <em class="sig-param">stat_test=&lt;function ks_2samp&gt;</em>, <em class="sig-param">threshold=0.05</em>, <em class="sig-param">input_size=12</em>, <em class="sig-param">replacement_size=8</em>, <em class="sig-param">replacements=1</em>, <em class="sig-param">iterations=5</em><span class="sig-paren">)</span><a class="headerlink" href="#MDSimsEval.rmsf_bootstrapped_analysis.bootstrapped_residue_analysis" title="Permalink to this definition">¶</a></dt>
-<dd><div class="line-block">
-<div class="line">This is the main method of finding the most significant RMSF residues in a general enough way in order to avoid
-overfitting.</div>
-<div class="line">To do that we follow the below bootstrapping method:</div>
-</div>
-<ol class="arabic simple">
-<li><p>We pick <code class="docutils literal notranslate"><span class="pre">input_size</span> <span class="pre">+</span> <span class="pre">replacement_size</span></code> agonists and <code class="docutils literal notranslate"><span class="pre">input_size</span> <span class="pre">+</span> <span class="pre">replacement_size</span></code> antagonists</p></li>
-<li><p>We randomly pick <code class="docutils literal notranslate"><span class="pre">input_size</span></code> agonists and <code class="docutils literal notranslate"><span class="pre">input_size</span></code> antagonists that will be our input set.</p></li>
-<li><dl class="simple">
-<dt>We repeat for a given number of iterations:</dt><dd><ol class="arabic simple">
-<li><p>Find the union of the most significant residues on specific windows</p></li>
-<li><p>Save the most significant residues</p></li>
-<li><p>Replace <code class="docutils literal notranslate"><span class="pre">replacement</span></code> agonists and <code class="docutils literal notranslate"><span class="pre">replacement</span></code> antagonists with random ligands
-from their respective replacement pools</p></li>
-</ol>
-</dd>
-</dl>
-</li>
-<li><p>Return which residues where significant on each iteration</p></li>
-</ol>
+<code class="sig-prename descclassname">MDSimsEval.rmsf_bootstrapped_analysis.</code><code class="sig-name descname">bootstrapped_residue_analysis</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">analysis_actors_dict</span></em>, <em class="sig-param"><span class="n">start</span></em>, <em class="sig-param"><span class="n">stop</span></em>, <em class="sig-param"><span class="n">stat_test</span></em>, <em class="sig-param"><span class="n">threshold</span></em>, <em class="sig-param"><span class="n">samples_numb</span></em>, <em class="sig-param"><span class="n">sample_size</span></em><span class="sig-paren">)</span><a class="headerlink" href="#MDSimsEval.rmsf_bootstrapped_analysis.bootstrapped_residue_analysis" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate <code class="docutils literal notranslate"><span class="pre">samples_numb</span></code> random samples  that each one will have <code class="docutils literal notranslate"><span class="pre">sample_size</span></code> agonists and <code class="docutils literal notranslate"><span class="pre">sample_size</span></code>
+antagonists. Then perform a statistical test on the RMSFs of each residue of the agonists vs the RMSFs of each
+residue of the antagonists. If the difference is significant save the residue as important for the specific
+iteration.</p>
+<p>Finally, return the significant residues on each iteration</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>analysis_actors_dict</strong> – <code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">&quot;Agonists&quot;:</span> <span class="pre">List[AnalysisActor.class],</span> <span class="pre">&quot;Antagonists&quot;:</span> <span class="pre">List[AnalysisActor.class]</span> <span class="pre">}</span></code></p></li>
-<li><p><strong>windows</strong> – List of (start, stop) tuples of each window</p></li>
+<li><p><strong>start</strong> (<em>int</em>) – The starting frame of the calculations</p></li>
+<li><p><strong>stop</strong> (<em>int</em>) – The stopping frame of the calculations</p></li>
 <li><p><strong>stat_test</strong> (<em>scipy.stats</em>) – A statistical test method with the interface of scipy.stats methods</p></li>
 <li><p><strong>threshold</strong> (<em>float</em>) – The p-value threshold of the accepted and returned residues</p></li>
-<li><p><strong>input_size</strong> (<em>int</em>) – The size of set for each class on which we will find the significant residues</p></li>
-<li><p><strong>replacement_size</strong> (<em>int</em>) – The size of the replacement set for each class</p></li>
-<li><p><strong>replacements</strong> (<em>int</em>) – How many replacements will occur on each iteration</p></li>
-<li><p><strong>iterations</strong> (<em>int</em>) – How many times we will repeat the finding of the significant residues</p></li>
+<li><p><strong>samples_numb</strong> (<em>int</em>) – How many random samples will be generated</p></li>
+<li><p><strong>sample_size</strong> (<em>int</em>) – How many ligands each sample will have of each class. Eg if <code class="docutils literal notranslate"><span class="pre">sample_size=10</span></code> then each
+sample will have 10 agonists and 10 antagonists</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A list of sets containing which residues were statistically significant on each iteration,
-<code class="docutils literal notranslate"><span class="pre">[{12,</span> <span class="pre">17,</span> <span class="pre">53},</span> <span class="pre">{17,</span> <span class="pre">62},</span> <span class="pre">...,</span> <span class="pre">{53,</span> <span class="pre">17}]</span></code></p>
+<dd class="field-even"><p>A list of <code class="docutils literal notranslate"><span class="pre">samples_numb</span></code> sets. Each sets contains the <code class="docutils literal notranslate"><span class="pre">ResidueId</span></code> of the residues that were significant on
+the specific iteration</p>
 </dd>
 </dl>
 </dd></dl>
@@ -541,6 +526,61 @@ argument an empty dictionary <code class="docutils literal notranslate"><span cl
 <li><p><strong>threshold</strong> (<em>float</em>) – The p-value threshold of the accepted and returned residues</p></li>
 <li><p><strong>cache</strong> – Dictionary with key <code class="docutils literal notranslate"><span class="pre">ligand_name_start_stop</span></code> and value the RMSF run result. If set to <code class="docutils literal notranslate"><span class="pre">None</span></code> no cache
 will be kept</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="MDSimsEval.rmsf_bootstrapped_analysis.plot_hists_summary">
+<code class="sig-prename descclassname">MDSimsEval.rmsf_bootstrapped_analysis.</code><code class="sig-name descname">plot_hists_summary</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">bootstrapped_results</span></em>, <em class="sig-param"><span class="n">residue_numb</span></em>, <em class="sig-param"><span class="n">dir_path</span></em>, <em class="sig-param"><span class="n">top_k</span><span class="o">=</span><span class="default_value">50</span></em><span class="sig-paren">)</span><a class="headerlink" href="#MDSimsEval.rmsf_bootstrapped_analysis.plot_hists_summary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plots a histogram which summarizes which residues were found significant and on how many samples on
+each window. The colors go from black (1st window) to yellow (5th window). In case of a residue being important
+on more than 1 window, the bars are stacked in chronological order (from the earlier windows to the later ones).
+The height of the bars shows the number of samples the residue was statistically important.</p>
+<p>On the legend the word <strong>thresh</strong> specifies the number of samples a residue must be found significant in, in order
+to be included in the <code class="docutils literal notranslate"><span class="pre">top-k</span></code> most significant residues.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Currently the function expects five windows of 500 frames each (0 - 500, 500 - 1000, …, 2000 - 2500).</p>
+</div>
+<p class="rubric">Example</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">MDSimsEval.utils</span> <span class="kn">import</span> <span class="n">create_analysis_actor_dict</span>
+<span class="kn">from</span> <span class="nn">MDSimsEval.rmsf_bootstrapped_analysis</span> <span class="kn">import</span> <span class="n">bootstrapped_residue_analysis</span>
+<span class="kn">from</span> <span class="nn">MDSimsEval.rmsf_bootstrapped_analysis</span> <span class="kn">import</span> <span class="n">plot_hists_summary</span>
+
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">stats</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">random</span>
+
+<span class="c1"># Read the data</span>
+<span class="n">analysis_actors_dict</span> <span class="o">=</span> <span class="n">create_analysis_actor_dict</span><span class="p">(</span><span class="s1">&#39;path_to_dataset_roor_folder&#39;</span><span class="p">)</span>
+
+<span class="c1"># Do not use all the ligands so as to have a validation set</span>
+<span class="n">agonists_train</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">analysis_actors_dict</span><span class="p">[</span><span class="s1">&#39;Agonists&#39;</span><span class="p">],</span> <span class="mi">20</span><span class="p">)</span>
+<span class="n">antagonists_train</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">analysis_actors_dict</span><span class="p">[</span><span class="s1">&#39;Antagonists&#39;</span><span class="p">],</span> <span class="mi">20</span><span class="p">)</span>
+
+<span class="n">bootstrapped_results</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">start</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2500</span><span class="p">,</span> <span class="mi">500</span><span class="p">):</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">bootstrapped_residue_analysis</span><span class="p">({</span><span class="s2">&quot;Agonists&quot;</span><span class="p">:</span> <span class="n">agonists_train</span><span class="p">,</span> <span class="s2">&quot;Antagonists&quot;</span><span class="p">:</span> <span class="n">antagonists_train</span><span class="p">},</span>
+                                        <span class="n">start</span><span class="p">,</span> <span class="n">start</span> <span class="o">+</span> <span class="mi">500</span><span class="p">,</span> <span class="n">stats</span><span class="o">.</span><span class="n">ks_2samp</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">samples_numb</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+                                        <span class="n">sample_size</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+    <span class="n">bootstrapped_results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+
+<span class="n">plot_hists_summary</span><span class="p">(</span><span class="n">bootstrapped_results</span><span class="p">,</span> <span class="n">residue_numb</span><span class="o">=</span><span class="mi">290</span><span class="p">,</span> <span class="n">dir_path</span><span class="o">=</span><span class="s1">&#39;path_to_save_dir/&#39;</span><span class="p">,</span> <span class="n">top_k</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="figure align-center" id="id4">
+<a class="reference internal image-reference" href="../_images/multi_color_hists_.png"><img alt="rmsf multi colored hists missing" src="../_images/multi_color_hists_.png" style="width: 700px; height: 200px;" /></a>
+<p class="caption"><span class="caption-text">Output plot of the above script, click for higher resolution</span><a class="headerlink" href="#id4" title="Permalink to this image">¶</a></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>bootstrapped_results</strong> – A list of <cite>bootstrapped_residue_analysis</cite> results for each window</p></li>
+<li><p><strong>residue_numb</strong> (<em>int</em>) – The total number of residues in the RMSF selection</p></li>
+<li><p><strong>dir_path</strong> (<em>str</em>) – The path of the directory the plot will be saved (must end with a <code class="docutils literal notranslate"><span class="pre">/</span></code>)</p></li>
+<li><p><strong>top_k</strong> (<em>int</em>) – How many residues to include in order of significance</p></li>
 </ul>
 </dd>
 </dl>
