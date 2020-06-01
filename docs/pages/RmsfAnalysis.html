@@ -464,7 +464,7 @@ on the rmsf of the given <code class="docutils literal notranslate"><span class=
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>analysis_actors_dict</strong> – <code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">&quot;Agonists&quot;:</span> <span class="pre">List[AnalysisActor.class],</span> <span class="pre">&quot;Antagonists&quot;:</span> <span class="pre">List[AnalysisActor.class]</span> <span class="pre">}</span></code></p></li>
-<li><p><strong>residue_ids</strong> – List of residue ids that we want to use in order to calculate the calculations.</p></li>
+<li><p><strong>residue_ids</strong> – List of residue ids that we want the correlation on</p></li>
 <li><p><strong>the top-k</strong><strong>, </strong><strong>high-k</strong><strong>, </strong><strong>most statistically significant.</strong> (<em>Eg</em>) – </p></li>
 <li><p><strong>method</strong> (<em>str</em>) – pearson, kendall, spearman</p></li>
 <li><p><strong>start</strong> (<em>int</em>) – The starting frame of the calculations</p></li>
@@ -566,6 +566,9 @@ to be included in the <code class="docutils literal notranslate"><span class="pr
                                         <span class="n">start</span><span class="p">,</span> <span class="n">start</span> <span class="o">+</span> <span class="mi">500</span><span class="p">,</span> <span class="n">stats</span><span class="o">.</span><span class="n">ks_2samp</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">samples_numb</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
                                         <span class="n">sample_size</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
     <span class="n">bootstrapped_results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+
+<span class="c1"># Here it is suggested to save the bootstrapped_results on disk using pickle so as to avoid</span>
+<span class="c1"># recalculating them</span>
 
 <span class="n">plot_hists_summary</span><span class="p">(</span><span class="n">bootstrapped_results</span><span class="p">,</span> <span class="n">residue_numb</span><span class="o">=</span><span class="mi">290</span><span class="p">,</span> <span class="n">dir_path</span><span class="o">=</span><span class="s1">&#39;path_to_save_dir/&#39;</span><span class="p">,</span> <span class="n">top_k</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
 </pre></div>

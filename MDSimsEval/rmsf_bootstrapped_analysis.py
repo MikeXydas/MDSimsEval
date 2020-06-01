@@ -231,7 +231,7 @@ def create_correlation_df(analysis_actors_dict, residue_ids, method, start, stop
 
     Args:
         analysis_actors_dict: ``{ "Agonists": List[AnalysisActor.class], "Antagonists": List[AnalysisActor.class] }``
-        residue_ids: List of residue ids that we want to use in order to calculate the calculations.
+        residue_ids: List of residue ids that we want the correlation on
         Eg the top-k, high-k, most statistically significant.
         method (str): pearson, kendall, spearman
         start(int): The starting frame of the calculations
@@ -347,6 +347,9 @@ def plot_hists_summary(bootstrapped_results, residue_numb, dir_path, top_k=50):
                                                     start, start + 500, stats.ks_2samp, threshold=0.05, samples_numb=1000,
                                                     sample_size=10)
                 bootstrapped_results.append(res)
+
+            # Here it is suggested to save the bootstrapped_results on disk using pickle so as to avoid
+            # recalculating them
 
             plot_hists_summary(bootstrapped_results, residue_numb=290, dir_path='path_to_save_dir/', top_k=50)
 
