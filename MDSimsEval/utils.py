@@ -101,7 +101,7 @@ def create_analysis_actor_dict(root_directory):
     return analysis_actors_dict
 
 
-def render_corr_df(corr_df, filepath):
+def render_corr_df(corr_df, filepath, reversed=False):
     """
     Renders and saves a correlation heatmap which is visually interpretable.
 
@@ -121,9 +121,12 @@ def render_corr_df(corr_df, filepath):
     Args:
         corr_df(pd.DataFrame): A DataFrame of pairwise correlations
         filepath(str): The full path the heatmap save location eg. ``/dir1/dir2/name_of_file``
+        reversed(boolean): If you want the coolwarm colormap to be inversed
 
     """
-    html_render = corr_df.style.background_gradient(cmap='coolwarm', axis=None).set_precision(2).render()
+    colormap = 'coolwarm_r' if reversed else 'coolwarm'
+
+    html_render = corr_df.style.background_gradient(cmap=colormap, axis=None).set_precision(2).render()
 
     # Saving the correlation matrix
     try:
