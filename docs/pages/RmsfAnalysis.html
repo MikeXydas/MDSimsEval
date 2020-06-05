@@ -480,6 +480,28 @@ cache will be kept</p></li>
 </dd></dl>
 
 <dl class="py function">
+<dt id="MDSimsEval.rmsf_bootstrapped_analysis.find_rmsf_of_residues">
+<code class="sig-prename descclassname">MDSimsEval.rmsf_bootstrapped_analysis.</code><code class="sig-name descname">find_rmsf_of_residues</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">analysis_actors_dict</span></em>, <em class="sig-param"><span class="n">which_residues</span></em>, <em class="sig-param"><span class="n">start</span></em>, <em class="sig-param"><span class="n">stop</span></em>, <em class="sig-param"><span class="n">rmsf_cache</span></em><span class="sig-paren">)</span><a class="headerlink" href="#MDSimsEval.rmsf_bootstrapped_analysis.find_rmsf_of_residues" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method finds and returns the RMSFs of each agonist and antagonist of the input residues.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>analysis_actors_dict</strong> – <code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">&quot;Agonists&quot;:</span> <span class="pre">List[AnalysisActor.class],</span> <span class="pre">&quot;Antagonists&quot;:</span> <span class="pre">List[AnalysisActor.class]</span> <span class="pre">}</span></code></p></li>
+<li><p><strong>which_residues</strong> – List of residue ids that we will return their RMSF value</p></li>
+<li><p><strong>start</strong> (<em>int</em>) – The starting frame of the calculations</p></li>
+<li><p><strong>stop</strong> (<em>int</em>) – The stopping frame of the calculations</p></li>
+<li><p><strong>rmsf_cache</strong> – Dictionary with key <code class="docutils literal notranslate"><span class="pre">ligand_name_start_stop</span></code> and value the RMSF run result. If set to <code class="docutils literal notranslate"><span class="pre">None</span></code> no
+cache will be kept</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>An <code class="docutils literal notranslate"><span class="pre">ndarray</span></code> of shape <code class="docutils literal notranslate"><span class="pre">numb_of_agonist</span> <span class="pre">+</span> <span class="pre">numb_of_antagonists,</span> <span class="pre">which_residues_length</span></code> containing the
+RMSF of each ligand of the input residue ids</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt id="MDSimsEval.rmsf_bootstrapped_analysis.initialize_pools">
 <code class="sig-prename descclassname">MDSimsEval.rmsf_bootstrapped_analysis.</code><code class="sig-name descname">initialize_pools</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ligands_list</span></em>, <em class="sig-param"><span class="n">total_ligands</span><span class="o">=</span><span class="default_value">20</span></em>, <em class="sig-param"><span class="n">set_ligands</span><span class="o">=</span><span class="default_value">12</span></em><span class="sig-paren">)</span><a class="headerlink" href="#MDSimsEval.rmsf_bootstrapped_analysis.initialize_pools" title="Permalink to this definition">¶</a></dt>
 <dd><p>Inputs a list of <code class="docutils literal notranslate"><span class="pre">MDSimsEval.AnalysisActor</span></code> objects and returns initial input and replacement

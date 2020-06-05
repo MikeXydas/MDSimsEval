@@ -409,3 +409,39 @@ def plot_hists_summary(bootstrapped_results, residue_numb, dir_path, top_k=50):
     ax.yaxis.grid()
 
     plt.savefig(f'{dir_path}multi_color_hists_.png', format='png')
+
+
+def find_rmsf_of_residues(analysis_actors_dict, which_residues, start, stop, rmsf_cache):
+    """
+    This method finds and returns the RMSFs of each agonist and antagonist of the input residues.
+
+    Args:
+        analysis_actors_dict: ``{ "Agonists": List[AnalysisActor.class], "Antagonists": List[AnalysisActor.class] }``
+        which_residues: List of residue ids that we will return their RMSF value
+        start(int): The starting frame of the calculations
+        stop(int): The stopping frame of the calculations
+        rmsf_cache: Dictionary with key ``ligand_name_start_stop`` and value the RMSF run result. If set to ``None`` no
+                    cache will be kept
+
+    Returns:
+        An ``ndarray`` of shape ``numb_of_agonist + numb_of_antagonists, which_residues_length`` containing the
+        RMSF of each ligand of the input residue ids
+
+    """
+    reset_rmsf_calculations(analysis_actors_dict, start, stop, rmsf_cache)
+
+    # Calculating the RMSFs of each residue instead of each atom
+    residue_rmsfs_agon = np.array([get_avg_rmsf_per_residue(ligand) for ligand in analysis_actors_dict['Agonists']])
+    residue_rmsfs_antagon = np.array(
+        [get_avg_rmsf_per_residue(ligand) for ligand in analysis_actors_dict['Antagonists']])
+
+    # We need the number of total residues to create the mask below
+    residues_numb = len(residue_rmsfs_agon[0])
+
+    # Create a True, False mask of the given residues
+    top_mask = [res_id in which_residues for res_id in np.arange(residues_numb)]
+
+    # Creating a DataFrame which will have as columns the ligand names and as rows the residues
+    rmsf_array = np.array([res_rmsf[top_mask] for res_rmsf in np.vstack((residue_rmsfs_agon, residue_rmsfs_antagon))])
+
+    return rmsf_array
