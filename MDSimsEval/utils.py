@@ -38,7 +38,6 @@ def create_analysis_actor_dict(root_directory):
                               )
 
     """
-
     # The input directory path must end with a "/"
     if not root_directory.endswith("/"):
         root_directory = root_directory + "/"
