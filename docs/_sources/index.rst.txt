@@ -40,6 +40,7 @@ The above solutions are actually used for some of my calculations.
    ./pages/RmsfAnalysis
    ./pages/PcaAnalysis
    ./pages/Utils
+   ./pages/Examples
 
 
 .. Indices and tables
