@@ -166,23 +166,14 @@
 <p>The class will be responsible for reading, running calculations and storing the results. The role of the class
 is mainly “structural” since it is the base input of all of our analysis functions. In the future a caching
 mechanism should be added so as to not have to perform multiple times the same calculations and instead read
-them from the disk.</p>
+them from disk.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p><strong>Solvent Accessible Surface Area (SASA) and Salt bridges</strong> are calculated outside of the package.
 More info on <a class="reference internal" href="ReadingData.html#reading-salt-sasa"><span class="std std-ref">SASA and Salt Bridges</span></a>.</p>
 </div>
 <p class="rubric">Example</p>
-<p>Example on one simulation</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">MDSimsEval.AnalysisActorClass</span> <span class="kn">import</span> <span class="n">AnalysisActor</span>
-<span class="n">ligand</span> <span class="o">=</span> <span class="n">AnalysisActor</span><span class="p">(</span><span class="s1">&#39;topology&#39;</span><span class="p">,</span> <span class="s1">&#39;trajectory&#39;</span><span class="p">,</span> <span class="s1">&#39;ligand_name&#39;</span><span class="p">)</span>    <span class="c1"># No SASA or Salt Bridges files provided</span>
-
-<span class="n">ligand</span><span class="o">.</span><span class="n">perform_analysis</span><span class="p">([</span><span class="s2">&quot;RMSF&quot;</span><span class="p">,</span> <span class="s2">&quot;Rg&quot;</span><span class="p">])</span>    <span class="c1"># Calculate the Rg and the RMSF of the simulation</span>
-<span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ligand</span><span class="o">.</span><span class="n">get_radius_of_gyration</span><span class="p">()))</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="mi">2500</span>
-</pre></div>
-</div>
-<p>Example on the whole <code class="docutils literal notranslate"><span class="pre">analysis_actors_dict</span></code> (probably what you want)</p>
+<p>Example on calculating RMSF and PCA on the whole <code class="docutils literal notranslate"><span class="pre">analysis_actors_dict</span></code></p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">MDSimsEval.utils</span> <span class="kn">import</span> <span class="n">create_analysis_actor_dict</span>
 <span class="n">analysis_actors_dict</span> <span class="o">=</span> <span class="n">create_analysis_actor_dict</span><span class="p">(</span><span class="s1">&#39;path_to_data_directory/&#39;</span><span class="p">)</span>
 

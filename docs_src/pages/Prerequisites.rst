@@ -9,7 +9,7 @@ Installation
 | **OS**: Developed on Ubuntu18.04 but any linux distribution should work
 | **Python**: Developed on 3.6 but any version >=3.6 should work
 
-**Package Only**
+**Package Only:**
 
 The steps for **installing the package only** are:
 
@@ -27,7 +27,7 @@ Then you can import any method or class
    to be installed via ``sudo apt-get install wkhtmltopdf``. More on the `imgkit package <https://github.com/kamalkraj/imgkit>`_.
    If not installed the output will be an ``.html`` file which can be opened with any browser.
 
-**Development Environment**
+**Development Environment:**
 
 If you are looking for adding functionality or changing the code you will need more packages (eg for the docs).
 

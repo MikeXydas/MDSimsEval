@@ -18,24 +18,14 @@ class AnalysisActor:
     The class will be responsible for reading, running calculations and storing the results. The role of the class
     is mainly "structural" since it is the base input of all of our analysis functions. In the future a caching
     mechanism should be added so as to not have to perform multiple times the same calculations and instead read
-    them from the disk.
+    them from disk.
 
     Note:
         **Solvent Accessible Surface Area (SASA) and Salt bridges** are calculated outside of the package.
         More info on :ref:`reading_salt_sasa`.
 
     Example:
-        Example on one simulation
-        ::
-
-            from MDSimsEval.AnalysisActorClass import AnalysisActor
-            ligand = AnalysisActor('topology', 'trajectory', 'ligand_name')    # No SASA or Salt Bridges files provided
-
-            ligand.perform_analysis(["RMSF", "Rg"])    # Calculate the Rg and the RMSF of the simulation
-            print(len(ligand.get_radius_of_gyration()))
-            >>> 2500
-
-        Example on the whole ``analysis_actors_dict`` (probably what you want)
+        Example on calculating RMSF and PCA on the whole ``analysis_actors_dict``
         ::
 
             from MDSimsEval.utils import create_analysis_actor_dict

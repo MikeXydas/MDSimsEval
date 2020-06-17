@@ -3,8 +3,8 @@
 Rg and SASA are two correlated metrics which focus on describing how the protein expands or shrinks as frames pass.
 
 The functions in this module are based on frame aggregating techniques per class. For example we will take the ``Rg`` of
-all the agonists on frame x and find the average. We will do that for every frame and end up with an average description
-of increases or decreases in ``Rg``.
+all the agonists on frame x and find the average. We will do that for every frame and end up with an average ``Rg`` of
+the agonists vs the antagonists.
 
 """
 

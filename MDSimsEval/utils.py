@@ -9,7 +9,7 @@ from .AnalysisActorClass import AnalysisActor
 
 def create_analysis_actor_dict(root_directory):
     """
-    Reads the simulations (topologies, trajectories and sasa.xvg, salts/ if available and stores them in dictionary
+    Reads the simulations (topologies, trajectories and sasa.xvg, salts if available) and stores them in a dictionary
     structure. The dictionary structure called ``analysis_actors_dict`` is the core structure that our functions
     take as an argument.
 
