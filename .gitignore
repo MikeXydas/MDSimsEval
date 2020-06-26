@@ -30,3 +30,4 @@ MD_Analysis/Agonists_Antagonists/AnalysisAgonistsAntagonists/__pycache__/
 /AnalysisPipeline_5HT2A.ipynb
 /jupyter_notebooks/cache/
 /md_analysis_run.py
+/md_bootstrap_models.py

@@ -1,0 +1,356 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>6. RMSF Baseline Models &mdash; MDSimsEval 0.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="7. PCA Analysis" href="PcaAnalysis.html" />
+    <link rel="prev" title="5. RMSF Analysis" href="RmsfAnalysis.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> MDSimsEval
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Prerequisites.html">1. Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ReadingData.html">2. Reading the simulations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="AnalysisActor.html">3. AnalysisActor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RgSasaAnalysis.html">4. Rg and SASA Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RmsfAnalysis.html">5. RMSF Analysis</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">6. RMSF Baseline Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PcaAnalysis.html">7. PCA Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Utils.html">8. Utility Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Examples.html">9. Basic Examples</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">MDSimsEval</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li><span class="section-number">6. </span>RMSF Baseline Models</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/pages/RMSFBaselineModels.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="rmsf-baseline-models">
+<h1><span class="section-number">6. </span>RMSF Baseline Models<a class="headerlink" href="#rmsf-baseline-models" title="Permalink to this headline">¶</a></h1>
+<p>On this package we are focusing a lot on the RMSF value as a mean of selecting which residues have the most
+separability between the Agonist - Antagonist classes. In order to evaluate our residue selection techniques we
+need a way to quantify their separability.</p>
+<p>For this reason we created some baseline models which are simple and can be used as any ML model (<code class="docutils literal notranslate"><span class="pre">fit</span></code>, <code class="docutils literal notranslate"><span class="pre">predict</span></code>)
+and calculate values such as accuracy.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>These models should not be used as the final classification models due to their simplicity. Their goal is
+evaluate the residue selection techniques.</p>
+</div>
+<p>The module also includes a method for bootstrapping the dataset of ligands.</p>
+<span class="target" id="module-MDSimsEval.rmsf_baseline_models"></span><dl class="py class">
+<dt id="MDSimsEval.rmsf_baseline_models.MajorityBaselineClassifierRMSF">
+<em class="property">class </em><code class="sig-prename descclassname">MDSimsEval.rmsf_baseline_models.</code><code class="sig-name descname">MajorityBaselineClassifierRMSF</code><span class="sig-paren">(</span><em class="sig-param">start</em>, <em class="sig-param">stop</em>, <em class="sig-param">rmsf_cache</em>, <em class="sig-param">method=&lt;function mean&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#MDSimsEval.rmsf_baseline_models.MajorityBaselineClassifierRMSF" title="Permalink to this definition">¶</a></dt>
+<dd><p>Used for evaluating residue selections based on their RMSF.</p>
+<p>This is a simple baseline model able to quantify how good our residue selection is.
+Given a k - k training set of agonists - antagonists,for an unknown ligand
+we iterate through the residues. If the residue is closer to the median/average of the
+training agonists (of the RMSF values of the specific residue) then the residue votes that
+the ligand is an agonist. Else it votes that the ligand is an antagonist.
+|
+| At then end we see which class had the most votes.</p>
+<dl class="py attribute">
+<dt id="MDSimsEval.rmsf_baseline_models.MajorityBaselineClassifierRMSF.start">
+<code class="sig-name descname">start</code><a class="headerlink" href="#MDSimsEval.rmsf_baseline_models.MajorityBaselineClassifierRMSF.start" title="Permalink to this definition">¶</a></dt>
+<dd><p>The starting frame of the window</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="MDSimsEval.rmsf_baseline_models.MajorityBaselineClassifierRMSF.stop">
+<code class="sig-name descname">stop</code><a class="headerlink" href="#MDSimsEval.rmsf_baseline_models.MajorityBaselineClassifierRMSF.stop" title="Permalink to this definition">¶</a></dt>
+<dd><p>The last frame of the window</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="MDSimsEval.rmsf_baseline_models.MajorityBaselineClassifierRMSF.method">
+<code class="sig-name descname">method</code><a class="headerlink" href="#MDSimsEval.rmsf_baseline_models.MajorityBaselineClassifierRMSF.method" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function that we will use for summarizing each residue, eg <code class="docutils literal notranslate"><span class="pre">np.mean</span></code>, <code class="docutils literal notranslate"><span class="pre">np.median</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>func</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="MDSimsEval.rmsf_baseline_models.MajorityBaselineClassifierRMSF.agonist_residue_baseline">
+<code class="sig-name descname">agonist_residue_baseline</code><a class="headerlink" href="#MDSimsEval.rmsf_baseline_models.MajorityBaselineClassifierRMSF.agonist_residue_baseline" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of the aggregated RMSF value of the agonists of each residue</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>List[float]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="MDSimsEval.rmsf_baseline_models.MajorityBaselineClassifierRMSF.antagonist_residue_baseline">
+<code class="sig-name descname">antagonist_residue_baseline</code><a class="headerlink" href="#MDSimsEval.rmsf_baseline_models.MajorityBaselineClassifierRMSF.antagonist_residue_baseline" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of the aggregated RMSF value of the antagonists of each
+residue</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>List[float]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="MDSimsEval.rmsf_baseline_models.MajorityBaselineClassifierRMSF.selected_residues">
+<code class="sig-name descname">selected_residues</code><a class="headerlink" href="#MDSimsEval.rmsf_baseline_models.MajorityBaselineClassifierRMSF.selected_residues" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of size total_residues, where True on the indexes of the residue ids
+selected</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>List[boolean]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="MDSimsEval.rmsf_baseline_models.MajorityBaselineClassifierRMSF.fit">
+<code class="sig-name descname">fit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">train_analysis_actors</span></em>, <em class="sig-param"><span class="n">residues</span></em><span class="sig-paren">)</span><a class="headerlink" href="#MDSimsEval.rmsf_baseline_models.MajorityBaselineClassifierRMSF.fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>The function that initializes the aggregated RMSF value for each residue for each class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>train_analysis_actors</strong> – <code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">&quot;Agonists&quot;:</span> <span class="pre">List[AnalysisActor.class],</span> <span class="pre">&quot;Antagonists&quot;:</span> <span class="pre">List[AnalysisActor.class]</span> <span class="pre">}</span></code></p></li>
+<li><p><strong>residues</strong> (<em>List</em><em>[</em><em>int</em><em>]</em>) – A list of residue ids that the model will use. For all the residues
+give <code class="docutils literal notranslate"><span class="pre">np.arange(290)</span></code> .</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="MDSimsEval.rmsf_baseline_models.MajorityBaselineClassifierRMSF.predict">
+<code class="sig-name descname">predict</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ligand</span></em><span class="sig-paren">)</span><a class="headerlink" href="#MDSimsEval.rmsf_baseline_models.MajorityBaselineClassifierRMSF.predict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs the majority voting and returns the predicted class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>ligand</strong> (<em>AnalysisActorClass</em>) – The ligand we want to predict its class</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The class label, 1 for Agonist, 0 for Antagonist.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt id="MDSimsEval.rmsf_baseline_models.bootstrap_dataset">
+<code class="sig-prename descclassname">MDSimsEval.rmsf_baseline_models.</code><code class="sig-name descname">bootstrap_dataset</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">analysis_actors_dict</span></em>, <em class="sig-param"><span class="n">samples</span></em>, <em class="sig-param"><span class="n">sample_size</span></em><span class="sig-paren">)</span><a class="headerlink" href="#MDSimsEval.rmsf_baseline_models.bootstrap_dataset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a given number of bootstrapped samples of the Agonist - Antagonist dataset.
+| Also the remaining ligands are returned as a validation set.
+| Eg if sample_size = 20 and on each class we have 27 ligands, then we create
+a dict of 20 - 20 unique ligands and the remaining 7 ligands are returned as a validation set.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>analysis_actors_dict</strong> – <code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">&quot;Agonists&quot;:</span> <span class="pre">List[AnalysisActor.class],</span> <span class="pre">&quot;Antagonists&quot;:</span> <span class="pre">List[AnalysisActor.class]</span> <span class="pre">}</span></code></p></li>
+<li><p><strong>samples</strong> (<em>int</em>) – Number of bootstrapped samples generated</p></li>
+<li><p><strong>sample_size</strong> (<em>int</em>) – How many ligands of each class the training set will have</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A tuple of (<code class="docutils literal notranslate"><span class="pre">train_dicts</span></code>, <code class="docutils literal notranslate"><span class="pre">test_dicts</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="PcaAnalysis.html" class="btn btn-neutral float-right" title="7. PCA Analysis" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="RmsfAnalysis.html" class="btn btn-neutral float-left" title="5. RMSF Analysis" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Mike Xydas
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

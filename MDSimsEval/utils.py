@@ -135,3 +135,22 @@ def render_corr_df(corr_df, filepath, reversed=False):
         # Save the html of the correlation map, which can be rendered by a browser
         with open(f"{filepath}.html", "w") as text_file:
             text_file.write(html_render)
+
+
+def complement_residues(ligand_list_full, ligand_list_selected):
+    """
+    Given a list of ligands and a list of ligands selected from the previous list, return the ligands included in
+    the first but not the second list.
+
+    Args:
+        ligand_list_full: A list of ``List[AnalysisActorClass]`` containing the full set of ligands
+        ligand_list_selected: A list of ``List[AnalysisActorClass]`` containing a subset of the ``ligand_list_full``
+
+    Returns:
+        A list of ``List[AnalysisActorClass]`` containing the complement of the two sets above
+
+    """
+    drug_names_selected = set([ligand.drug_name for ligand in ligand_list_selected])
+    returned_list = [ligand for ligand in ligand_list_full if ligand.drug_name not in drug_names_selected]
+
+    return returned_list
