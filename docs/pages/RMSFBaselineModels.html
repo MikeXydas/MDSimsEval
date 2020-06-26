@@ -172,6 +172,111 @@ evaluate the residue selection techniques.</p>
 </div>
 <p>The module also includes a method for bootstrapping the dataset of ligands.</p>
 <span class="target" id="module-MDSimsEval.rmsf_baseline_models"></span><dl class="py class">
+<dt id="MDSimsEval.rmsf_baseline_models.BaselineClassifierAggregatedResidues">
+<em class="property">class </em><code class="sig-prename descclassname">MDSimsEval.rmsf_baseline_models.</code><code class="sig-name descname">BaselineClassifierAggregatedResidues</code><span class="sig-paren">(</span><em class="sig-param">start</em>, <em class="sig-param">stop</em>, <em class="sig-param">rmsf_cache</em>, <em class="sig-param">method=&lt;function mean&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#MDSimsEval.rmsf_baseline_models.BaselineClassifierAggregatedResidues" title="Permalink to this definition">¶</a></dt>
+<dd><p>This simple model fits on the training data by calculating the average RMSF value of the agonist and the
+antagonist sets. The RMSF is calculated on the residues given and aggregated to one value. This means that for
+the agonists we calculate the average/median value for each residue and then we aggregate again ending with a
+scalar value.</p>
+<dl class="py attribute">
+<dt id="MDSimsEval.rmsf_baseline_models.BaselineClassifierAggregatedResidues.start">
+<code class="sig-name descname">start</code><a class="headerlink" href="#MDSimsEval.rmsf_baseline_models.BaselineClassifierAggregatedResidues.start" title="Permalink to this definition">¶</a></dt>
+<dd><p>The starting frame of the window</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="MDSimsEval.rmsf_baseline_models.BaselineClassifierAggregatedResidues.stop">
+<code class="sig-name descname">stop</code><a class="headerlink" href="#MDSimsEval.rmsf_baseline_models.BaselineClassifierAggregatedResidues.stop" title="Permalink to this definition">¶</a></dt>
+<dd><p>The last frame of the window</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="MDSimsEval.rmsf_baseline_models.BaselineClassifierAggregatedResidues.method">
+<code class="sig-name descname">method</code><a class="headerlink" href="#MDSimsEval.rmsf_baseline_models.BaselineClassifierAggregatedResidues.method" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function that we will use for summarizing each residue, eg <cite>np.mean</cite>, <cite>np.median</cite></p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>func</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="MDSimsEval.rmsf_baseline_models.BaselineClassifierAggregatedResidues.agonist_baseline">
+<code class="sig-name descname">agonist_baseline</code><a class="headerlink" href="#MDSimsEval.rmsf_baseline_models.BaselineClassifierAggregatedResidues.agonist_baseline" title="Permalink to this definition">¶</a></dt>
+<dd><p>The aggregated RMSF value of the agonist class</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="MDSimsEval.rmsf_baseline_models.BaselineClassifierAggregatedResidues.antagonist_baseline">
+<code class="sig-name descname">antagonist_baseline</code><a class="headerlink" href="#MDSimsEval.rmsf_baseline_models.BaselineClassifierAggregatedResidues.antagonist_baseline" title="Permalink to this definition">¶</a></dt>
+<dd><p>The aggregated RMSF value of the antagonist class</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="MDSimsEval.rmsf_baseline_models.BaselineClassifierAggregatedResidues.selected_residues">
+<code class="sig-name descname">selected_residues</code><a class="headerlink" href="#MDSimsEval.rmsf_baseline_models.BaselineClassifierAggregatedResidues.selected_residues" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of size total_residues, where True on the indexes of the residue ids selected</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>List[boolean]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="MDSimsEval.rmsf_baseline_models.BaselineClassifierAggregatedResidues.fit">
+<code class="sig-name descname">fit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">train_analysis_actors</span></em>, <em class="sig-param"><span class="n">residues</span></em><span class="sig-paren">)</span><a class="headerlink" href="#MDSimsEval.rmsf_baseline_models.BaselineClassifierAggregatedResidues.fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>The function that initializes the aggregated RMSF value for each class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>train_analysis_actors</strong> – <code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">&quot;Agonists&quot;:</span> <span class="pre">List[AnalysisActor.class],</span> <span class="pre">&quot;Antagonists&quot;:</span> <span class="pre">List[AnalysisActor.class]</span> <span class="pre">}</span></code></p></li>
+<li><p><strong>residues</strong> (<em>List</em><em>[</em><em>int</em><em>]</em>) – A list of residue ids that the model will use. For all the residues
+give <code class="docutils literal notranslate"><span class="pre">np.arange(290)</span></code> .</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="MDSimsEval.rmsf_baseline_models.BaselineClassifierAggregatedResidues.predict">
+<code class="sig-name descname">predict</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ligand</span></em><span class="sig-paren">)</span><a class="headerlink" href="#MDSimsEval.rmsf_baseline_models.BaselineClassifierAggregatedResidues.predict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks the distance of the unknown ligand from the agonist and antagonist averages and returns
+as a label the class that is closest.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>ligand</strong> (<em>AnalysisActorClass</em>) – The ligand we want to predict its class</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The class label, 1 for Agonist, 0 for Antagonist.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt id="MDSimsEval.rmsf_baseline_models.MajorityBaselineClassifierRMSF">
 <em class="property">class </em><code class="sig-prename descclassname">MDSimsEval.rmsf_baseline_models.</code><code class="sig-name descname">MajorityBaselineClassifierRMSF</code><span class="sig-paren">(</span><em class="sig-param">start</em>, <em class="sig-param">stop</em>, <em class="sig-param">rmsf_cache</em>, <em class="sig-param">method=&lt;function mean&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#MDSimsEval.rmsf_baseline_models.MajorityBaselineClassifierRMSF" title="Permalink to this definition">¶</a></dt>
 <dd><p>Used for evaluating residue selections based on their RMSF.</p>

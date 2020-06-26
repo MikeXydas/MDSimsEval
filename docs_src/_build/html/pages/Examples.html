@@ -94,6 +94,7 @@
 <li class="toctree-l1"><a class="reference internal" href="Utils.html">8. Utility Functions</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">9. Basic Examples</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#rmsf-cherry-picked-residues">9.1. RMSF Cherry Picked Residues</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#rmsf-baseline-models">9.2. RMSF Baseline Models</a></li>
 </ul>
 </li>
 </ul>
@@ -247,6 +248,94 @@ of their 1st 3 PCs, in order to evaluate their separability.</p>
 </div>
 <p><strong>Output</strong></p>
 <a class="reference internal image-reference" href="../_images/cherry_pick_2D.png"><img alt="missing cherry pick 2D projections" class="align-center" src="../_images/cherry_pick_2D.png" style="width: 700px; height: 270px;" /></a>
+</div>
+<div class="section" id="rmsf-baseline-models">
+<h2><span class="section-number">9.2. </span>RMSF Baseline Models<a class="headerlink" href="#rmsf-baseline-models" title="Permalink to this headline">¶</a></h2>
+<p>The example below shows how we can evaluate the residue selection using simple and intuitive models
+implemented on this package. This example <strong>should not</strong> be used as a model for classifying ligands,
+only for evaluating residue selections.</p>
+<p>Briefly the flow below is:</p>
+<ol class="arabic simple">
+<li><p>Read the data</p></li>
+<li><p>Bootstrap the ligands to create a number of training - validation samples</p></li>
+<li><p>For each window and bootstrap samples fit and predict on the training and validation set</p></li>
+<li><p>Create a DataFrame summarizing the results</p></li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">MDSimsEval.rmsf_baseline_models</span> <span class="kn">import</span> <span class="n">bootstrap_dataset</span><span class="p">,</span> <span class="n">MajorityBaselineClassifierRMSF</span><span class="p">,</span> \
+    <span class="n">BaselineClassifierAggregatedResidues</span>
+<span class="kn">from</span> <span class="nn">MDSimsEval.utils</span> <span class="kn">import</span> <span class="n">create_analysis_actor_dict</span>
+
+<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">stats</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
+
+
+<span class="c1"># Read the data</span>
+<span class="n">analysis_actors_dict</span> <span class="o">=</span> <span class="n">create_analysis_actor_dict</span><span class="p">(</span><span class="s1">&#39;../datasets/New_AI_MD&#39;</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">calculate_accuracy</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">ligands_dict</span><span class="p">):</span>
+    <span class="c1"># We define a function that will help us calculate the accuracy of our feature selection</span>
+    <span class="n">acc</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">which_agon</span> <span class="ow">in</span> <span class="n">ligands_dict</span><span class="p">[</span><span class="s1">&#39;Agonists&#39;</span><span class="p">]:</span>
+        <span class="n">label</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">which_agon</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">label</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">acc</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="k">for</span> <span class="n">which_antagon</span> <span class="ow">in</span> <span class="n">ligands_dict</span><span class="p">[</span><span class="s1">&#39;Antagonists&#39;</span><span class="p">]:</span>
+        <span class="n">label</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">which_antagon</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">label</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">acc</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="k">return</span> <span class="n">acc</span> <span class="o">/</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ligands_dict</span><span class="p">[</span><span class="s1">&#39;Agonists&#39;</span><span class="p">])</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">ligands_dict</span><span class="p">[</span><span class="s1">&#39;Antagonists&#39;</span><span class="p">]))</span> <span class="o">*</span> <span class="mi">100</span>
+
+
+<span class="c1"># IMPORTANT: For any RMSF analysis always initialize rmsf_cache as an empty dict and pass it as an argument to the</span>
+<span class="c1"># rmsf methods</span>
+<span class="n">rmsf_cache</span> <span class="o">=</span> <span class="p">{}</span>
+
+<span class="c1"># Windows we will evaluate our feature selection on</span>
+<span class="n">windows</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2500</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1250</span><span class="p">],</span> <span class="p">[</span><span class="mi">1250</span><span class="p">,</span> <span class="mi">2500</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">500</span><span class="p">],</span> <span class="p">[</span><span class="mi">500</span><span class="p">,</span> <span class="mi">1000</span><span class="p">],</span> <span class="p">[</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">1500</span><span class="p">],</span> <span class="p">[</span><span class="mi">1500</span><span class="p">,</span> <span class="mi">2000</span><span class="p">],</span> <span class="p">[</span><span class="mi">2000</span><span class="p">,</span> <span class="mi">2500</span><span class="p">]]</span>
+
+<span class="c1"># Create the bootstrap samples</span>
+<span class="n">train_dicts</span><span class="p">,</span> <span class="n">validation_dicts</span> <span class="o">=</span> <span class="n">bootstrap_dataset</span><span class="p">(</span><span class="n">analysis_actors_dict</span><span class="p">,</span> <span class="n">samples</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">sample_size</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+
+<span class="n">total_metrics</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># We will save our accuracies of each window on this dict</span>
+
+<span class="k">for</span> <span class="n">start</span><span class="p">,</span> <span class="n">stop</span> <span class="ow">in</span> <span class="n">windows</span><span class="p">:</span>
+    <span class="n">accs</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">BaselineClassifierAggregatedResidues</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">stop</span><span class="p">,</span> <span class="n">rmsf_cache</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">)</span>
+    <span class="c1"># model = MajorityBaselineClassifierRMSF(start, stop, rmsf_cache, np.mean)</span>
+
+    <span class="c1"># The loop is slow at each 1st iteration but speeds due to rmsf_cache</span>
+    <span class="k">for</span> <span class="n">train_dict</span><span class="p">,</span> <span class="n">validation_dict</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">train_dicts</span><span class="p">,</span> <span class="n">validation_dicts</span><span class="p">)),</span> <span class="n">desc</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;Window </span><span class="si">{start}</span><span class="s1"> - </span><span class="si">{stop}</span><span class="s1">&#39;</span><span class="p">):</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_dict</span><span class="p">,</span> <span class="n">residues</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">290</span><span class="p">))</span>
+
+        <span class="n">accs</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">calculate_accuracy</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">train_dict</span><span class="p">),</span> <span class="n">calculate_accuracy</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">validation_dict</span><span class="p">)])</span>
+
+    <span class="n">accs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">accs</span><span class="p">)</span>  <span class="c1"># Transform to numpy array for the mean, sem below</span>
+    <span class="n">mean_accs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">accs</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="c1"># Calculating the Standard Error of the Mean gives us an indication of the fluctuations of the accuracies</span>
+    <span class="c1"># High sem suggests that we need to increase the number of bootstrapped samples</span>
+    <span class="n">sem_accs</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">sem</span><span class="p">(</span><span class="n">accs</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="c1"># Save the results on the dictionary that will be transformed to a DataFrame</span>
+    <span class="n">total_metrics</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{start}</span><span class="s1"> - </span><span class="si">{stop}</span><span class="s1">&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">mean_accs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">mean_accs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">sem_accs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">sem_accs</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+
+<span class="c1"># Save the results using pickle for future use</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;cache/baseline_models/aggregated_acc_all_res_mean.pkl&#39;</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">handle</span><span class="p">:</span>
+    <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">total_metrics</span><span class="p">,</span> <span class="n">handle</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">total_metrics</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s1">&#39;index&#39;</span><span class="p">,</span>
+                             <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Mean Train Accuracy&#39;</span><span class="p">,</span> <span class="s1">&#39;Mean Test Accuracy&#39;</span><span class="p">,</span>
+                                      <span class="s1">&#39;Stde Train Accuracy&#39;</span><span class="p">,</span> <span class="s1">&#39;Stde Test Accuracy&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">decimals</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+</pre></div>
+</div>
+<p><strong>Output</strong> (if ran on Jupyter Notebook, using <code class="docutils literal notranslate"><span class="pre">display</span></code> instead of <code class="docutils literal notranslate"><span class="pre">print</span></code> at the end):</p>
+<a class="reference internal image-reference" href="../_images/baseline_models_result.png"><img alt="missing baseline model results" class="align-center" src="../_images/baseline_models_result.png" style="width: 530px; height: 215px;" /></a>
 </div>
 </div>
 
