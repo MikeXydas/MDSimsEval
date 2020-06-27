@@ -10,6 +10,8 @@ need a way to quantify their separability.
 For this reason we created some baseline models which are simple and can be used as any ML model (``fit``, ``predict``)
 and calculate values such as accuracy.
 
+We suggest reading  :ref:`this example<rmsf_baseline_models>` to feel familiar with the flow.
+
 .. warning::
 
     These models should not be used as the final classification models due to their simplicity. Their goal is

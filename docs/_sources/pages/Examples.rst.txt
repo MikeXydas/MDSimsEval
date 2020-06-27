@@ -28,6 +28,8 @@ of their 1st 3 PCs, in order to evaluate their separability.
     :height: 270px
     :alt: missing cherry pick 2D projections
 
+.. _rmsf_baseline_models:
+
 RMSF Baseline Models
 ####################
 

@@ -1,4 +1,4 @@
-from MDSimsEval.rmsf_baseline_models import bootstrap_dataset, MajorityBaselineClassifierRMSF, \
+from MDSimsEval.rmsf_baseline_models import bootstrap_dataset, BaselineClassifierResidueMajority, \
     BaselineClassifierAggregatedResidues
 from MDSimsEval.utils import create_analysis_actor_dict
 
@@ -44,7 +44,7 @@ total_metrics = {}  # We will save our accuracies of each window on this dict
 for start, stop in windows:
     accs = []
     model = BaselineClassifierAggregatedResidues(start, stop, rmsf_cache, method=np.mean)
-    # model = MajorityBaselineClassifierRMSF(start, stop, rmsf_cache, np.mean)
+    # model = BaselineClassifierResidueMajority(start, stop, rmsf_cache, np.mean)
 
     # The loop is slow at each 1st iteration but speeds due to rmsf_cache
     for train_dict, validation_dict in tqdm(list(zip(train_dicts, validation_dicts)), desc=f'Window {start} - {stop}'):

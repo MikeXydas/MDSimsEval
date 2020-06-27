@@ -6,7 +6,7 @@ import numpy as np
 import random
 
 
-class MajorityBaselineClassifierRMSF:
+class BaselineClassifierResidueMajority:
     """
     Used for evaluating residue selections based on their RMSF.
 
@@ -141,6 +141,8 @@ class BaselineClassifierAggregatedResidues:
         for which_ligand in train_analysis_actors['Agonists'][1:]:
             stacked_agonists = np.vstack(
                 (stacked_agonists, get_avg_rmsf_per_residue(which_ligand)[self.selected_residues]))
+
+        print(stacked_agonists.shape)
         self.agonist_baseline = self.method(stacked_agonists)
 
         # Calculating baseline antagonist RMSF value
@@ -166,7 +168,7 @@ class BaselineClassifierAggregatedResidues:
         # We do a trick and create a Dict of ligands so as to use reset_rmsf_calculations
         reset_rmsf_calculations({'Agonists': [ligand], 'Antagonists': []}, self.start, self.stop, self.rmsf_cache)
 
-        rmsf_value = np.mean(get_avg_rmsf_per_residue(ligand)[self.selected_residues])
+        rmsf_value = self.method(get_avg_rmsf_per_residue(ligand)[self.selected_residues])
 
         agon_distance = np.abs(self.agonist_baseline - rmsf_value)
         antagon_distance = np.abs(self.antagonist_baseline - rmsf_value)

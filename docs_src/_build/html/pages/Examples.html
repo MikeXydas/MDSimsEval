@@ -250,7 +250,7 @@ of their 1st 3 PCs, in order to evaluate their separability.</p>
 <a class="reference internal image-reference" href="../_images/cherry_pick_2D.png"><img alt="missing cherry pick 2D projections" class="align-center" src="../_images/cherry_pick_2D.png" style="width: 700px; height: 270px;" /></a>
 </div>
 <div class="section" id="rmsf-baseline-models">
-<h2><span class="section-number">9.2. </span>RMSF Baseline Models<a class="headerlink" href="#rmsf-baseline-models" title="Permalink to this headline">¶</a></h2>
+<span id="id1"></span><h2><span class="section-number">9.2. </span>RMSF Baseline Models<a class="headerlink" href="#rmsf-baseline-models" title="Permalink to this headline">¶</a></h2>
 <p>The example below shows how we can evaluate the residue selection using simple and intuitive models
 implemented on this package. This example <strong>should not</strong> be used as a model for classifying ligands,
 only for evaluating residue selections.</p>
@@ -261,7 +261,7 @@ only for evaluating residue selections.</p>
 <li><p>For each window and bootstrap samples fit and predict on the training and validation set</p></li>
 <li><p>Create a DataFrame summarizing the results</p></li>
 </ol>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">MDSimsEval.rmsf_baseline_models</span> <span class="kn">import</span> <span class="n">bootstrap_dataset</span><span class="p">,</span> <span class="n">MajorityBaselineClassifierRMSF</span><span class="p">,</span> \
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">MDSimsEval.rmsf_baseline_models</span> <span class="kn">import</span> <span class="n">bootstrap_dataset</span><span class="p">,</span> <span class="n">BaselineClassifierResidueMajority</span><span class="p">,</span> \
     <span class="n">BaselineClassifierAggregatedResidues</span>
 <span class="kn">from</span> <span class="nn">MDSimsEval.utils</span> <span class="kn">import</span> <span class="n">create_analysis_actor_dict</span>
 
@@ -307,7 +307,7 @@ only for evaluating residue selections.</p>
 <span class="k">for</span> <span class="n">start</span><span class="p">,</span> <span class="n">stop</span> <span class="ow">in</span> <span class="n">windows</span><span class="p">:</span>
     <span class="n">accs</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">model</span> <span class="o">=</span> <span class="n">BaselineClassifierAggregatedResidues</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">stop</span><span class="p">,</span> <span class="n">rmsf_cache</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">)</span>
-    <span class="c1"># model = MajorityBaselineClassifierRMSF(start, stop, rmsf_cache, np.mean)</span>
+    <span class="c1"># model = BaselineClassifierResidueMajority(start, stop, rmsf_cache, np.mean)</span>
 
     <span class="c1"># The loop is slow at each 1st iteration but speeds due to rmsf_cache</span>
     <span class="k">for</span> <span class="n">train_dict</span><span class="p">,</span> <span class="n">validation_dict</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">train_dicts</span><span class="p">,</span> <span class="n">validation_dicts</span><span class="p">)),</span> <span class="n">desc</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;Window </span><span class="si">{start}</span><span class="s1"> - </span><span class="si">{stop}</span><span class="s1">&#39;</span><span class="p">):</span>

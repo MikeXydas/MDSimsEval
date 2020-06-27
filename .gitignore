@@ -31,3 +31,4 @@ MD_Analysis/Agonists_Antagonists/AnalysisAgonistsAntagonists/__pycache__/
 /jupyter_notebooks/cache/
 /md_analysis_run.py
 /md_bootstrap_models.py
+/debug_models.py
