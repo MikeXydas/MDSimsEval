@@ -178,7 +178,8 @@ def sensitivity_calc(sign_residues_per_iter):
 #     return significant_residues_per_iter
 
 
-def bootstrapped_residue_analysis(analysis_actors_dict, start, stop, stat_test, threshold, samples_numb, sample_size):
+def bootstrapped_residue_analysis(analysis_actors_dict, start, stop, stat_test, threshold, samples_numb, sample_size,
+                                  rmsf_cache=None):
     """
     Generate ``samples_numb`` random samples  that each one will have ``sample_size`` agonists and ``sample_size``
     antagonists. Then perform a statistical test on the RMSFs of each residue of the agonists vs the RMSFs of each
@@ -196,6 +197,8 @@ def bootstrapped_residue_analysis(analysis_actors_dict, start, stop, stat_test, 
         samples_numb (int): How many random samples will be generated
         sample_size (int): How many ligands each sample will have of each class. Eg if ``sample_size=10`` then each
                            sample will have 10 agonists and 10 antagonists
+        rmsf_cache: Dictionary with key ``ligand_name_start_stop`` and value the RMSF run result. If set to ``None``
+                    no cache will be kept
 
     Returns:
          A list of ``samples_numb`` sets. Each sets contains the ``ResidueId`` of the residues that were significant on
@@ -210,10 +213,12 @@ def bootstrapped_residue_analysis(analysis_actors_dict, start, stop, stat_test, 
              'Antagonists': random.sample(analysis_actors_dict['Antagonists'], sample_size)}
         )
 
-    rmsf_cache = {}
+    if rmsf_cache is None:
+        rmsf_cache = {}
+
     residues_per_sample = []
 
-    for sample in tqdm(samples, desc='Sample'):
+    for sample in samples:
         sign_residues = minimal_stat_test(sample['Agonists'], sample['Antagonists'], stat_test, start, stop, threshold,
                                           rmsf_cache)
 

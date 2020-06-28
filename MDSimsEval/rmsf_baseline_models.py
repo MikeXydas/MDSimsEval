@@ -142,7 +142,6 @@ class BaselineClassifierAggregatedResidues:
             stacked_agonists = np.vstack(
                 (stacked_agonists, get_avg_rmsf_per_residue(which_ligand)[self.selected_residues]))
 
-        print(stacked_agonists.shape)
         self.agonist_baseline = self.method(stacked_agonists)
 
         # Calculating baseline antagonist RMSF value

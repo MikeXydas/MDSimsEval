@@ -32,3 +32,4 @@ MD_Analysis/Agonists_Antagonists/AnalysisAgonistsAntagonists/__pycache__/
 /md_analysis_run.py
 /md_bootstrap_models.py
 /debug_models.py
+/md_top_ks.py
