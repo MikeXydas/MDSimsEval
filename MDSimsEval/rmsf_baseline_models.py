@@ -1,5 +1,6 @@
 from MDSimsEval.rmsf_analysis import reset_rmsf_calculations
 from MDSimsEval.rmsf_analysis import get_avg_rmsf_per_residue
+from MDSimsEval.rmsf_bootstrapped_analysis import find_rmsf_of_residues
 from MDSimsEval.utils import complement_residues
 
 import numpy as np
@@ -38,35 +39,60 @@ class BaselineClassifierResidueMajority:
         self.selected_residues = None
         self.agonist_residue_baseline = None
         self.antagonist_residue_baseline = None
+        self.selected_residues_windows = None
 
-    def fit(self, train_analysis_actors, residues):
+    def fit(self, train_analysis_actors, residues=None, residue_windows=None):
         """
         The function that initializes the aggregated RMSF value for each residue for each class.
+
+        .. warning:: You must use **exactly one** of the ``residues``, ``residue_windows`` and let the other one on its
+                     default value.
 
         Args:
             train_analysis_actors: ``{ "Agonists": List[AnalysisActor.class], "Antagonists": List[AnalysisActor.class] }``
             residues (List[int]): A list of residue ids that the model will use. For all the residues
                                   give ``np.arange(290)`` .
+            residue_windows: A dictionary with residue ids as keys and values a list of ``[start, stop]``. This argument
+                             allows us to use one residue in more than one window. This is used in the residue cherry
+                             picking part of the thesis.
 
         """
-        reset_rmsf_calculations(train_analysis_actors, self.start, self.stop, self.rmsf_cache)
+        if (residues is None and residue_windows is None) or (residues is not None and residue_windows is not None):
+            raise ValueError('Must give  exactly one of residues, residue_windows arguments')
 
-        # Create a mask of the residues selected
-        self.selected_residues = [which_res in residues for which_res in np.arange(290)]
+        elif residues is not None:
+            reset_rmsf_calculations(train_analysis_actors, self.start, self.stop, self.rmsf_cache)
 
-        # Calculating baseline agonist RMSF value
-        stacked_agonists = get_avg_rmsf_per_residue(train_analysis_actors['Agonists'][0])[self.selected_residues]
-        for which_ligand in train_analysis_actors['Agonists'][1:]:
-            stacked_agonists = np.vstack(
-                (stacked_agonists, get_avg_rmsf_per_residue(which_ligand)[self.selected_residues]))
+            # Create a mask of the residues selected
+            self.selected_residues = [which_res in residues for which_res in np.arange(290)]
+
+            # Calculating baseline agonist RMSF value
+            stacked_agonists = get_avg_rmsf_per_residue(train_analysis_actors['Agonists'][0])[self.selected_residues]
+            for which_ligand in train_analysis_actors['Agonists'][1:]:
+                stacked_agonists = np.vstack(
+                    (stacked_agonists, get_avg_rmsf_per_residue(which_ligand)[self.selected_residues]))
+
+            # Calculating baseline antagonist RMSF value
+            stacked_antagonists = get_avg_rmsf_per_residue(train_analysis_actors['Antagonists'][0])[
+                self.selected_residues]
+            for which_ligand in train_analysis_actors['Antagonists'][1:]:
+                stacked_antagonists = np.vstack(
+                    (stacked_antagonists, get_avg_rmsf_per_residue(which_ligand)[self.selected_residues]))
+
+        else:    # Case that we are given a dictionary of residue_ids: [[start1, stop1], [start2, stop2]]
+            self.selected_residues_windows = residue_windows
+            rmsf_array = []
+            for res, windows in residue_windows.items():
+                for window in windows:
+                    rmsf_array.append(
+                        find_rmsf_of_residues(train_analysis_actors, [res], window[0], window[1], self.rmsf_cache))
+
+            rmsf_array = np.array(rmsf_array).reshape(len(rmsf_array), len(rmsf_array[0])).T
+
+            stacked_agonists = rmsf_array[:len(train_analysis_actors['Agonists']), :]
+            stacked_antagonists = rmsf_array[len(train_analysis_actors['Agonists']):, :]
+
         self.agonist_residue_baseline = self.method(stacked_agonists, axis=0)
-
-        # Calculating baseline antagonist RMSF value
-        stacked_antagonists = get_avg_rmsf_per_residue(train_analysis_actors['Antagonists'][0])[
-            self.selected_residues]
-        for which_ligand in train_analysis_actors['Antagonists'][1:]:
-            stacked_antagonists = np.vstack(
-                (stacked_antagonists, get_avg_rmsf_per_residue(which_ligand)[self.selected_residues]))
         self.antagonist_residue_baseline = self.method(stacked_antagonists, axis=0)
 
     def predict(self, ligand):
@@ -83,13 +109,23 @@ class BaselineClassifierResidueMajority:
         # We do a trick and create a Dict of ligands so as to use reset_rmsf_calculations
         reset_rmsf_calculations({'Agonists': [ligand], 'Antagonists': []}, self.start, self.stop, self.rmsf_cache)
 
-        rmsf_values = get_avg_rmsf_per_residue(ligand)[self.selected_residues]
+        if self.selected_residues is not None:
+            rmsf_values = get_avg_rmsf_per_residue(ligand)[self.selected_residues]
+        else:
+            rmsf_array = []
+            for res, windows in self.selected_residues_windows.items():
+                for window in windows:
+                    rmsf_array.append(
+                        find_rmsf_of_residues({'Agonists': [ligand], 'Antagonists': [ligand]},
+                                              [res], window[0], window[1], self.rmsf_cache))
+
+            rmsf_values = np.array(rmsf_array).reshape(len(rmsf_array), len(rmsf_array[0])).T[0]
 
         agon_distances = np.abs(self.agonist_residue_baseline - rmsf_values)
         antagon_distances = np.abs(self.antagonist_residue_baseline - rmsf_values)
 
         # Perform the majority voting
-        if np.sum(agon_distances < antagon_distances) > np.sum(self.selected_residues) / 2:
+        if np.sum(agon_distances < antagon_distances) > len(rmsf_values) / 2:
             return 1  # Case agonist
         else:
             return 0  # Case antagonist
@@ -120,36 +156,60 @@ class BaselineClassifierAggregatedResidues:
         self.selected_residues = None
         self.agonist_baseline = None
         self.antagonist_baseline = None
+        self.selected_residues_windows = None
 
-    def fit(self, train_analysis_actors, residues):
+    def fit(self, train_analysis_actors, residues=None, residue_windows=None):
         """
         The function that initializes the aggregated RMSF value for each class.
+
+        .. warning:: You must use **exactly one** of the ``residues``, ``residue_windows`` and let the other one on its
+                     default value.
 
         Args:
             train_analysis_actors: ``{ "Agonists": List[AnalysisActor.class], "Antagonists": List[AnalysisActor.class] }``
             residues (List[int]): A list of residue ids that the model will use. For all the residues
                                   give ``np.arange(290)`` .
+            residue_windows: A dictionary with residue ids as keys and values a list of ``[start, stop]``. This argument
+                             allows us to use one residue in more than one window. This is used in the residue cherry
+                             picking part of the thesis.
 
         """
-        reset_rmsf_calculations(train_analysis_actors, self.start, self.stop, self.rmsf_cache)
+        if (residues is None and residue_windows is None) or (residues is not None and residue_windows is not None):
+            raise ValueError('Must give  exactly one of residues, residue_windows arguments')
 
-        # Create a mask of the residues selected
-        self.selected_residues = [which_res in residues for which_res in np.arange(290)]
+        elif residues is not None:
+            reset_rmsf_calculations(train_analysis_actors, self.start, self.stop, self.rmsf_cache)
 
-        # Calculating baseline agonist RMSF value
-        stacked_agonists = get_avg_rmsf_per_residue(train_analysis_actors['Agonists'][0])[self.selected_residues]
-        for which_ligand in train_analysis_actors['Agonists'][1:]:
-            stacked_agonists = np.vstack(
-                (stacked_agonists, get_avg_rmsf_per_residue(which_ligand)[self.selected_residues]))
+            # Create a mask of the residues selected
+            self.selected_residues = [which_res in residues for which_res in np.arange(290)]
+
+            # Calculating baseline agonist RMSF value
+            stacked_agonists = get_avg_rmsf_per_residue(train_analysis_actors['Agonists'][0])[self.selected_residues]
+            for which_ligand in train_analysis_actors['Agonists'][1:]:
+                stacked_agonists = np.vstack(
+                    (stacked_agonists, get_avg_rmsf_per_residue(which_ligand)[self.selected_residues]))
+
+            # Calculating baseline antagonist RMSF value
+            stacked_antagonists = get_avg_rmsf_per_residue(train_analysis_actors['Antagonists'][0])[
+                self.selected_residues]
+            for which_ligand in train_analysis_actors['Antagonists'][1:]:
+                stacked_antagonists = np.vstack(
+                    (stacked_antagonists, get_avg_rmsf_per_residue(which_ligand)[self.selected_residues]))
+
+        else:    # Case that we are given a dictionary of residue_ids: [[start1, stop1], [start2, stop2]]
+            self.selected_residues_windows = residue_windows
+            rmsf_array = []
+            for res, windows in residue_windows.items():
+                for window in windows:
+                    rmsf_array.append(
+                        find_rmsf_of_residues(train_analysis_actors, [res], window[0], window[1], self.rmsf_cache))
+
+            rmsf_array = np.array(rmsf_array).reshape(len(rmsf_array), len(rmsf_array[0])).T
+
+            stacked_agonists = rmsf_array[:len(train_analysis_actors['Agonists']), :]
+            stacked_antagonists = rmsf_array[len(train_analysis_actors['Agonists']):, :]
 
         self.agonist_baseline = self.method(stacked_agonists)
-
-        # Calculating baseline antagonist RMSF value
-        stacked_antagonists = get_avg_rmsf_per_residue(train_analysis_actors['Antagonists'][0])[
-            self.selected_residues]
-        for which_ligand in train_analysis_actors['Antagonists'][1:]:
-            stacked_antagonists = np.vstack(
-                (stacked_antagonists, get_avg_rmsf_per_residue(which_ligand)[self.selected_residues]))
         self.antagonist_baseline = self.method(stacked_antagonists)
 
     def predict(self, ligand):
@@ -165,9 +225,21 @@ class BaselineClassifierAggregatedResidues:
 
         """
         # We do a trick and create a Dict of ligands so as to use reset_rmsf_calculations
-        reset_rmsf_calculations({'Agonists': [ligand], 'Antagonists': []}, self.start, self.stop, self.rmsf_cache)
+        if self.selected_residues is not None:
+            reset_rmsf_calculations({'Agonists': [ligand], 'Antagonists': []}, self.start, self.stop, self.rmsf_cache)
 
-        rmsf_value = self.method(get_avg_rmsf_per_residue(ligand)[self.selected_residues])
+            rmsf_value = self.method(get_avg_rmsf_per_residue(ligand)[self.selected_residues])
+
+        else:
+            rmsf_array = []
+            for res, windows in self.selected_residues_windows.items():
+                for window in windows:
+                    rmsf_array.append(
+                        find_rmsf_of_residues({'Agonists': [ligand], 'Antagonists': [ligand]},
+                                              [res], window[0], window[1], self.rmsf_cache))
+
+            rmsf_array = np.array(rmsf_array).reshape(len(rmsf_array), len(rmsf_array[0])).T[0]
+            rmsf_value = self.method(rmsf_array)
 
         agon_distance = np.abs(self.agonist_baseline - rmsf_value)
         antagon_distance = np.abs(self.antagonist_baseline - rmsf_value)

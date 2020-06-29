@@ -247,14 +247,22 @@ scalar value.</p>
 
 <dl class="py method">
 <dt id="MDSimsEval.rmsf_baseline_models.BaselineClassifierAggregatedResidues.fit">
-<code class="sig-name descname">fit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">train_analysis_actors</span></em>, <em class="sig-param"><span class="n">residues</span></em><span class="sig-paren">)</span><a class="headerlink" href="#MDSimsEval.rmsf_baseline_models.BaselineClassifierAggregatedResidues.fit" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">fit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">train_analysis_actors</span></em>, <em class="sig-param"><span class="n">residues</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">residue_windows</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#MDSimsEval.rmsf_baseline_models.BaselineClassifierAggregatedResidues.fit" title="Permalink to this definition">¶</a></dt>
 <dd><p>The function that initializes the aggregated RMSF value for each class.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>You must use <strong>exactly one</strong> of the <code class="docutils literal notranslate"><span class="pre">residues</span></code>, <code class="docutils literal notranslate"><span class="pre">residue_windows</span></code> and let the other one on its
+default value.</p>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>train_analysis_actors</strong> – <code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">&quot;Agonists&quot;:</span> <span class="pre">List[AnalysisActor.class],</span> <span class="pre">&quot;Antagonists&quot;:</span> <span class="pre">List[AnalysisActor.class]</span> <span class="pre">}</span></code></p></li>
 <li><p><strong>residues</strong> (<em>List</em><em>[</em><em>int</em><em>]</em>) – A list of residue ids that the model will use. For all the residues
 give <code class="docutils literal notranslate"><span class="pre">np.arange(290)</span></code> .</p></li>
+<li><p><strong>residue_windows</strong> – A dictionary with residue ids as keys and values a list of <code class="docutils literal notranslate"><span class="pre">[start,</span> <span class="pre">stop]</span></code>. This argument
+allows us to use one residue in more than one window. This is used in the residue cherry
+picking part of the thesis.</p></li>
 </ul>
 </dd>
 </dl>
@@ -358,14 +366,22 @@ selected</p>
 
 <dl class="py method">
 <dt id="MDSimsEval.rmsf_baseline_models.BaselineClassifierResidueMajority.fit">
-<code class="sig-name descname">fit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">train_analysis_actors</span></em>, <em class="sig-param"><span class="n">residues</span></em><span class="sig-paren">)</span><a class="headerlink" href="#MDSimsEval.rmsf_baseline_models.BaselineClassifierResidueMajority.fit" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">fit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">train_analysis_actors</span></em>, <em class="sig-param"><span class="n">residues</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">residue_windows</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#MDSimsEval.rmsf_baseline_models.BaselineClassifierResidueMajority.fit" title="Permalink to this definition">¶</a></dt>
 <dd><p>The function that initializes the aggregated RMSF value for each residue for each class.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>You must use <strong>exactly one</strong> of the <code class="docutils literal notranslate"><span class="pre">residues</span></code>, <code class="docutils literal notranslate"><span class="pre">residue_windows</span></code> and let the other one on its
+default value.</p>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>train_analysis_actors</strong> – <code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">&quot;Agonists&quot;:</span> <span class="pre">List[AnalysisActor.class],</span> <span class="pre">&quot;Antagonists&quot;:</span> <span class="pre">List[AnalysisActor.class]</span> <span class="pre">}</span></code></p></li>
 <li><p><strong>residues</strong> (<em>List</em><em>[</em><em>int</em><em>]</em>) – A list of residue ids that the model will use. For all the residues
 give <code class="docutils literal notranslate"><span class="pre">np.arange(290)</span></code> .</p></li>
+<li><p><strong>residue_windows</strong> – A dictionary with residue ids as keys and values a list of <code class="docutils literal notranslate"><span class="pre">[start,</span> <span class="pre">stop]</span></code>. This argument
+allows us to use one residue in more than one window. This is used in the residue cherry
+picking part of the thesis.</p></li>
 </ul>
 </dd>
 </dl>

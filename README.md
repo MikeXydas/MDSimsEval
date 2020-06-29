@@ -6,5 +6,3 @@ stores them and provides a number of methods for understanding their discriminat
 
 
 [More can be found on the docs](https://mikexydas.github.io/MDSimsEval/).
-
-**Note**: The jupyter notebooks need some splitting and cleaning up.
