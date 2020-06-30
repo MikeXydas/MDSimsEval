@@ -1,3 +1,5 @@
+import collections
+
 from MDSimsEval.rmsf_analysis import reset_rmsf_calculations
 from MDSimsEval.rmsf_analysis import get_avg_rmsf_per_residue
 from MDSimsEval.rmsf_bootstrapped_analysis import find_rmsf_of_residues
@@ -39,28 +41,33 @@ class BaselineClassifierResidueMajority:
         self.selected_residues = None
         self.agonist_residue_baseline = None
         self.antagonist_residue_baseline = None
-        self.selected_residues_windows = None
 
-    def fit(self, train_analysis_actors, residues=None, residue_windows=None):
+    def fit(self, train_analysis_actors, residues):
         """
         The function that initializes the aggregated RMSF value for each residue for each class.
 
-        .. warning:: You must use **exactly one** of the ``residues``, ``residue_windows`` and let the other one on its
-                     default value.
-
         Args:
             train_analysis_actors: ``{ "Agonists": List[AnalysisActor.class], "Antagonists": List[AnalysisActor.class] }``
-            residues (List[int]): A list of residue ids that the model will use. For all the residues
-                                  give ``np.arange(290)`` .
-            residue_windows: A dictionary with residue ids as keys and values a list of ``[start, stop]``. This argument
-                             allows us to use one residue in more than one window. This is used in the residue cherry
-                             picking part of the thesis.
+            residues: A list of residue ids that the model will use. For all the residues give
+                      ``np.arange(290)`` . Can also be a dictionary with residue ids as keys and values a
+                      list of ``[start, stop]``. This argument allows us to use a residue in more than
+                      one window. This is used in the residue cherry picking part of the thesis.
+
+                      Example:
+                        ::
+
+                            residues = [10, 11, 27, 52, 83]  # This will use the window saved as an attribute when we created the model object
+                            or
+                            residues = {
+                                         115: [[0, 500], [2000, 2500]],
+                                         117: [[2000, 2500]],
+                                         81: [[2000, 2500]],
+                                         78: [[1000, 1500], [1500, 2000]],
+                                         254: [[0, 500], [1500, 2000]],
+                                      }
 
         """
-        if (residues is None and residue_windows is None) or (residues is not None and residue_windows is not None):
-            raise ValueError('Must give  exactly one of residues, residue_windows arguments')
-
-        elif residues is not None:
+        if isinstance(residues, list):
             reset_rmsf_calculations(train_analysis_actors, self.start, self.stop, self.rmsf_cache)
 
             # Create a mask of the residues selected
@@ -79,10 +86,11 @@ class BaselineClassifierResidueMajority:
                 stacked_antagonists = np.vstack(
                     (stacked_antagonists, get_avg_rmsf_per_residue(which_ligand)[self.selected_residues]))
 
-        else:    # Case that we are given a dictionary of residue_ids: [[start1, stop1], [start2, stop2]]
-            self.selected_residues_windows = residue_windows
+        elif isinstance(residues, collections.Mapping):
+            # Case that we are given a dictionary of residue_ids: [[start1, stop1], [start2, stop2]]
+            self.selected_residues = residues
             rmsf_array = []
-            for res, windows in residue_windows.items():
+            for res, windows in residues.items():
                 for window in windows:
                     rmsf_array.append(
                         find_rmsf_of_residues(train_analysis_actors, [res], window[0], window[1], self.rmsf_cache))
@@ -91,6 +99,8 @@ class BaselineClassifierResidueMajority:
 
             stacked_agonists = rmsf_array[:len(train_analysis_actors['Agonists']), :]
             stacked_antagonists = rmsf_array[len(train_analysis_actors['Agonists']):, :]
+        else:
+            raise ValueError('residues argument expecting a list or a mapping (dictionary)')
 
         self.agonist_residue_baseline = self.method(stacked_agonists, axis=0)
         self.antagonist_residue_baseline = self.method(stacked_antagonists, axis=0)
@@ -109,17 +119,19 @@ class BaselineClassifierResidueMajority:
         # We do a trick and create a Dict of ligands so as to use reset_rmsf_calculations
         reset_rmsf_calculations({'Agonists': [ligand], 'Antagonists': []}, self.start, self.stop, self.rmsf_cache)
 
-        if self.selected_residues is not None:
+        if isinstance(self.selected_residues, list):
             rmsf_values = get_avg_rmsf_per_residue(ligand)[self.selected_residues]
-        else:
+        elif isinstance(self.selected_residues, collections.Mapping):
             rmsf_array = []
-            for res, windows in self.selected_residues_windows.items():
+            for res, windows in self.selected_residues.items():
                 for window in windows:
                     rmsf_array.append(
                         find_rmsf_of_residues({'Agonists': [ligand], 'Antagonists': [ligand]},
                                               [res], window[0], window[1], self.rmsf_cache))
 
             rmsf_values = np.array(rmsf_array).reshape(len(rmsf_array), len(rmsf_array[0])).T[0]
+        else:
+            raise ValueError('UNEXPECTED: selected residues is missing or is not of type list or mapping (dictionary)')
 
         agon_distances = np.abs(self.agonist_residue_baseline - rmsf_values)
         antagon_distances = np.abs(self.antagonist_residue_baseline - rmsf_values)
@@ -156,28 +168,33 @@ class BaselineClassifierAggregatedResidues:
         self.selected_residues = None
         self.agonist_baseline = None
         self.antagonist_baseline = None
-        self.selected_residues_windows = None
 
-    def fit(self, train_analysis_actors, residues=None, residue_windows=None):
+    def fit(self, train_analysis_actors, residues):
         """
         The function that initializes the aggregated RMSF value for each class.
 
-        .. warning:: You must use **exactly one** of the ``residues``, ``residue_windows`` and let the other one on its
-                     default value.
-
         Args:
             train_analysis_actors: ``{ "Agonists": List[AnalysisActor.class], "Antagonists": List[AnalysisActor.class] }``
-            residues (List[int]): A list of residue ids that the model will use. For all the residues
-                                  give ``np.arange(290)`` .
-            residue_windows: A dictionary with residue ids as keys and values a list of ``[start, stop]``. This argument
-                             allows us to use one residue in more than one window. This is used in the residue cherry
-                             picking part of the thesis.
+            residues: A list of residue ids that the model will use. For all the residues give ``np.arange(290)`` . Can
+                      also be a dictionary with residue ids as keys and values a list of ``[start, stop]``. This argument
+                      allows us to use a residue in more than one window. This is used in the residue cherry
+                      picking part of the thesis.
+
+                      Example:
+                        ::
+
+                            residues = [10, 11, 27, 52, 83]  # This will use the window saved as an attribute when we created the model object
+                            or
+                            residues = {
+                                         115: [[0, 500], [2000, 2500]],
+                                         117: [[2000, 2500]],
+                                         81: [[2000, 2500]],
+                                         78: [[1000, 1500], [1500, 2000]],
+                                         254: [[0, 500], [1500, 2000]],
+                                      }
 
         """
-        if (residues is None and residue_windows is None) or (residues is not None and residue_windows is not None):
-            raise ValueError('Must give  exactly one of residues, residue_windows arguments')
-
-        elif residues is not None:
+        if isinstance(residues, list):
             reset_rmsf_calculations(train_analysis_actors, self.start, self.stop, self.rmsf_cache)
 
             # Create a mask of the residues selected
@@ -196,10 +213,11 @@ class BaselineClassifierAggregatedResidues:
                 stacked_antagonists = np.vstack(
                     (stacked_antagonists, get_avg_rmsf_per_residue(which_ligand)[self.selected_residues]))
 
-        else:    # Case that we are given a dictionary of residue_ids: [[start1, stop1], [start2, stop2]]
-            self.selected_residues_windows = residue_windows
+        elif isinstance(residues, collections.Mapping):
+            # Case that we are given a dictionary of residue_ids: [[start1, stop1], [start2, stop2]]
+            self.selected_residues = residues
             rmsf_array = []
-            for res, windows in residue_windows.items():
+            for res, windows in residues.items():
                 for window in windows:
                     rmsf_array.append(
                         find_rmsf_of_residues(train_analysis_actors, [res], window[0], window[1], self.rmsf_cache))
@@ -208,6 +226,8 @@ class BaselineClassifierAggregatedResidues:
 
             stacked_agonists = rmsf_array[:len(train_analysis_actors['Agonists']), :]
             stacked_antagonists = rmsf_array[len(train_analysis_actors['Agonists']):, :]
+        else:
+            raise ValueError('residues argument expecting a list or a mapping (dictionary)')
 
         self.agonist_baseline = self.method(stacked_agonists)
         self.antagonist_baseline = self.method(stacked_antagonists)
@@ -225,14 +245,14 @@ class BaselineClassifierAggregatedResidues:
 
         """
         # We do a trick and create a Dict of ligands so as to use reset_rmsf_calculations
-        if self.selected_residues is not None:
+        if isinstance(self.selected_residues, list):
             reset_rmsf_calculations({'Agonists': [ligand], 'Antagonists': []}, self.start, self.stop, self.rmsf_cache)
 
             rmsf_value = self.method(get_avg_rmsf_per_residue(ligand)[self.selected_residues])
 
-        else:
+        elif isinstance(self.selected_residues, collections.Mapping):
             rmsf_array = []
-            for res, windows in self.selected_residues_windows.items():
+            for res, windows in self.selected_residues.items():
                 for window in windows:
                     rmsf_array.append(
                         find_rmsf_of_residues({'Agonists': [ligand], 'Antagonists': [ligand]},
@@ -240,6 +260,8 @@ class BaselineClassifierAggregatedResidues:
 
             rmsf_array = np.array(rmsf_array).reshape(len(rmsf_array), len(rmsf_array[0])).T[0]
             rmsf_value = self.method(rmsf_array)
+        else:
+            raise ValueError('UNEXPECTED: selected residues is missing or is not of type list or mapping (dictionary)')
 
         agon_distance = np.abs(self.agonist_baseline - rmsf_value)
         antagon_distance = np.abs(self.antagonist_baseline - rmsf_value)

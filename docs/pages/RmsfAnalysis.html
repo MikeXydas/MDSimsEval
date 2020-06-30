@@ -430,7 +430,7 @@ overfitting and providing with an evaluation of how general enough are our resul
 </div>
 <span class="target" id="module-MDSimsEval.rmsf_bootstrapped_analysis"></span><dl class="py function">
 <dt id="MDSimsEval.rmsf_bootstrapped_analysis.bootstrapped_residue_analysis">
-<code class="sig-prename descclassname">MDSimsEval.rmsf_bootstrapped_analysis.</code><code class="sig-name descname">bootstrapped_residue_analysis</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">analysis_actors_dict</span></em>, <em class="sig-param"><span class="n">start</span></em>, <em class="sig-param"><span class="n">stop</span></em>, <em class="sig-param"><span class="n">stat_test</span></em>, <em class="sig-param"><span class="n">threshold</span></em>, <em class="sig-param"><span class="n">samples_numb</span></em>, <em class="sig-param"><span class="n">sample_size</span></em><span class="sig-paren">)</span><a class="headerlink" href="#MDSimsEval.rmsf_bootstrapped_analysis.bootstrapped_residue_analysis" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">MDSimsEval.rmsf_bootstrapped_analysis.</code><code class="sig-name descname">bootstrapped_residue_analysis</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">analysis_actors_dict</span></em>, <em class="sig-param"><span class="n">start</span></em>, <em class="sig-param"><span class="n">stop</span></em>, <em class="sig-param"><span class="n">stat_test</span></em>, <em class="sig-param"><span class="n">threshold</span></em>, <em class="sig-param"><span class="n">samples_numb</span></em>, <em class="sig-param"><span class="n">sample_size</span></em>, <em class="sig-param"><span class="n">rmsf_cache</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#MDSimsEval.rmsf_bootstrapped_analysis.bootstrapped_residue_analysis" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate <code class="docutils literal notranslate"><span class="pre">samples_numb</span></code> random samples  that each one will have <code class="docutils literal notranslate"><span class="pre">sample_size</span></code> agonists and <code class="docutils literal notranslate"><span class="pre">sample_size</span></code>
 antagonists. Then perform a statistical test on the RMSFs of each residue of the agonists vs the RMSFs of each
 residue of the antagonists. If the difference is significant save the residue as important for the specific
@@ -447,6 +447,8 @@ iteration.</p>
 <li><p><strong>samples_numb</strong> (<em>int</em>) – How many random samples will be generated</p></li>
 <li><p><strong>sample_size</strong> (<em>int</em>) – How many ligands each sample will have of each class. Eg if <code class="docutils literal notranslate"><span class="pre">sample_size=10</span></code> then each
 sample will have 10 agonists and 10 antagonists</p></li>
+<li><p><strong>rmsf_cache</strong> – Dictionary with key <code class="docutils literal notranslate"><span class="pre">ligand_name_start_stop</span></code> and value the RMSF run result. If set to <code class="docutils literal notranslate"><span class="pre">None</span></code>
+no cache will be kept</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>

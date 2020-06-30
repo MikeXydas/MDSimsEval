@@ -253,8 +253,23 @@ scalar value.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>train_analysis_actors</strong> – <code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">&quot;Agonists&quot;:</span> <span class="pre">List[AnalysisActor.class],</span> <span class="pre">&quot;Antagonists&quot;:</span> <span class="pre">List[AnalysisActor.class]</span> <span class="pre">}</span></code></p></li>
-<li><p><strong>residues</strong> (<em>List</em><em>[</em><em>int</em><em>]</em>) – A list of residue ids that the model will use. For all the residues
-give <code class="docutils literal notranslate"><span class="pre">np.arange(290)</span></code> .</p></li>
+<li><p><strong>residues</strong> – <p>A list of residue ids that the model will use. For all the residues give <code class="docutils literal notranslate"><span class="pre">np.arange(290)</span></code> . Can
+also be a dictionary with residue ids as keys and values a list of <code class="docutils literal notranslate"><span class="pre">[start,</span> <span class="pre">stop]</span></code>. This argument
+allows us to use a residue in more than one window. This is used in the residue cherry
+picking part of the thesis.</p>
+<p class="rubric">Example</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">residues</span> <span class="o">=</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">27</span><span class="p">,</span> <span class="mi">52</span><span class="p">,</span> <span class="mi">83</span><span class="p">]</span>  <span class="c1"># This will use the window saved as an attribute when we created the model object</span>
+<span class="ow">or</span>
+<span class="n">residues</span> <span class="o">=</span> <span class="p">{</span>
+             <span class="mi">115</span><span class="p">:</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">500</span><span class="p">],</span> <span class="p">[</span><span class="mi">2000</span><span class="p">,</span> <span class="mi">2500</span><span class="p">]],</span>
+             <span class="mi">117</span><span class="p">:</span> <span class="p">[[</span><span class="mi">2000</span><span class="p">,</span> <span class="mi">2500</span><span class="p">]],</span>
+             <span class="mi">81</span><span class="p">:</span> <span class="p">[[</span><span class="mi">2000</span><span class="p">,</span> <span class="mi">2500</span><span class="p">]],</span>
+             <span class="mi">78</span><span class="p">:</span> <span class="p">[[</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">1500</span><span class="p">],</span> <span class="p">[</span><span class="mi">1500</span><span class="p">,</span> <span class="mi">2000</span><span class="p">]],</span>
+             <span class="mi">254</span><span class="p">:</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">500</span><span class="p">],</span> <span class="p">[</span><span class="mi">1500</span><span class="p">,</span> <span class="mi">2000</span><span class="p">]],</span>
+          <span class="p">}</span>
+</pre></div>
+</div>
+</p></li>
 </ul>
 </dd>
 </dl>
@@ -364,8 +379,23 @@ selected</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>train_analysis_actors</strong> – <code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">&quot;Agonists&quot;:</span> <span class="pre">List[AnalysisActor.class],</span> <span class="pre">&quot;Antagonists&quot;:</span> <span class="pre">List[AnalysisActor.class]</span> <span class="pre">}</span></code></p></li>
-<li><p><strong>residues</strong> (<em>List</em><em>[</em><em>int</em><em>]</em>) – A list of residue ids that the model will use. For all the residues
-give <code class="docutils literal notranslate"><span class="pre">np.arange(290)</span></code> .</p></li>
+<li><p><strong>residues</strong> – <p>A list of residue ids that the model will use. For all the residues give
+<code class="docutils literal notranslate"><span class="pre">np.arange(290)</span></code> . Can also be a dictionary with residue ids as keys and values a
+list of <code class="docutils literal notranslate"><span class="pre">[start,</span> <span class="pre">stop]</span></code>. This argument allows us to use a residue in more than
+one window. This is used in the residue cherry picking part of the thesis.</p>
+<p class="rubric">Example</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">residues</span> <span class="o">=</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">27</span><span class="p">,</span> <span class="mi">52</span><span class="p">,</span> <span class="mi">83</span><span class="p">]</span>  <span class="c1"># This will use the window saved as an attribute when we created the model object</span>
+<span class="ow">or</span>
+<span class="n">residues</span> <span class="o">=</span> <span class="p">{</span>
+             <span class="mi">115</span><span class="p">:</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">500</span><span class="p">],</span> <span class="p">[</span><span class="mi">2000</span><span class="p">,</span> <span class="mi">2500</span><span class="p">]],</span>
+             <span class="mi">117</span><span class="p">:</span> <span class="p">[[</span><span class="mi">2000</span><span class="p">,</span> <span class="mi">2500</span><span class="p">]],</span>
+             <span class="mi">81</span><span class="p">:</span> <span class="p">[[</span><span class="mi">2000</span><span class="p">,</span> <span class="mi">2500</span><span class="p">]],</span>
+             <span class="mi">78</span><span class="p">:</span> <span class="p">[[</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">1500</span><span class="p">],</span> <span class="p">[</span><span class="mi">1500</span><span class="p">,</span> <span class="mi">2000</span><span class="p">]],</span>
+             <span class="mi">254</span><span class="p">:</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">500</span><span class="p">],</span> <span class="p">[</span><span class="mi">1500</span><span class="p">,</span> <span class="mi">2000</span><span class="p">]],</span>
+          <span class="p">}</span>
+</pre></div>
+</div>
+</p></li>
 </ul>
 </dd>
 </dl>
