@@ -261,8 +261,8 @@ only for evaluating residue selections.</p>
 <li><p>For each window and bootstrap samples fit and predict on the training and validation set</p></li>
 <li><p>Create a DataFrame summarizing the results</p></li>
 </ol>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">MDSimsEval.rmsf_baseline_models</span> <span class="kn">import</span> <span class="n">bootstrap_dataset</span><span class="p">,</span> <span class="n">BaselineClassifierResidueMajority</span><span class="p">,</span> \
-    <span class="n">BaselineClassifierAggregatedResidues</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">MDSimsEval.rmsf_baseline_models</span> <span class="kn">import</span> <span class="n">bootstrap_dataset</span><span class="p">,</span> <span class="n">ResidueMajority</span><span class="p">,</span> \
+    <span class="n">AggregatedResidues</span>
 <span class="kn">from</span> <span class="nn">MDSimsEval.utils</span> <span class="kn">import</span> <span class="n">create_analysis_actor_dict</span>
 
 <span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
@@ -306,7 +306,7 @@ only for evaluating residue selections.</p>
 
 <span class="k">for</span> <span class="n">start</span><span class="p">,</span> <span class="n">stop</span> <span class="ow">in</span> <span class="n">windows</span><span class="p">:</span>
     <span class="n">accs</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">model</span> <span class="o">=</span> <span class="n">BaselineClassifierAggregatedResidues</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">stop</span><span class="p">,</span> <span class="n">rmsf_cache</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">)</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">AggregatedResidues</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">stop</span><span class="p">,</span> <span class="n">rmsf_cache</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">)</span>
     <span class="c1"># model = BaselineClassifierResidueMajority(start, stop, rmsf_cache, np.mean)</span>
 
     <span class="c1"># The loop is slow at each 1st iteration but speeds due to rmsf_cache</span>
