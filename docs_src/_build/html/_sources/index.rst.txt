@@ -24,7 +24,7 @@ If your goal is simple analysis of MD I suggest these free solutions:
 The above solutions are actually used for some of my calculations.
 
 **In order to get started you should read** :doc:`Prerequisites <pages/Prerequisites>`,
-:doc:`Reading <pages/ReadingData>`, :doc:`AnalysisActor <pages/AnalysisActor>` in this order.
+:doc:`Reading the Simulations <pages/ReadingData>`, :doc:`AnalysisActor <pages/AnalysisActor>` in this order.
 
 .. Contents
 .. ========

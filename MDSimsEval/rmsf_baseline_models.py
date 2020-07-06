@@ -338,13 +338,15 @@ class KSDistance(BaselineClassifier):
 
     def predict(self, ligand):
         """
-        Performs the majority voting and returns the predicted class.
+        Performs the K-S test. If we have a mismatch of outcomes (one class accepts it, the other one rejects it) then
+        we classify as the one that accepted. Else, we classify using the distance of K-S.
 
         Args:
             ligand (AnalysisActorClass): The ligand we want to predict its class
 
         Returns:
-            The class label, 1 for Agonist, 0 for Antagonist.
+            Tuple of the class label, 1 for Agonist, 0 for Antagonist , the test outcome where A is accept , R is
+            reject.
 
         """
         if isinstance(self.selected_residues, list):
@@ -355,14 +357,26 @@ class KSDistance(BaselineClassifier):
             raise ValueError('UNEXPECTED: selected residues is missing or is not of type list or mapping (dictionary)')
 
         # We perform the K-S test which returns (distance, p_value) and keep the distance only
-        agon_distance = stats.ks_2samp(self.agonist_residue_baseline, rmsf_values)[0]
-        antagon_distances = stats.ks_2samp(self.antagonist_residue_baseline, rmsf_values)[0]
+        agon_distance, agon_p_value = stats.ks_2samp(self.agonist_residue_baseline, rmsf_values)
+        antagon_distances, antagon_p_value = stats.ks_2samp(self.antagonist_residue_baseline, rmsf_values)
 
-        # Perform the majority voting
-        if agon_distance < antagon_distances:
-            return 1  # Case agonist
+        # See if the test rejects the null hypothesis for one class and rejects it for the other
+        if antagon_p_value <= 0.05 < agon_p_value:
+            return 1, "A-R"  # Case agonist
+        elif agon_p_value <= 0.05 < antagon_p_value:
+            return 0, "A-R"  # Case antagonist
+
+        # Decide if we had a reject - reject or accept - accept
+        if antagon_p_value < 0.05:
+            ret_str = "R-R"
         else:
-            return 0  # Case antagonist
+            ret_str = "A-A"
+
+        # Return the class that has the lowest K-S distance
+        if agon_distance < antagon_distances:
+            return 1, ret_str  # Case agonist
+        else:
+            return 0, ret_str  # Case antagonist
 
 
 def bootstrap_dataset(analysis_actors_dict, samples, sample_size):
