@@ -307,7 +307,7 @@ only for evaluating residue selections.</p>
 <span class="k">for</span> <span class="n">start</span><span class="p">,</span> <span class="n">stop</span> <span class="ow">in</span> <span class="n">windows</span><span class="p">:</span>
     <span class="n">accs</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">model</span> <span class="o">=</span> <span class="n">AggregatedResidues</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">stop</span><span class="p">,</span> <span class="n">rmsf_cache</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">)</span>
-    <span class="c1"># model = BaselineClassifierResidueMajority(start, stop, rmsf_cache, np.mean)</span>
+    <span class="c1"># model = ResidueMajority(start, stop, rmsf_cache, np.mean)</span>
 
     <span class="c1"># The loop is slow at each 1st iteration but speeds due to rmsf_cache</span>
     <span class="k">for</span> <span class="n">train_dict</span><span class="p">,</span> <span class="n">validation_dict</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">train_dicts</span><span class="p">,</span> <span class="n">validation_dicts</span><span class="p">)),</span> <span class="n">desc</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;Window </span><span class="si">{start}</span><span class="s1"> - </span><span class="si">{stop}</span><span class="s1">&#39;</span><span class="p">):</span>

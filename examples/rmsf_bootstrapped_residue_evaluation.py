@@ -44,7 +44,7 @@ total_metrics = {}  # We will save our accuracies of each window on this dict
 for start, stop in windows:
     accs = []
     model = AggregatedResidues(start, stop, rmsf_cache, method=np.mean)
-    # model = BaselineClassifierResidueMajority(start, stop, rmsf_cache, np.mean)
+    # model = ResidueMajority(start, stop, rmsf_cache, np.mean)
 
     # The loop is slow at each 1st iteration but speeds due to rmsf_cache
     for train_dict, validation_dict in tqdm(list(zip(train_dicts, validation_dicts)), desc=f'Window {start} - {stop}'):
