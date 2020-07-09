@@ -40,7 +40,6 @@ The above solutions are actually used for some of my calculations.
    ./pages/RgSasaAnalysis
    ./pages/RmsfAnalysis
    ./pages/RMSFBaselineModels
-   ./pages/PcaAnalysis
    ./pages/Utils
    ./pages/Examples
 
