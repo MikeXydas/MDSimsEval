@@ -344,9 +344,7 @@ class KSDistance(BaselineClassifier):
             ligand (AnalysisActorClass): The ligand we want to predict its class
 
         Returns:
-            Tuple of the class label, 1 for Agonist, 0 for Antagonist , the test outcome where A is accept , R is
-            reject.
-
+            Tuple of the class label, 1 for Agonist, 0 for Antagonist
         """
         if isinstance(self.selected_residues, list):
             rmsf_values = self.read_unknown_list_residues(ligand)
