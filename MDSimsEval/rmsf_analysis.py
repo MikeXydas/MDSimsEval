@@ -34,7 +34,7 @@ def reset_rmsf_calculations(analysis_actors_dict, start, stop, cache=None):
         if cache is not None and key_name in cache:
             ligand.rmsf_res = cache[key_name]  # RMSF calculation exists in cache
         else:
-            ligand.rmsf_res = RMSF(ligand.uni.select_atoms('protein')).run(start=start, stop=stop)
+            ligand.rmsf_res = RMSF(ligand.uni.select_atoms('protein')).run(start=start, stop=stop).rmsf
             if cache is not None:  # Cache is enabled and RMSF calculation does NOT exist in cache
                 cache[key_name] = ligand.rmsf_res
 
@@ -66,7 +66,7 @@ def get_avg_rmsf_per_residue(ligand):
         elif first_time:
             first_time = False
 
-        total_rmsf[bucket] += ligand.rmsf_res.rmsf[i]
+        total_rmsf[bucket] += ligand.rmsf_res[i]
         total_atoms[bucket] += 1
 
     avg_rmsf_per_residue = total_rmsf / total_atoms  # Calculate the mean
