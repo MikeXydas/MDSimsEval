@@ -35,3 +35,4 @@ MD_Analysis/Agonists_Antagonists/AnalysisAgonistsAntagonists/__pycache__/
 /i3_scripts/md_top_ks.py
 /i3_scripts/md_cherry_picked.py
 /i3_scripts/
+/debug_parsing_outer_results.py
