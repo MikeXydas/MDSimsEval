@@ -1,5 +1,8 @@
 import collections
 
+from sklearn.manifold import MDS
+from sklearn.neighbors import KNeighborsClassifier
+
 from MDSimsEval.rmsf_analysis import reset_rmsf_calculations
 from MDSimsEval.rmsf_analysis import get_avg_rmsf_per_residue
 from MDSimsEval.rmsf_bootstrapped_analysis import find_rmsf_of_residues
@@ -9,6 +12,7 @@ from scipy import stats
 from abc import ABC, abstractmethod
 
 import numpy as np
+import pandas as pd
 import random
 
 
@@ -24,7 +28,7 @@ class BaselineClassifier(ABC):
     to better understand how ``fit`` and ``predict`` are implemented and how we use the helper methods in this class.
 
     """
-    def __init__(self, start, stop, rmsf_cache, method=np.mean):
+    def __init__(self, start, stop, rmsf_cache, method):
         self.start = start
         self.stop = stop
         self.method = method
@@ -344,7 +348,7 @@ class KSDistance(BaselineClassifier):
             ligand (AnalysisActorClass): The ligand we want to predict its class
 
         Returns:
-            Tuple of the class label, 1 for Agonist, 0 for Antagonist
+            The class label, 1 for Agonist, 0 for Antagonist
         """
         if isinstance(self.selected_residues, list):
             rmsf_values = self.read_unknown_list_residues(ligand)
@@ -418,3 +422,115 @@ def bootstrap_dataset(analysis_actors_dict, samples, sample_size):
                         for agonist_sample, antagonist_sample in zip(test_agonists_samples, test_antagonists_samples)]
 
     return train_actor_dicts, test_actor_dicts
+
+
+class MDStoKNN(BaselineClassifier):
+    """
+    This is a model that classifies ligands based on the K nearest neighbors on a MDS 2D projection.
+
+    We first calculate the pairwise distances of **all** the ligands creating an ``agons_numb`` + ``antagons_numb`` *x*
+    ``agons_numb`` + ``antagons_numb`` matrix. We perform a non-linear projection using MDS transforming the matrix to a
+    ``agons_numb`` + ``antagons_numb`` *x* 2 shape.
+
+    We provide the indexes of the ligands that the labels are known. These will be considered our train set. We fit a
+    KNN model on them. We then provide the index of the ligand we want to predict. For example we may have 20 agonists,
+    20 antagonists and we want to predict an unknown ligand. The transformed shape of our 2D projection will be
+    20 + 20 + 1 *x* 2. The indexes [0, 1, ..., 39] will for the train set and will be passed on the fit of the KNN. We
+    then pass the index 40 in the ``predict`` method in order to predict the unknown ligand.
+
+    .. note::
+        This model is more complex than the others which have a straight forward approach, similar to the ``sklearn``
+        models. The main idea is that the model knows all the data points a priori in order to create the 2D mapping. We
+        then reveal to the model the labels of the known ligands in order to predict the unknown ligands.
+
+    Args:
+        start (int): The starting frame of the window
+        stop (int): The last frame of the window
+        metric: A method used to calculate the pairwise distance of the ligands. Possible metrics are K-S distance and
+                Spearman's r
+        neigh (KNeighborsClassifier): The KNN model used for predicting the unknown ligands
+
+    """
+    def __init__(self, start, stop, rmsf_cache, metric, neighbors):
+        super().__init__(start, stop, rmsf_cache, None)
+        self.pairwise_distances = None
+        self.metric_method = metric
+        self.neigh = KNeighborsClassifier(n_neighbors=neighbors)
+
+    def create_pairwise_distances(self, analysis_actors_dict, residues):
+        """
+        Creates the pairwise distance matrix of all the input ligands that will be projected on a 2D manifold using MDS
+
+        Args:
+            analysis_actors_dict: ``{ "Agonists": List[AnalysisActor.class], "Antagonists": List[AnalysisActor.class] }``
+            residues: A list of residue ids that the model will use. For all the residues give
+                      ``np.arange(290)``.
+
+        Returns:
+            A DataFrame of shape ``agons_numb`` + ``antagons_numb`` *x* ``agons_numb`` + ``antagons_numb``
+
+        """
+        reset_rmsf_calculations(analysis_actors_dict, self.start, self.stop, self.rmsf_cache)
+
+        # Create a mask of the residues selected
+        selected_residues = [which_res in residues for which_res in np.arange(290)]
+
+        ligand_rmsf = collections.OrderedDict()
+        for which_ligand in analysis_actors_dict['Agonists'] + analysis_actors_dict['Antagonists']:
+            ligand_rmsf[which_ligand.drug_name] = get_avg_rmsf_per_residue(which_ligand)[selected_residues]
+
+        distances_df = pd.DataFrame(np.zeros((len(ligand_rmsf), len(ligand_rmsf))), columns=list(ligand_rmsf),
+                                    index=list(ligand_rmsf))
+
+        for ind_ligand, ind_rmsf in ligand_rmsf.items():
+            for col_ligand, col_rmsf in ligand_rmsf.items():
+                distances_df.at[ind_ligand, col_ligand] = self.metric_method(ind_rmsf, col_rmsf)
+
+        return distances_df
+
+    def fit(self, analysis_actors_dict, residues):
+        """
+        Create the pairwise distance matrix and perform MDS to transform it to a 2D matrix.
+
+        Args:
+            analysis_actors_dict: ``{ "Agonists": List[AnalysisActor.class], "Antagonists": List[AnalysisActor.class] }``
+            residues: A list of residue ids that the model will use. For all the residues give
+                      ``np.arange(290)``.
+
+        """
+        self.pairwise_distances = self.create_pairwise_distances(analysis_actors_dict, residues)
+
+        print(self.pairwise_distances.shape)
+        # Perform the MDS dimensionality reduction
+        mds = MDS(n_components=2, dissimilarity='precomputed')
+        self.pairwise_distances = mds.fit_transform(self.pairwise_distances)
+
+    def choose_known_ligands(self, agonist_inds, antagonists_inds):
+        """
+        Give the indexes of the agonists and antagonists ligands that will be form the train set and fits the KNN
+        model using the transformed pairwise distances.
+
+        Args:
+            agonist_inds: The indexes of the train agonists
+            antagonists_inds: The indexes of the train antagonists
+
+        """
+        x_train = np.array(self.pairwise_distances)[agonist_inds + antagonists_inds]
+        y_train = np.concatenate([np.ones(len(agonist_inds)), np.zeros(len(antagonists_inds))])
+
+        self.neigh.fit(x_train, y_train)
+
+    def predict(self, ligand_ind):
+        """
+        Given an index of the unknown ligand predict it using the KNN fitted KNN model
+
+        Args:
+             ligand_ind: The index of the unknown ligand
+
+        Returns:
+            The class label, 1 for Agonist, 0 for Antagonist
+
+        """
+        pred_x = self.pairwise_distances[ligand_ind]
+
+        return self.neigh.predict([pred_x])
