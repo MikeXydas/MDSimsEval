@@ -500,7 +500,6 @@ class MDStoKNN(BaselineClassifier):
         """
         self.pairwise_distances = self.create_pairwise_distances(analysis_actors_dict, residues)
 
-        print(self.pairwise_distances.shape)
         # Perform the MDS dimensionality reduction
         mds = MDS(n_components=2, dissimilarity='precomputed')
         self.pairwise_distances = mds.fit_transform(self.pairwise_distances)
