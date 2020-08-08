@@ -2,6 +2,7 @@ import collections
 
 from sklearn.manifold import MDS
 from sklearn.neighbors import KNeighborsClassifier
+from sklearn.decomposition import PCA
 
 from MDSimsEval.rmsf_analysis import reset_rmsf_calculations
 from MDSimsEval.rmsf_analysis import get_avg_rmsf_per_residue
@@ -502,6 +503,7 @@ class MDStoKNN(BaselineClassifier):
 
         # Perform the MDS dimensionality reduction
         mds = MDS(n_components=2, dissimilarity='precomputed')
+        # mds = PCA(n_components=2)
         self.pairwise_distances = mds.fit_transform(self.pairwise_distances)
 
     def choose_known_ligands(self, agonist_inds, antagonists_inds):
