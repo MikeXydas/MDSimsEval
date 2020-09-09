@@ -502,8 +502,8 @@ class MDStoKNN(BaselineClassifier):
         self.pairwise_distances = self.create_pairwise_distances(analysis_actors_dict, residues)
 
         # Perform the MDS dimensionality reduction
-        mds = MDS(n_components=2, dissimilarity='precomputed')
-        # mds = PCA(n_components=2)
+        # mds = MDS(n_components=2, dissimilarity='precomputed')
+        mds = PCA(n_components=2)
         self.pairwise_distances = mds.fit_transform(self.pairwise_distances)
 
     def choose_known_ligands(self, agonist_inds, antagonists_inds):

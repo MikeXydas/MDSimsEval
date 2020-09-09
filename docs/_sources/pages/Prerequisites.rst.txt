@@ -13,7 +13,7 @@ Installation
 
 The steps for **installing the package only** are:
 
-1. Clone the repository
+1. Clone the repository ``git clone https://github.com/MikeXydas/MDSimsEval.git``
 2. ``cd MDSimsEval``
 3. ``pip install .``
 
