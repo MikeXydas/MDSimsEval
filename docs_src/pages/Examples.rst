@@ -8,25 +8,6 @@ Here we can find some basic examples of using the methods included in the packag
     We suggest using the ``.shape`` attribute when running these examples in order to understand the expected
     inputs and outputs.
 
-RMSF Cherry Picked Residues
-###########################
-
-We define **cherry picking** as empirically deciding which residues and on which windows we are going to
-calculate the RMSF of the ligands. The selection of the residues may come from a combination of plots or from
-the experience in the field.
-
-The example below inputs a dictionary of specific residues on specific windows and creates their 2D PCA projection
-of their 1st 3 PCs, in order to evaluate their separability.
-
-.. literalinclude:: ../../examples/rmsf_cherry_pick.py
-
-**Output**
-
-.. image:: ../_static/cherry_pick_2D.png
-    :width: 700px
-    :align: center
-    :height: 270px
-    :alt: missing cherry pick 2D projections
 
 .. _rmsf_baseline_models:
 
@@ -53,3 +34,42 @@ Briefly the flow below is:
     :align: center
     :height: 215px
     :alt: missing baseline model results
+
+
+RMSF Display the top-50KS Residues
+##################################
+
+In this example the goal is to display the top-10KS residues in descending order of discriminating
+importance of their RMSF based on the K-S statistical test performed in the
+``bootstrapped_residue_analysis`` method.
+
+
+.. literalinclude:: ../../examples/rmsf_display_topxKS_residue_ids.py
+
+**Output** (if ran on Jupyter Notebook, using ``display`` instead of ``print`` at the end):
+
+.. image:: ../_static/top_10KS_residue_ids.png
+    :width: 500px
+    :align: center
+    :height: 320px
+    :alt: missing top10KS residue ids
+
+RMSF Cherry Picked Residues
+###########################
+
+We define **cherry picking** as empirically deciding which residues and on which windows we are going to
+calculate the RMSF of the ligands. The selection of the residues may come from a combination of plots or from
+the experience in the field.
+
+The example below inputs a dictionary of specific residues on specific windows and creates their 2D PCA projection
+of their 1st 3 PCs, in order to evaluate their separability.
+
+.. literalinclude:: ../../examples/rmsf_cherry_pick.py
+
+**Output**
+
+.. image:: ../_static/cherry_pick_2D.png
+    :width: 700px
+    :align: center
+    :height: 270px
+    :alt: missing cherry pick 2D projections

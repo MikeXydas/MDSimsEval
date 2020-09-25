@@ -8,9 +8,8 @@ import numpy as np
 import pandas as pd
 import pickle
 
-
 # Read the data
-analysis_actors_dict = create_analysis_actor_dict('../datasets/New_AI_MD')
+analysis_actors_dict = create_analysis_actor_dict('path_to_data_directory/')
 
 
 def calculate_accuracy(model, ligands_dict):
