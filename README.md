@@ -7,7 +7,8 @@ analysis and classification.
 More specifically the use case we developped this package for was to define and evaluate models used 
 for discriminating agonist vs. antagonist ligands of the 5-HT2A receptor.
 
-
+**Install**: `pip install mdsimseval`  
+  
 [More can be found on the docs](https://mikexydas.github.io/MDSimsEval/).
 
 ## Thesis Abstract

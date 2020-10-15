@@ -1,21 +1,17 @@
 .. Prerequisites
 
-Prerequisites
+Prerequisites and Installation
 =================================================
 
 Installation
 ############
 
-| **OS**: Developed on Ubuntu18.04 but any linux distribution should work
 | **Python**: Developed on 3.6 but any version >=3.6 should work
 
-**Package Only:**
+**Installing package only:**
 
-The steps for **installing the package only** are:
+``pip install mdsimseval``
 
-1. Clone the repository ``git clone https://github.com/MikeXydas/MDSimsEval.git``
-2. ``cd MDSimsEval``
-3. ``pip install .``
 
 Then you can import any method or class
 ::
@@ -34,10 +30,11 @@ If you are looking for adding functionality or changing the code you will need m
 1. Clone the repository
 2. Install the ``requirements.txt``
 
+ - Poetry (suggested): ``poetry install``
  - Conda Env: ``conda install --file requirements.txt``
  - VirtualEnv: ``pip install -r requirements.txt``
 
-3. Copy the `MDSimsEval` directory to your project
+
 
 Data
 ####
