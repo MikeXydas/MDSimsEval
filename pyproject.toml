@@ -1,0 +1,35 @@
+[tool.poetry]
+name = "MDSimsEval"
+version = "0.1.0"
+description = "Collective analysis on a set of Molecular Dynamics simulations."
+authors = ["Mike Xydas <mikexydas@gmail.com>"]
+license = "MIT"
+homepage = "https://mikexydas.github.io/MDSimsEval/"
+repository = "https://github.com/MikeXydas/MDSimsEval"
+readme = "README.md"
+keywords= ["molecular-dynamics", "RMSF"]
+packages = [
+    { include = "MDSimsEval" },
+    { include = "MDSimsEval/**/*.py" },
+]
+
+[tool.poetry.dependencies]
+python = "^3.6.9"
+tqdm = "^4.50.2"
+numpy = "^1.19.2"
+pandas = "^1.0.3"
+matplotlib = "^3.3.2"
+imgkit = "^1.0.2"
+scipy = "^1.5.2"
+mdtraj = "^1.9.4"
+scikit-learn = "^0.23.2"
+seaborn = "^0.11.0"
+MDAnalysis = "^1.0.0"
+
+[tool.poetry.dev-dependencies]
+jupyter = "^1.0.0"
+Sphinx = "^3.2.1"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
