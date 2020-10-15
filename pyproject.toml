@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "MDSimsEval"
-version = "0.1.0"
+version = "0.1.1"
 description = "Collective analysis on a set of Molecular Dynamics simulations."
 authors = ["Mike Xydas <mikexydas@gmail.com>"]
 license = "MIT"
