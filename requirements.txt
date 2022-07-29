@@ -60,7 +60,7 @@ MDAnalysisData==0.8.0
 MDAnalysisTests==0.20.1
 -e git+https://github.com/MikeXydas/Bioinformatics_Thesis.git@a95d5a75184c05f8c21051a2f6ac3c3ebe2ce665#egg=MDSimsEval
 mdtraj==1.9.3
-mistune==0.8.4
+mistune==2.0.3
 mmtf-python==1.1.2
 mock==3.0.5
 more-itertools==8.1.0
