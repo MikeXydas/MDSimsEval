@@ -65,7 +65,7 @@ mmtf-python==1.1.2
 mock==3.0.5
 more-itertools==8.1.0
 msgpack==0.6.2
-nbconvert==5.6.1
+nbconvert==6.5.1
 nbformat==4.4.0
 networkx==2.4
 nltk==3.5
